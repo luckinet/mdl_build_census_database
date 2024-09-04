@@ -46,7 +46,7 @@ if(build_crops){
   # crops ----
 
   ## yield ----
-  rosstat_yield <- list.files(path = paste0(dir_census_wip, "tables/stage1/rosstat/"),
+  rosstat_yield <- list.files(path = paste0(dir_census_data, "tables/stage1/rosstat/"),
                               pattern = "yield")
 
   for(i in seq_along(rosstat_yield)){
@@ -84,7 +84,7 @@ if(build_crops){
   }
 
   ## plantations ----
-  rosstat_planted <- list.files(path = paste0(dir_census_wip, "/tables/stage1/rosstat/"),
+  rosstat_planted <- list.files(path = paste0(dir_census_data, "/tables/stage1/rosstat/"),
                                 pattern = "planted")
 
   for(i in seq_along(rosstat_planted)){
@@ -122,7 +122,7 @@ if(build_crops){
 
   }
 
-  rosstat_production <- list.files(path = paste0(dir_census_wip, "/tables/stage1/rosstat/"),
+  rosstat_production <- list.files(path = paste0(dir_census_data, "/tables/stage1/rosstat/"),
                                    pattern = "production")
 
   ## production ----
@@ -160,7 +160,7 @@ if(build_crops){
 
   }
 
-  rosstat_perennial <- list.files(path = paste0(dir_census_wip, "/tables/stage1/rosstat/"),
+  rosstat_perennial <- list.files(path = paste0(dir_census_data, "/tables/stage1/rosstat/"),
                                   pattern = "perennial")
 
   ## perennials ----
@@ -208,7 +208,7 @@ if(build_crops){
 if(build_livestock){
   # livestock ----
 
-  rosstat_livestock <- list.files(path = paste0(dir_census_wip, "/tables/stage1/rosstat/"),
+  rosstat_livestock <- list.files(path = paste0(dir_census_data, "/tables/stage1/rosstat/"),
                                   pattern = "livestock")
 
   for(i in seq_along(rosstat_livestock)){
@@ -446,18 +446,3 @@ if(build_tech){
   #           beep = 10)
 }
 
-#### test schemas
-
-myRoot <- paste0(dir_census_wip, "/adb_tables/stage2/")
-myFile <- "Russian Federation_al3_livestockAdygea_2008_2020_rosstat.csv"
-schema <- schema_livestock
-
-input <- read_csv(file = paste0(myRoot, myFile),
-                  col_names = FALSE,
-                  col_types = cols(.default = "c"))
-
-validateSchema(schema = schema, input = input)
-
-output <- reorganise(input = input, schema = schema)
-
-#### delete this section after finalising script

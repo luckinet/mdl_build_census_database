@@ -6,7 +6,7 @@
 # date        : 2024-03-27
 # version     : 0.8.0
 # status      : working (luts), working (gpw)
-# comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
+# comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
 
 # set module-specific paths ----
@@ -50,7 +50,6 @@ source(paste0(dir_census, "02_fao.R"))
 ### regional ----
 source(paste0(dir_census, "02_agriwanet.R"))
 source(paste0(dir_census, "02_eurostat.R"))
-include zigas european dataset: https://zenodo.org/records/11058509
 
 ### outdated or redundant with the more detailed data below ----
 # source(paste0(dir_census, "X02_agCensus.R"))
