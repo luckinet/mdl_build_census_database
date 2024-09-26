@@ -20,31 +20,47 @@
 # sampling    : survey, census
 # ----
 
-thisNation <- _INSERT
+thisNation <- "Norway"
 
 # 1. dataseries ----
 #
-ds <- c(_INSERT)
-gs <- c(_INSERT)
+ds <- c("ssbno")
+gs <- c("ssbno")
 
-regDataseries(name = ds[],
-              description = _INSERT,
-              homepage = _INSERT,
-              version = _INSERT,
-              licence_link = _INSERT)
+regDataseries(name = ds[1],
+              description = "Statistics Norway",
+              homepage = "https://www.ssb.no/en/",
+              version = "2024.09",
+              licence_link = licenses$by4)
 
 
 # 2. geometries ----
 #
 regGeometry(nation = !!thisNation,
-            gSeries = gs[],
-            label = list(al_ = ""),
-            archive = "|",
-            archiveLink = _INSERT,
-            downloadDate = _INSERT,
-            updateFrequency = _INSERT)
+            gSeries = gs[1],
+            label = list(al1 = "fylkesnavn"),
+            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|fylke.shp",
+            archiveLink = "https://kart.ssb.no/",
+            downloadDate = ymd("2024-07-22"),
+            updateFrequency = "unknown")
 
-normGeometry(pattern = gs[],
+regGeometry(nation = !!thisNation,
+            gSeries = gs[1],
+            label = list(al2 = "kommunenum"),
+            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|kommune.shp",
+            archiveLink = "https://kart.ssb.no/",
+            downloadDate = ymd("2024-07-22"),
+            updateFrequency = "unknown")
+
+regGeometry(nation = !!thisNation,
+            gSeries = gs[1],
+            label = list(al2 = "kommunenum", al3 = "grunnkre_1"),
+            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|grunnkrets.shp",
+            archiveLink = "https://kart.ssb.no/",
+            downloadDate = ymd("2024-07-22"),
+            updateFrequency = "unknown")
+
+normGeometry(pattern = gs[1],
              beep = 10)
 
 
