@@ -6,7 +6,7 @@
 # date        : 2024-MM-DD
 # version     : 0.0.0
 # status      : find data, update, inventarize, validate, normalize, done
-# comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
+# comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
 # geography   : _INSERT
 # spatial     : _INSERT
@@ -53,16 +53,17 @@ normGeometry(pattern = gs[],
 if(build_crops){
   ## crops ----
 
-  schema_crops <- setCluster(id = _INSERT) %>%
+  schema_crops <- setCluster(id = _INSERT) |>
     setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "method", value = "") %>%
-    setIDVar(name = "crop", ) %>%
-    setObsVar(name = "hectares_harvested", ) %>%
-    setObsVar(name = "tons_produced", ) %>%
+              na_values = _INSERT) |>
+    setFilter() |>
+    setIDVar(name = "al2", ) |>
+    setIDVar(name = "al3", ) |>
+    setIDVar(name = "year", ) |>
+    setIDVar(name = "method", value = "") |>
+    setIDVar(name = "crop", ) |>
+    setObsVar(name = "hectares_harvested", ) |>
+    setObsVar(name = "tons_produced", ) |>
     setObsVar(name = "kiloPerHectare_yield", )
 
   regTable(al1 = !!thisNation,
@@ -89,13 +90,15 @@ if(build_crops){
 if(build_livestock){
   ## livestock ----
 
-  schema_livestock <- setCluster() %>%
-    setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "method", value = "") %>%
-    setIDVar(name = "animal", )  %>%
+  schema_livestock <- setCluster(id = _INSERT) |>
+    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
+              na_values = _INSERT) |>
+    setFilter() |>
+    setIDVar(name = "al2", ) |>
+    setIDVar(name = "al3", ) |>
+    setIDVar(name = "year", ) |>
+    setIDVar(name = "method", value = "") |>
+    setIDVar(name = "animal", ) |>
     setObsVar(name = "number_heads", )
 
   regTable(al1 = !!thisNation,
@@ -122,13 +125,15 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  schema_landuse <- setCluster() %>%
-    setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "methdod", value = "") %>%
-    setIDVar(name = "landuse", ) %>%
+  schema_landuse <- setCluster(id = _INSERT) |>
+    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
+              na_values = _INSERT) |>
+    setFilter() |>
+    setIDVar(name = "al2", ) |>
+    setIDVar(name = "al3", ) |>
+    setIDVar(name = "year", ) |>
+    setIDVar(name = "methdod", value = "") |>
+    setIDVar(name = "landuse", ) |>
     setObsVar(name = "hectares_covered", )
 
   regTable(al1 = !!thisNation,
@@ -154,16 +159,31 @@ if(build_landuse){
 
 #### test schemas
 #
-myRoot <- paste0(dir_census_wip, "tables/stage2/")
-myFile <- "Indonesia_al2_buffalo_2000_2022_bps.csv"
+myRoot <- paste0(dir_census_data, "tables/stage2/")
+myFile <- "Brazil_al3_bubalino_1990_2022_ibge.csv"
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
                   col_types = cols(.default = "c"))
 
-schema <- schema_livestock_bps_al2
-validateSchema(schema = schema, input = input)
+schema <- schema_ibge2
+
+schema <- schema |>
+  validateSchema(input = input)
+input <- input |>
+  validateInput(schema = schema)
+
+ids <- schema |>
+  getIDVars(input = input)
+
+obs <- schema |>
+  getObsVars(input = input)
 
 output <- reorganise(input = input, schema = schema)
-#
-# https://github.com/luckinet/tabshiftr/issues
-#### delete this section after finalising script
+
+
+adb_visualise(territory = list(al1 = "Russian Federation"),
+              concept = list(animal = "cattle"),
+              variable = "number_heads",
+              level = "al3",
+              year = 2000:2020,
+              animate = TRUE)

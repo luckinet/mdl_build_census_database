@@ -121,7 +121,7 @@ if(build_crops){
 
   normTable(pattern = paste0("crops.*", ds[1]),
             ontoMatch = "crop",
-            # query = "al1 == 'Brazil'",
+            query = "al1 %in% c('Brazil', 'Indonesia')",
             beep = 10)
 
 }
@@ -154,7 +154,7 @@ if(build_livestock){
 
   normTable(pattern = paste0("livestock.*", ds[1]),
             ontoMatch = "animal",
-            query = "al1 == 'Russian Federation'",
+            query = "al1 == 'Brazil'",
             beep = 10)
 
 }
