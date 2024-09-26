@@ -17,10 +17,11 @@
 # ----
 
 thisNation <- "Russian Federation"
-# source(paste0(mdl0301, "src/96_preprocess_rosstat.R"))
+# source(paste0(mdl0301, "src/preprocess_rosstat.R"))
 
 # todo:
 # - sort in files from stage1/outdated to capture more municipalities
+# check (files in "not_needed"): ivanovo, decide on crimea, karachayCherkess, Mordovia; tyumen (includes at least 3 oblasts)
 
 ds <- c("rosstat")
 gs <- c("gadm")

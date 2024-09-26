@@ -1,23 +1,27 @@
 # ----
-# geography : _INSERT
-# period    : _INSERT
-# dataseries: State Statistics Service of Ukraine (https://www.ukrstat.gov.ua/)
-# variables :
-#   - land      : _INSERT
-#   - crops     : _INSERT
-#   - livestock : _INSERT
-#   - technology: _INSERT
-#   - social    : _INSERT
-# sampling  : survey, census
-# spatial   : _INSERT
-# authors   : Steffen Ehrmann
-# date      : 2024-MM-DD
-# status    : find data, update, inventarize, validate, normalize, done
-# comment   : _INSERT
+# title       : build census database - indis, mospi
+# description : this script integrates data of 'State Statistics Service of Ukraine' (https://www.ukrstat.gov.ua/)
+# license     : https://creativecommons.org/licenses/by-sa/4.0/
+# authors     : Steffen Ehrmann
+# date        : 2024-04-16
+# version     : 0.0.0
+# status      : find data, update, inventarize, validate, normalize, done
+# comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
+# ----
+# geography   : Ukraine
+# spatial     : _INSERT
+# period      : _INSERT
+# variables   :
+# - land      : hectares_covered
+# - crops     : hectares_harvested, tons_produced, kiloPerHectare_yield
+# - livestock : number_heads
+# - tech      : number_machines, tons_applied (fertilizer)
+# - social    : _INSERT
+# sampling    : survey, census
 # ----
 
 thisNation <- "Ukraine"
-# source(paste0(mdl0301, "src/96_preprocess_ukrstat.R"))
+# source(paste0(mdl0301, "src/preprocess_ukrstat.R"))
 
 
 # 1. dataseries ----

@@ -25,6 +25,8 @@ thisNation <- "Brazil"
 ds <- c("ibge", "mapb")
 gs <- c("ibge")
 
+compare at 2007 with GLW
+
 
 # 1. dataseries ----
 #

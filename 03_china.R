@@ -21,7 +21,7 @@
 # ----
 
 thisNation <- "China"
-# source(paste0(mdl0301, "src/96_preprocess_cnki.R"))
+# source(paste0(mdl0301, "src/preprocess_cnki.R"))
 
 # 1. dataseries ----
 #

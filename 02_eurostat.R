@@ -21,7 +21,7 @@
 # ----
 
 thisNation <- "Europe"
-# source(paste0(mdl0301, "src/96_preprocess_eurostat.R")) -> has a new input schema, need to adapt when including crops
+# source(paste0(mdl0301, "src/preprocess_eurostat.R")) -> has a new input schema, need to adapt when including crops
 
 # flag information: https://ec.europa.eu/eurostat/data/database/information
 flags <- tibble(flag = c("b", "c", "d", "e", "f", "n", "p", "r", "s", "u", "z"),
