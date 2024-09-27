@@ -83,6 +83,6 @@ regGeometry(gSeries = "gadm",
 # normalise geometries ----
 #
 normGeometry(pattern = "gadm",
-             query = "WHERE NAME_0 IN ('Brazil', 'Indonesia')",
+             # query = "WHERE NAME_0 IN ('Brazil', 'Indonesia')",
              stringdist = FALSE, strictMatch = TRUE,
              beep = 10)
