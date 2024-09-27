@@ -5,7 +5,7 @@
 # authors     : Steffen Ehrmann
 # date        : 2024-06-05
 # version     : 1.0.0
-# status      : done (luts), done (gpw)
+# status      : done
 # comment     : -
 # ----
 # geography   : Global
@@ -154,7 +154,7 @@ if(build_livestock){
 
   normTable(pattern = paste0("livestock.*", ds[1]),
             ontoMatch = "animal",
-            query = "al1 == 'Brazil'",
+            # query = "al1 == 'Brazil'",
             beep = 10)
 
 }
@@ -262,12 +262,12 @@ if(build_landuse){
 
   normTable(pattern = paste0("landuse.*", ds[1]),
             ontoMatch = "use",
-            query = "al1 == 'Denmark'",
+            # query = "al1 == 'Denmark'",
             beep = 10)
 
   normTable(pattern = ds[2],
             ontoMatch = "use",
-            query = "al1 == 'Denmark'",
+            # query = "al1 == 'Denmark'",
             beep = 10)
 
 }

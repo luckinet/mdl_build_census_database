@@ -1,12 +1,12 @@
 # ----
-# title       : build census database - indis, mospi
+# title       : build census database - ukrstat
 # description : this script integrates data of 'State Statistics Service of Ukraine' (https://www.ukrstat.gov.ua/)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-04-16
-# version     : 0.0.0
-# status      : find data, update, inventarize, validate, normalize, done
-# comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
+# date        : 2024-09-27
+# version     : 0.0.1
+# status      : work in progress
+# comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
 # geography   : Ukraine
 # spatial     : _INSERT

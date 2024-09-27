@@ -1,14 +1,14 @@
 # ----
-# title       : build census database - _INESRT
-# description : this script integrates data of '_INSERT' (LINK)
+# title       : build census database - dstdk
+# description : this script integrates data of 'Statistics Denmark' (https://www.statbank.dk)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-07-26
+# date        : 2024-09-27
 # version     : 0.0.1
-# status      : find data, update, inventarize, validate, normalize, done
-# comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
+# status      : work in progress
+# comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
-# geography   : _INSERT
+# geography   : Denmark
 # spatial     : _INSERT
 # period      : _INSERT
 # variables   :

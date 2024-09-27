@@ -5,7 +5,7 @@
 # authors     : Steffen Ehrmann
 # date        : 2024-06-05
 # version     : 1.0.0
-# status      : validate (luts), done (gpw)
+# status      : done
 # comment     : -
 # ----
 # geography   : Central Asia
@@ -126,10 +126,5 @@ if(build_livestock){
   normTable(pattern = paste0("livestock.*", ds[1]),
             ontoMatch = "animal",
             beep = 10)
-
-}
-
-## landuse ----
-if(build_landuse){
 
 }

@@ -1,14 +1,14 @@
 # ----
-# title       : build census database - _INESRT
-# description : this script integrates data of '_INSERT' (LINK)
+# title       : build census database - ssbno
+# description : this script integrates data of 'Statistics Norway' (https://www.ssb.no/en/)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-MM-DD
-# version     : 0.0.0
-# status      : find data, update, inventarize, validate, normalize, done
-# comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
+# date        : 2024-09-27
+# version     : 0.0.1
+# status      : work in progress
+# comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
-# geography   : _INSERT
+# geography   : Norway
 # spatial     : _INSERT
 # period      : _INSERT
 # variables   :

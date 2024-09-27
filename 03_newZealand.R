@@ -5,7 +5,7 @@
 # authors     : Steffen Ehrmann
 # date        : 2024-06-06
 # version     : 1.0.0
-# status      : validate (luts), done (gpw)
+# status      : done
 # comment     : archived data (pdfs etc): https://cdm20045.contentdm.oclc.org/digital?page=1, how to find old data not (yet) on the new website: https://www.stats.govt.nz/about-us/stats-nz-archive-website/
 # ----
 # geography   : New Zealand
@@ -412,8 +412,6 @@ if(build_livestock){
   normTable(pattern = ds[1],
             ontoMatch = "animal",
             beep = 10)
-
-  need to check parent-handling for the next new zealand al3 table
 
 }
 

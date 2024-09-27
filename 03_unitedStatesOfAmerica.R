@@ -5,7 +5,7 @@
 # authors     : Steffen Ehrmann
 # date        : 2024-06-05
 # version     : 1.0.0
-# status      : validate (luts), done (gpw)
+# status      : done
 # comment     : -
 # ----
 # geography   : United States of America
@@ -73,15 +73,13 @@ schema_usda_census <- schema_usda %>%
 schema_usda_survey <- schema_usda %>%
   setIDVar(name = "methdod", value = "survey")
 
-## crops ----
 if(build_crops){
+  ## crops ----
 
   ### census ----
   schema_usda_census_crops <- schema_usda_census %>%
     setIDVar(name = "crop", columns = .find(pattern = "SHORT_DESC", row = 1)) %>%
     setObsVar(name = "hectares_harvested", columns = .find(pattern = "VALUE", row = 1))
-
-  doublecheck unit and observed variable here
 
   regTable(al1 = !!thisNation,
            label = "al3",
@@ -126,8 +124,8 @@ if(build_crops){
 
 }
 
-## livestock ----
 if(build_livestock){
+  ## livestock ----
 
   ### census ----
   schema_usda_census_livestock <- schema_usda_census %>%
@@ -177,7 +175,8 @@ if(build_livestock){
 
 }
 
-## landuse ----
 if(build_landuse){
+  ## landuse ----
 
+  # work in progress
 }

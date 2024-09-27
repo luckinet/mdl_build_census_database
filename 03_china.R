@@ -5,23 +5,22 @@
 # authors     : Steffen Ehrmann
 # date        : 2024-07-17
 # version     : 0.6.0
-# status      :update, inventarize, validate, normalize, done
+# status      : work in progress
 # comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
 # ----
 # geography   : China
-# spatial     : _INSERT
+# spatial     :
 # period      : 1949 - 2020
 # variables   :
-# - land      : hectares_covered
-# - crops     : hectares_harvested, tons_produced, kiloPerHectare_yield
+# - land      : wip
+# - crops     : wip
 # - livestock : number_heads
-# - tech      : number_machines, tons_applied (fertilizer)
+# - tech      : wip
 # - social    : -
 # sampling    : survey, census
 # ----
 
 thisNation <- "China"
-# source(paste0(mdl0301, "src/preprocess_cnki.R"))
 
 # 1. dataseries ----
 #
@@ -49,32 +48,6 @@ regDataseries(name = gs[2],
 
 # 2. geometries ----
 #
-# regGeometry(nation = "China",
-#             gSeries = gs[2],
-#             level = 1,
-#             nameCol = "",
-#             archive = "|",
-#             archiveLink = "http://gaohr.win/site/blogs/2017/2017-04-18-GIS-basic-data-of-China.html",
-#             updateFrequency = "unknown")
-#
-# regGeometry(nation = "China",
-#             gSeries = gs[2],
-#             level = 2,
-#             nameCol = "",
-#             archive = "|",
-#             archiveLink = "http://gaohr.win/site/blogs/2017/2017-04-18-GIS-basic-data-of-China.html",
-#             updateFrequency = "unknown")
-#
-# regGeometry(nation = "China",
-#             gSeries = gs[2],
-#             level = 3,
-#             nameCol = "",
-#             archive = "|",
-#             archiveLink = "http://gaohr.win/site/blogs/2017/2017-04-18-GIS-basic-data-of-China.html",
-#             updateFrequency = "unknown")
-
-normGeometry(pattern = gs[],
-             beep = 10)
 
 
 # 3. tables ----
@@ -91,78 +64,7 @@ schema_nbs <- setCluster(id = "animal", left = 1, top = 4) %>%
 if(build_crops){
   ## crops ----
 
-  ### nbs ----
-  https://data.stats.gov.cn/english/easyquery.htm?cn=E0103
-  # schema_nbs_harvested <- schema_nbs %>%
-  #   setObsVar(name = "harvested", unit = "ha", columns = c(2:73))
-  #
-  # schema_nbs_planted <- schema_nbs %>%
-  #   setObsVar(name = "planted", unit = "ha", factor = 1000, columns = c(2:73), relative = TRUE)
-  #
-  # schema_nbs_production <- schema_nbs %>%
-  #   setIDVar(name = "commodities", rows = 2, columns = 1, split = "(?<=of ).*(?=\\()") %>%
-  #   setObsVar(name = "production", unit = "t", factor = 10000, columns = c(2:73))
-  #
-  # schema_nbs_production_02 <- schema_nbs %>%
-  #   setIDVar(name = "year", rows = 1, columns = c(2:71), relative = TRUE) %>%
-  #   setIDVar(name = "commodities", rows = 2, columns = 1, split = "(?<=of ).*(?=\\()") %>%
-  #   setObsVar(name = "production", unit = "t", factor = 10000, columns = c(2:71))
-
-  schema_crops <- setCluster(id = _INSERT) %>%
-    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "method", value = "") %>%
-    setIDVar(name = "crop", ) %>%
-    setObsVar(name = "hectares_harvested", ) %>%
-    setObsVar(name = "tons_produced", ) %>%
-    setObsVar(name = "kiloPerHectare_yield", )
-
-  regTable(nation = !!thisNation,
-           label = "al_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_crops,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "crop",
-            beep = 10)
-
-  for(i in seq_along(nbs_data)){
-
-    thisFile <- nbs_data[i]
-    message("  --> working with '", thisFile, "'")
-    temp <- str_split(thisFile, "_")[[1]]
-
-    if(temp[2] == "area"){
-      schema <- schema_nbs_harvested
-    } else if(temp[2] == "planted"){
-      schema <- schema_nbs_planted
-    } else if(temp[2] == "output" & temp[1] != "barley" & temp[1] != "benne" &
-              temp[1] != "fibreCrops" & temp[1] != "flax" & temp[1] != "helianthus" &
-              temp[1] != "hemp" & temp[1] != "jowar" & temp[1] != "juteAmbaryHemp" &
-              temp[1] != "millet" & temp[1] != "mung" & temp[1] != "otherCereals" &
-              temp[1] != "potato" & temp[1] != "ramee" & temp[1] != "redDates" &
-              temp[1] != "soja" & temp[1] != "springWheat" & temp[1] != "sugarcane" &
-              temp[1] != "winterWheat"){
-      schema <- schema_nbs_production
-    }
-
-
-  }
-
+  # work in progress
 }
 
 if(build_livestock){
@@ -207,34 +109,7 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  schema_landuse <- setCluster() %>%
-    setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "methdod", value = "") %>%
-    setIDVar(name = "landuse", ) %>%
-    setObsVar(name = "hectares_covered", )
-
-  regTable(nation = !!thisNation,
-           label = "al_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_landuse,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "landuse",
-            beep = 10)
+  # work in progress
 }
 
 

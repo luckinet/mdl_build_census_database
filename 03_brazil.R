@@ -5,7 +5,7 @@
 # authors     : Steffen Ehrmann
 # date        : 2024-08-03
 # version     : 1.0.0
-# status      : done (luts), done (gpw)
+# status      : done
 # comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
 # ----
 # geography   : Brazil
@@ -24,8 +24,6 @@ thisNation <- "Brazil"
 
 ds <- c("ibge", "mapb")
 gs <- c("ibge")
-
-compare at 2007 with GLW
 
 
 # 1. dataseries ----
@@ -69,7 +67,8 @@ normGeometry(pattern = gs[1],
 if(build_crops){
   ## crops ----
 
-  schema_ibge1 <- setCluster(id = "year", left = 1, top = 3, height = 400536) %>%
+  schema_ibge1 <-
+    setCluster(id = "year", left = 1, top = 3, height = 400536) %>%
     setIDVar(name = "al2", columns = 1, split = "((?<=\\().*(?=\\)))") %>%
     setIDVar(name = "al3", columns = 1, split = "(^.*?(?=\\s\\())") %>%
     setIDVar(name = "year", columns = 3) %>%
