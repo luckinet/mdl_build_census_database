@@ -1,14 +1,14 @@
 # ----
-# title       : build census database - indis, mospi
-# description : this script integrates data of 'Ministry of statistic and program implementation, government of India' (http://mospi.nic.in/), 'Indiastat Districts' (https://www.indiastatdistricts.com/)
+# title       : build census database - genesis
+# description : this script integrates data of 'Regionaldatenbank Deutschland' (https://www.regionalstatistik.de/genesis/online)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-04-16
-# version     : 0.0.0
-# status      : find data, update, inventarize, validate, normalize, done
+# date        : 2024-09-27
+# version     : 0.0.1
+# status      : work in progress
 # comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
-# geography   : India
+# geography   : Germany
 # spatial     : _INSERT
 # period      : _INSERT
 # variables   :

@@ -5,7 +5,7 @@
 # authors     : Steffen Ehrmann
 # date        : 2024-06-07
 # version     : 1.0.0
-# status      : validate (luts), done (gpw)
+# status      : done
 # comment     : -
 # ----
 # geography   : Argentina
@@ -238,7 +238,6 @@ if(build_landuse){
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "year", columns = 14) %>%
     setIDVar(name = "landuse", columns = c(7:10), rows = 1) %>%
-    # setObsVar(name = "tree_rows", columns = c(7:10), key = 5, value = "cortinas") %>%
     setObsVar(name = "hectares_covered", columns = c(7:10), key = 5, value = "macizo")
 
   regTable(al1 = !!thisNation,
