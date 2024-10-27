@@ -38,44 +38,44 @@ regDataseries(name = "gadm",
 # register geometries ----
 #
 regGeometry(gSeries = "gadm",
-            label = list(al1 = "NAME_0"),
-            archive = "gadm36_levels_gpkg.zip|gadm36_levels.gpkg",
-            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm36_levels_gpkg.zip",
+            label = list(ADM0 = "NAME_0"),
+            archive = "gadm_410-levels.zip|gadm36_levels.gpkg",
+            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm_410-levels.zip",
             downloadDate = ymd("2024-01-04"),
             updateFrequency = "unknown")
 
 regGeometry(gSeries = "gadm",
-            label = list(al1 = "NAME_0", al2 = "NAME_1"),
-            archive = "gadm36_levels_gpkg.zip|gadm36_levels.gpkg",
-            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm36_levels_gpkg.zip",
+            label = list(ADM0 = "NAME_0", ADM1 = "NAME_1"),
+            archive = "gadm_410-levels.zip|gadm36_levels.gpkg",
+            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm_410-levels.zip",
             downloadDate = ymd("2024-01-04"),
             updateFrequency = "unknown")
 
 regGeometry(gSeries = "gadm",
-            label = list(al1 = "NAME_0", al2 = "NAME_1", al3 = "NAME_2"),
-            archive = "gadm36_levels_gpkg.zip|gadm36_levels.gpkg",
-            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm36_levels_gpkg.zip",
+            label = list(ADM0 = "NAME_0", ADM1 = "NAME_1", ADM2 = "NAME_2"),
+            archive = "gadm_410-levels.zip|gadm36_levels.gpkg",
+            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm_410-levels.zip",
             downloadDate = ymd("2024-01-04"),
             updateFrequency = "unknown")
 
 regGeometry(gSeries = "gadm",
-            label = list(al1 = "NAME_0", al2 = "NAME_1", al3 = "NAME_2", al4 = "NAME_3"),
-            archive = "gadm36_levels_gpkg.zip|gadm36_levels.gpkg",
-            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm36_levels_gpkg.zip",
+            label = list(ADM0 = "NAME_0", ADM1 = "NAME_1", ADM2 = "NAME_2", ADM3 = "NAME_3"),
+            archive = "gadm_410-levels.zip|gadm36_levels.gpkg",
+            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm_410-levels.zip",
             downloadDate = ymd("2024-01-04"),
             updateFrequency = "unknown")
 
 regGeometry(gSeries = "gadm",
-            label = list(al1 = "NAME_0", al2 = "NAME_1", al3 = "NAME_2", al4 = "NAME_3", al5 = "NAME_4"),
-            archive = "gadm36_levels_gpkg.zip|gadm36_levels.gpkg",
-            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm36_levels_gpkg.zip",
+            label = list(ADM0 = "NAME_0", ADM1 = "NAME_1", ADM2 = "NAME_2", ADM3 = "NAME_3", ADM4 = "NAME_4"),
+            archive = "gadm_410-levels.zip|gadm36_levels.gpkg",
+            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm_410-levels.zip",
             downloadDate = ymd("2024-01-04"),
             updateFrequency = "unknown")
 
 regGeometry(gSeries = "gadm",
-            label = list(al1 = "NAME_0", al2 = "NAME_1", al3 = "NAME_2", al4 = "NAME_3", al5 = "NAME_4", al6 = "NAME_5"),
-            archive = "gadm36_levels_gpkg.zip|gadm36_levels.gpkg",
-            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm36_levels_gpkg.zip",
+            label = list(ADM0 = "NAME_0", ADM1 = "NAME_1", ADM2 = "NAME_2", ADM3 = "NAME_3", ADM4 = "NAME_4", ADM5 = "NAME_5"),
+            archive = "gadm_410-levels.zip|gadm36_levels.gpkg",
+            archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm_410-levels.zip",
             downloadDate = ymd("2024-01-04"),
             updateFrequency = "unknown")
 
@@ -83,6 +83,6 @@ regGeometry(gSeries = "gadm",
 # normalise geometries ----
 #
 normGeometry(pattern = "gadm",
-             # query = "WHERE NAME_0 IN ('Brazil', 'Indonesia')",
+             # query = "WHERE COUNTRY IN ('Brazil', 'Indonesia')",
              stringdist = FALSE, strictMatch = TRUE,
              beep = 10)

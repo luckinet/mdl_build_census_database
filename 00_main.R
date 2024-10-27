@@ -4,7 +4,7 @@
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
 # date        : 2024-09-26
-# version     : 0.9.0
+# version     : 0.7.0
 # status      : working
 # comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
@@ -19,7 +19,7 @@ path_gaz <- paste0(.get_path("onto", "_data"), "lucki_gazetteer.rds")
 #
 adb_init(root = .get_path("cens", "_data"), version = model_info$tag,
          licence = "https://creativecommons.org/licenses/by-sa/4.0/",
-         gazetteer = path_gaz, top = "al1",
+         gazetteer = path_gaz, top = "ADM0",
          ontology = list("crop" = path_onto, "animal" = path_onto, "use" = path_onto),
          author = list(cre = model_info$authors$cre,
                        aut = model_info$authors$aut$census,
