@@ -22,6 +22,9 @@
 
 thisNation <- "Europe"
 # source(paste0(mdl0301, "src/preprocess_eurostat.R"))
+#
+# any data about horses? also in the US
+# how about zeros? Where are they, do my schemas capture them correctly?
 
 # flag information: https://ec.europa.eu/eurostat/data/database/information
 flags <- tibble(flag = c("b", "c", "d", "e", "f", "n", "p", "r", "s", "u", "z"),

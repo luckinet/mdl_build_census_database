@@ -29,11 +29,11 @@ thisNation <- "Ukraine"
 ds <- c("ukrstat")
 gs <- c(_INSERT)
 
-regDataseries(name = ds[],
-              description = _INSERT,
-              homepage = _INSERT,
-              version = _INSERT,
-              licence_link = _INSERT)
+regDataseries(name = ds[1],
+              description = "State Statistics Service of Ukraine",
+              homepage = "https://www.ukrstat.gov.ua/",
+              version = "2024.10",
+              licence_link = "unknown")
 
 # regDataseries(name = ds[1],
 #               description = "State statistic service of Urkaine",

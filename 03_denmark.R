@@ -37,14 +37,14 @@ thisNation <- "Denmark"
 
 # 1. dataseries ----
 #
-ds <- c(_INSERT)
-gs <- c(_INSERT)
+ds <- c("dstdk")
+gs <- c("dstdk")
 
-regDataseries(name = ds[],
-              description = _INSERT,
-              homepage = _INSERT,
-              version = _INSERT,
-              licence_link = _INSERT)
+regDataseries(name = ds[1],
+              description = "Statistics Denmark",
+              homepage = "https://www.statbank.dk",
+              version = "2024.10",
+              licence_link = "unknown")
 
 
 # 2. geometries ----

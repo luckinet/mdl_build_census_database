@@ -36,32 +36,32 @@ regDataseries(name = ds[1],
 
 # 2. geometries ----
 #
-regGeometry(nation = !!thisNation,
-            gSeries = gs[1],
-            label = list(al1 = "fylkesnavn"),
-            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|fylke.shp",
-            archiveLink = "https://kart.ssb.no/",
-            downloadDate = ymd("2024-07-22"),
-            updateFrequency = "unknown")
-
-regGeometry(nation = !!thisNation,
-            gSeries = gs[1],
-            label = list(al2 = "kommunenum"),
-            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|kommune.shp",
-            archiveLink = "https://kart.ssb.no/",
-            downloadDate = ymd("2024-07-22"),
-            updateFrequency = "unknown")
-
-regGeometry(nation = !!thisNation,
-            gSeries = gs[1],
-            label = list(al2 = "kommunenum", al3 = "grunnkre_1"),
-            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|grunnkrets.shp",
-            archiveLink = "https://kart.ssb.no/",
-            downloadDate = ymd("2024-07-22"),
-            updateFrequency = "unknown")
-
-normGeometry(pattern = gs[1],
-             beep = 10)
+# regGeometry(nation = !!thisNation,
+#             gSeries = gs[1],
+#             label = list(al1 = "fylkesnavn"),
+#             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|fylke.shp",
+#             archiveLink = "https://kart.ssb.no/",
+#             downloadDate = ymd("2024-07-22"),
+#             updateFrequency = "unknown")
+#
+# regGeometry(nation = !!thisNation,
+#             gSeries = gs[1],
+#             label = list(al2 = "kommunenum"),
+#             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|kommune.shp",
+#             archiveLink = "https://kart.ssb.no/",
+#             downloadDate = ymd("2024-07-22"),
+#             updateFrequency = "unknown")
+#
+# regGeometry(nation = !!thisNation,
+#             gSeries = gs[1],
+#             label = list(al2 = "kommunenum", al3 = "grunnkre_1"),
+#             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|grunnkrets.shp",
+#             archiveLink = "https://kart.ssb.no/",
+#             downloadDate = ymd("2024-07-22"),
+#             updateFrequency = "unknown")
+#
+# normGeometry(pattern = gs[1],
+#              beep = 10)
 
 
 # 3. tables ----
