@@ -209,7 +209,7 @@ if(build_crops){
 if(build_livestock){
   ## livestock ----
 
-  rosstat_livestock <- list.files(path = paste0(dir_census_data, "/tables/stage1/rosstat/"),
+  rosstat_livestock <- list.files(path = paste0(.get_path("cens", "_data"), "/tables/stage1/rosstat/"),
                                   pattern = "livestock")
 
   for(i in seq_along(rosstat_livestock)){

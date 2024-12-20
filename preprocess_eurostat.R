@@ -5,8 +5,8 @@ allFiles <- selectCols <- NULL
 
 # set paths ----
 #
-incomingTables <- paste0(dir_census_wip, "tables/stage1/eurostat/")
-incomingGeometries <- paste0(dir_census_wip, "geometries/stage1/")
+incomingTables <- paste0(.get_path("cens", "_data"), "tables/stage1/eurostat/")
+incomingGeometries <- paste0(.get_path("cens", "_data"), "geometries/stage1/")
 
 
 # load metadata ----
@@ -300,7 +300,7 @@ for(i in seq_along(allInput)){
   rngYears <- range(as.numeric(colnames(temp)), na.rm = TRUE)
 
   # handle some special cases (they are so special!)
-  if(theInput == "estat_agr_r_animal.tsv.gz"){
+  if(theInput == "agr_r_animal_tabular.tsv.gz"){
 
     temp2 <- temp %>%
       filter(ah_level == 2) %>%
@@ -309,8 +309,8 @@ for(i in seq_along(allInput)){
       filter(ah_level == 3) %>%
       select(-ah_level)
 
-    write_csv(x = temp2, file = paste0(dir_census_wip, "tables/stage2/", thisNation, "_al2_", theName, "_", rngYears[1], "_", rngYears[2], "_eurostat.csv"), na = "")
-    write_csv(x = temp3, file = paste0(dir_census_wip, "tables/stage2/", thisNation, "_al3_", theName, "_", rngYears[1], "_", rngYears[2], "_eurostat.csv"), na = "")
+    write_csv(x = temp2, file = paste0(.get_path("cens", "_data"), "tables/stage2/", thisNation, "_al2_", theName, "_", rngYears[1], "_", rngYears[2], "_eurostat.csv"), na = "")
+    write_csv(x = temp3, file = paste0(.get_path("cens", "_data"), "tables/stage2/", thisNation, "_al3_", theName, "_", rngYears[1], "_", rngYears[2], "_eurostat.csv"), na = "")
 
   } else {
 
@@ -336,7 +336,7 @@ for(i in seq_along(allInput)){
     }
 
     if(dim(temp)[1] != 0){
-      write_csv(x = temp, file = paste0(dir_census_wip, "tables/stage2/", thisNation, "_al", maxLvl, "_", theName, "_", rngYears[1], "_", rngYears[2], "_eurostat.csv"), na = "NA")
+      write_csv(x = temp, file = paste0(.get_path("cens", "_data"), "tables/stage2/", thisNation, "_al", maxLvl, "_", theName, "_", rngYears[1], "_", rngYears[2], "_eurostat.csv"), na = "NA")
     }
 
   }

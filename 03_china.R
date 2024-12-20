@@ -52,7 +52,7 @@ regDataseries(name = gs[2],
 
 # 3. tables ----
 #
-nbs_data <- list.files(path = paste0(dir_census_wip, "/tables/stage1/nbs"))
+nbs_data <- list.files(path = paste0(.get_path("cens", "_data"), "/tables/stage1/nbs"))
 
 schema_nbs <- setCluster(id = "animal", left = 1, top = 4) %>%
   setFormat(decimal = ".") |>
