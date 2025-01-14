@@ -6,7 +6,7 @@
 # date        : 2024-04-03
 # version     : 1.0.0
 # status      : done
-# comment     : version 3.6
+# comment     : version 4.1
 # ----
 # geography   : Global
 # spatial     : GADM0, GADM1, GADM2, GADM3, GADM4, GADM5
@@ -23,16 +23,10 @@
 # register dataseries ----
 #
 regDataseries(name = "gadm",
-              description = "Database of Global Administrative Areas v3.6",
+              description = "Database of Global Administrative Areas v4.1",
               homepage = "https://gadm.org/index.html",
-              version = "3.6",
+              version = "4.1",
               licence_link = "https://gadm.org/license.html")
-
-# regDataseries(name = "gadm",
-#               description = "Database of Global Administrative Areas v4.1",
-#               homepage = "https://gadm.org/index.html",
-#               version = "4.1",
-#               licence_link = "https://gadm.org/license.html")
 
 
 # register geometries ----
