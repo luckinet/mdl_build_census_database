@@ -43,8 +43,8 @@ regDataseries(name = ds[1],
 if(build_crops){
 
   schema_agriwanet1 <-
-    setIDVar(name = "al1", columns = 1) %>%
-    setIDVar(name = "al2", columns = 2) %>%
+    setIDVar(name = "ADM0", columns = 1) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
     setIDVar(name = "year", columns = 4) %>%
     setIDVar(name = "method", value = "yearbook") %>%
     setIDVar(name = "crop", columns = c(20:34), rows = 1) %>%
@@ -52,7 +52,7 @@ if(build_crops){
               key = 3, value = "all farms (not applic case) (10)")
 
   regTable(subset = "harvested",
-           label = "al2",
+           label = "ADM1",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_agriwanet1,
@@ -67,8 +67,8 @@ if(build_crops){
            overwrite = TRUE)
 
   schema_agriwanet2 <-
-    setIDVar(name = "al1", columns = 1) %>%
-    setIDVar(name = "al2", columns = 2) %>%
+    setIDVar(name = "ADM0", columns = 1) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
     setIDVar(name = "year", columns = 4) %>%
     setIDVar(name = "method", value = "yearbook") %>%
     setIDVar(name = "crop", columns = c(35:49), rows = 1) %>%
@@ -76,7 +76,7 @@ if(build_crops){
               key = 3, value = "all farms (not applic case) (10)")
 
   regTable(subset = "production",
-           label = "al2",
+           label = "ADM1",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_agriwanet2,
@@ -100,8 +100,8 @@ if(build_crops){
 if(build_livestock){
 
   schema_agriwanet3 <-
-    setIDVar(name = "al1", columns = 1) %>%
-    setIDVar(name = "al2", columns = 2) %>%
+    setIDVar(name = "ADM0", columns = 1) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
     setIDVar(name = "year", columns = 4) %>%
     setIDVar(name = "method", value = "yearbook") %>%
     setIDVar(name = "animal", columns = c(50:53), rows = 1) %>%
@@ -109,7 +109,7 @@ if(build_livestock){
               key = 3, value = "all farms (not applic case) (10)")
 
   regTable(subset = "livestock",
-           label = "al2",
+           label = "ADM1",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_agriwanet3,

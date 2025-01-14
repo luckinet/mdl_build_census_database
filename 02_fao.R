@@ -52,13 +52,13 @@ if(build_crops){
 
   ### area harvested ----
   schema_faostat2 <-
-    setIDVar(name = "al1", columns = 3) %>%
+    setIDVar(name = "ADM0", columns = 3) %>%
     setIDVar(name = "year", columns = 10) %>%
     setIDVar(name = "method", value = "survey, yearbook [1]") %>%
     setIDVar(name = "crop", columns = 6) %>%
     setObsVar(name = "hectares_harvested", columns = 12)
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            subset = "cropsHarvested",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -75,13 +75,13 @@ if(build_crops){
 
   ### tons produced ----
   schema_faostat2 <-
-    setIDVar(name = "al1", columns = 3) %>%
+    setIDVar(name = "ADM0", columns = 3) %>%
     setIDVar(name = "year", columns = 10) %>%
     setIDVar(name = "method", value = "survey, yearbook [1]") %>%
     setIDVar(name = "crop", columns = 6) %>%
     setObsVar(name = "tons_produced", columns = 12)
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            subset = "cropsProduction",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -98,13 +98,13 @@ if(build_crops){
 
   ### kiloPerHectare yield ----
   schema_faostat2 <-
-    setIDVar(name = "al1", columns = 3) %>%
+    setIDVar(name = "ADM0", columns = 3) %>%
     setIDVar(name = "year", columns = 10) %>%
     setIDVar(name = "method", value = "survey, yearbook [1]") %>%
     setIDVar(name = "crop", columns = 6) %>%
     setObsVar(name = "kiloPerHectare_yield", factor = 10, columns = 12)
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            subset = "cropsYield",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -121,7 +121,7 @@ if(build_crops){
 
   normTable(pattern = paste0("crops.*", ds[1]),
             ontoMatch = "crop",
-            query = "al1 %in% c('Brazil', 'Indonesia')",
+            query = "ADM0 %in% c('Brazil', 'Indonesia')",
             beep = 10)
 
 }
@@ -131,13 +131,13 @@ if(build_livestock){
 
   ### number heads ----
   schema_faostat1 <-
-    setIDVar(name = "al1", columns = 3) %>%
+    setIDVar(name = "ADM0", columns = 3) %>%
     setIDVar(name = "year", columns = 10) %>%
     setIDVar(name = "method", value = "survey, yearbook [1]") %>%
     setIDVar(name = "animal", columns = 6) %>%
     setObsVar(name = "number_heads", columns = 12) # this needs a fix in 'factor' for chicken/ducks
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -154,7 +154,7 @@ if(build_livestock){
 
   normTable(pattern = paste0("livestock.*", ds[1]),
             ontoMatch = "animal",
-            # query = "al1 == 'Russian Federation'",
+            # query = "ADM0 == 'Russian Federation'",
             beep = 10)
 
 }
@@ -164,14 +164,14 @@ if(build_landuse){
 
   ### faostat ----
   schema_faostat3 <-
-    setIDVar(name = "al1", columns = 3) %>%
+    setIDVar(name = "ADM0", columns = 3) %>%
     setIDVar(name = "year", columns = 9) %>%
     setIDVar(name = "method", value = "survey, yearbook [1]") %>%
     setIDVar(name = "use", columns = 5) %>%
     setObsVar(name = "hectares_covered", factor = 1000, columns = 11,
               key = 7, value = "Area")
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            subset = "landuse",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -188,13 +188,13 @@ if(build_landuse){
 
   ### frafao ----
   schema_frafao1 <- setCluster(id = "year") %>%
-    setIDVar(name = "al1", columns = 1) %>%
+    setIDVar(name = "ADM0", columns = 1) %>%
     setIDVar(name = "year", columns = 3, rows = 1, split = "\\d+") %>%
     setIDVar(name = "method", value = "survey, yearbook [1]") %>%
     setIDVar(name = "use", columns = c(3, 6), rows = 1) %>%
     setObsVar(name = "hectares_covered", factor = 1000, columns = c(3, 6))
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            dSeries = ds[2],
            gSeries = gs[1],
            begin = 1995,
@@ -209,13 +209,13 @@ if(build_landuse){
            overwrite = TRUE)
 
   schema_frafao2 <- setCluster(id = "use", left = 11, top = 4, width = 5) %>%
-    setIDVar(name = "al1", columns = 1) %>%
+    setIDVar(name = "ADM0", columns = 1) %>%
     setIDVar(name = "year", columns = c(11:15), rows = 4) %>%
     setIDVar(name = "method", value = "survey, yearbook [1]") %>%
     setIDVar(name = "use", columns = 11, rows = 3) %>%
     setObsVar(name = "hectares_covered", factor = 1000, columns = c(11:15))
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            subset = "primaryForest",
            dSeries = ds[2],
            gSeries = gs[1],
@@ -230,7 +230,7 @@ if(build_landuse){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            subset = "naturalRegen",
            dSeries = ds[2],
            gSeries = gs[1],
@@ -245,7 +245,7 @@ if(build_landuse){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(label = "al1",
+  regTable(label = "ADM0",
            subset = "plantedForest",
            dSeries = ds[2],
            gSeries = gs[1],
@@ -262,12 +262,12 @@ if(build_landuse){
 
   normTable(pattern = paste0("landuse.*", ds[1]),
             ontoMatch = "use",
-            # query = "al1 == 'Denmark'",
+            # query = "ADM0 == 'Denmark'",
             beep = 10)
 
   normTable(pattern = ds[2],
             ontoMatch = "use",
-            # query = "al1 == 'Denmark'",
+            # query = "ADM0 == 'Denmark'",
             beep = 10)
 
 }
