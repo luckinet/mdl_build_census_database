@@ -1,6 +1,6 @@
 # ----
 # title       : build census database - dstdk
-# description : this script integrates data of 'Statistics Denmark' (https://www.statbank.dk)
+# description : this script integrates data of 'Statistics Denmark' (https://www.statbank.dk, https://www.statbank.dk/statbank5a)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
 # date        : 2024-09-27
@@ -20,18 +20,9 @@
 # sampling    : survey, census
 # ----
 
-https://www.statbank.dk/statbank5a/default.asp?w=1921
 
 
-https://www.statbank.dk/AFG5
-https://www.statbank.dk/AFG
 
-https://www.statbank.dk/HST77
-https://www.statbank.dk/HST7
-https://www.statbank.dk/HDYR07
-https://www.statbank.dk/HALM
-https://www.statbank.dk/HALM1
-https://www.statbank.dk/FL1
 
 thisNation <- "Denmark"
 
@@ -51,13 +42,13 @@ regDataseries(name = ds[1],
 #
 regGeometry(nation = !!thisNation,
             gSeries = gs[],
-            label = list(al_ = ""),
+            label = list(ADM_ = ""),
             archive = "|",
             archiveLink = _INSERT,
             downloadDate = _INSERT,
             updateFrequency = _INSERT)
 
-normGeometry(pattern = gs[],
+normGeometry(pattern = gs[1],
              beep = 10)
 
 
@@ -65,12 +56,20 @@ normGeometry(pattern = gs[],
 #
 if(build_crops){
   ## crops ----
+  https://www.statbank.dk/AFG5
+  https://www.statbank.dk/AFG
+
+  https://www.statbank.dk/HST77
+  https://www.statbank.dk/HST7
+  https://www.statbank.dk/HALM
+  https://www.statbank.dk/HALM1
+  https://www.statbank.dk/FL1
 
   schema_crops <- setCluster(id = _INSERT) %>%
     setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
               na_values = _INSERT) %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "method", value = "") %>%
     setIDVar(name = "crop", ) %>%
@@ -79,7 +78,7 @@ if(build_crops){
     setObsVar(name = "kiloPerHectare_yield", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -104,32 +103,46 @@ if(build_livestock){
 
   schema_livestock <- setCluster() %>%
     setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "method", value = "") %>%
     setIDVar(name = "animal", )  %>%
     setObsVar(name = "number_heads", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
+           label = "ADM1",
+           subset = "livestock",
+           dSeries = ds[1],
+           gSeries = gs[1],
            schema = schema_livestock,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           begin = 1982,
+           end = 2006,
+           archive = "2025116204311516975717HDYR74683155415.csv",
+           archiveLink = "https://www.statbank.dk/HDYR",
+           downloadDate = ymd("2025-01-16"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.statbank.dk/statbank5a/selectvarval/Define.asp?MainTable=HDYR&TabStrip=Info&PLanguage=1&FF=8",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
-  2024726135113474083435HDYR0749881546597.csv
+  regTable(al1 = !!thisNation,
+           label = "ADM1",
+           subset = "livestock",
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock,
+           begin = 2006,
+           end = 2023,
+           archive = "2024726135823474083435HST7750306201535.csv",
+           archiveLink = "https://www.statbank.dk/HDYR07",
+           downloadDate = ymd("2025-01-16"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.statbank.dk/statbank5a/selectvarval/Define.asp?MainTable=HDYR07&TabStrip=Info&PLanguage=1&FF=8",
+           metadataPath = "unknown",
+           overwrite = TRUE)
 
-  normTable(pattern = ds[],
+
+  normTable(pattern = ds[1],
             ontoMatch = "animal",
             beep = 10)
 }
@@ -139,15 +152,15 @@ if(build_landuse){
 
   schema_landuse <- setCluster() %>%
     setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "methdod", value = "") %>%
     setIDVar(name = "landuse", ) %>%
     setObsVar(name = "hectares_covered", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -170,7 +183,7 @@ if(build_landuse){
 #### test schemas
 #
 myRoot <- paste0(dir_census_wip, "tables/stage2/")
-myFile <- "China_al2_camelsHeadcount_1978_2020_nbs.csv"
+myFile <- ""
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
                   col_types = cols(.default = "c"))

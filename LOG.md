@@ -1,3 +1,7 @@
+# 2025-01-14 - v0.8.1
+
+- starting to include remaining south american countries
+
 # 2024-10-16 - v0.7.0
 
 - had to fix bugs in arealDB

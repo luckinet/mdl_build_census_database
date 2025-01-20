@@ -38,7 +38,7 @@ regDataseries(name = ds[],
 #
 regGeometry(nation = !!thisNation,
             gSeries = gs[],
-            label = list(al_ = ""),
+            label = list(ADM_ = ""),
             archive = "|",
             archiveLink = _INSERT,
             downloadDate = _INSERT,
@@ -68,7 +68,7 @@ if(build_crops){
     setObsVar(name = "kiloPerHectare_yield", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -104,7 +104,7 @@ if(build_livestock){
     setObsVar(name = "number_heads", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -140,7 +140,7 @@ if(build_landuse){
     setObsVar(name = "hectares_covered", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],

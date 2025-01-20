@@ -1,22 +1,22 @@
 # ----
 # title       : build census database - ssbno
-# description : this script integrates data of 'Statistics Norway' (https://www.ssb.no/en/)
+# description : this script integrates data of 'Statistics Norway' (https://www.ssb.no/en/, https://www.ssb.no/en/statbank/list/stjord)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-09-27
-# version     : 0.0.1
+# date        : 2024-01-16
+# version     : 0.0.2
 # status      : work in progress
 # comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
 # geography   : Norway
-# spatial     : _INSERT
-# period      : _INSERT
+# spatial     : ADM1, ADM2
+# period      : 1969 - 2023
 # variables   :
 # - land      : hectares_covered
 # - crops     : hectares_planted, hectares_harvested, tons_produced, kiloPerHectare_yield
-# - livestock : number_heads, colonies
+# - livestock : number_heads
 # - tech      : number_machines, tons_applied (fertilizer)
-# - social    : _INSERT
+# - social    : -
 # sampling    : survey, census
 # ----
 
@@ -36,32 +36,32 @@ regDataseries(name = ds[1],
 
 # 2. geometries ----
 #
-# regGeometry(nation = !!thisNation,
-#             gSeries = gs[1],
-#             label = list(al1 = "fylkesnavn"),
-#             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|fylke.shp",
-#             archiveLink = "https://kart.ssb.no/",
-#             downloadDate = ymd("2024-07-22"),
-#             updateFrequency = "unknown")
-#
-# regGeometry(nation = !!thisNation,
-#             gSeries = gs[1],
-#             label = list(al2 = "kommunenum"),
-#             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|kommune.shp",
-#             archiveLink = "https://kart.ssb.no/",
-#             downloadDate = ymd("2024-07-22"),
-#             updateFrequency = "unknown")
-#
-# regGeometry(nation = !!thisNation,
-#             gSeries = gs[1],
-#             label = list(al2 = "kommunenum", al3 = "grunnkre_1"),
-#             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|grunnkrets.shp",
-#             archiveLink = "https://kart.ssb.no/",
-#             downloadDate = ymd("2024-07-22"),
-#             updateFrequency = "unknown")
-#
-# normGeometry(pattern = gs[1],
-#              beep = 10)
+regGeometry(nation = !!thisNation,
+            gSeries = gs[1],
+            label = list(al1 = "fylkesnavn"),
+            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|fylke.shp",
+            archiveLink = "https://kart.ssb.no/",
+            downloadDate = ymd("2024-07-22"),
+            updateFrequency = "unknown")
+
+regGeometry(nation = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM1 = "kommunenum"),
+            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|kommune.shp",
+            archiveLink = "https://kart.ssb.no/",
+            downloadDate = ymd("2024-07-22"),
+            updateFrequency = "unknown")
+
+regGeometry(nation = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM1 = "kommunenum", ADM2 = "grunnkre_1"),
+            archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|grunnkrets.shp",
+            archiveLink = "https://kart.ssb.no/",
+            downloadDate = ymd("2024-07-22"),
+            updateFrequency = "unknown")
+
+normGeometry(pattern = gs[1],
+             beep = 10)
 
 
 # 3. tables ----
@@ -72,8 +72,8 @@ if(build_crops){
   schema_crops <- setCluster(id = _INSERT) %>%
     setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
               na_values = _INSERT) %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "method", value = "") %>%
     setIDVar(name = "crop", ) %>%
@@ -82,7 +82,7 @@ if(build_crops){
     setObsVar(name = "kiloPerHectare_yield", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -105,36 +105,50 @@ if(build_crops){
 if(build_livestock){
   ## livestock ----
 
-  schema_livestock <- setCluster() %>%
+  schema_livestock_ssbno <- setCluster() %>%
     setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "method", value = "") %>%
     setIDVar(name = "animal", )  %>%
     setObsVar(name = "number_heads", )
 
+  ### detailed species ----
   regTable(al1 = !!thisNation,
-           label = "al_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           label = "ADM1",
+           subset = "surveySpecies",
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ssbno,
+           begin = 1969,
+           end = 2023,
+           archive = "11507_20240722-204729.xlsx",
+           archiveLink = "https://www.ssb.no/en/statbank/table/11507/tableViewLayout1/",
+           downloadDate = ymd("2025-01-16"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.ssb.no/en/statbank/table/11507",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
-  13315_20240722-222718.xlsx
-  11507_20240722-204729.xlsx
-  06447_20240722-204649.xlsx
+  ### detailed admin units ----
+  regTable(al1 = !!thisNation,
+           label = "ADM2",
+           subset = "surveyAdmin",
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ssbno,
+           begin = 1969,
+           end = 2023,
+           archive = "06447_20240722-204649.xlsx",
+           archiveLink = "https://www.ssb.no/en/statbank/table/06447/tableViewLayout1/",
+           downloadDate = ymd("2025-01-16"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.ssb.no/en/statbank/table/06447",
+           metadataPath = "unkown",
+           overwrite = TRUE)
 
-  normTable(pattern = ds[],
+  normTable(pattern = ds[1],
             ontoMatch = "animal",
             beep = 10)
 }
@@ -144,15 +158,15 @@ if(build_landuse){
 
   schema_landuse <- setCluster() %>%
     setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "methdod", value = "") %>%
     setIDVar(name = "landuse", ) %>%
     setObsVar(name = "hectares_covered", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -175,7 +189,7 @@ if(build_landuse){
 #### test schemas
 #
 myRoot <- paste0(dir_census_wip, "tables/stage2/")
-myFile <- "China_al2_camelsHeadcount_1978_2020_nbs.csv"
+myFile <- ""
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
                   col_types = cols(.default = "c"))

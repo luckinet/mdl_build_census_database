@@ -47,8 +47,8 @@ if(build_crops){
   schema_crops <- setCluster(id = _INSERT) %>%
     setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
               na_values = _INSERT) %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "method", value = "") %>%
     setIDVar(name = "crop", ) %>%
@@ -57,7 +57,7 @@ if(build_crops){
     setObsVar(name = "kiloPerHectare_yield", )
 
   regTable(nation = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -82,8 +82,8 @@ if(build_livestock){
 
   schema_livestock_census <- setCluster() %>%
     setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "method", value = "census") %>%
     setIDVar(name = "animal", )  %>%
@@ -91,17 +91,15 @@ if(build_livestock){
 
   schema_livestock_survey <- setCluster() %>%
     setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", )  %>%
     setObsVar(name = "number_heads", )
 
-  same schema as india basically, solve together!
-
   regTable(al1 = !!thisNation,
-           label = "al3",
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -111,13 +109,13 @@ if(build_livestock){
            archive = "41120-12-01-4.csv",
            archiveLink = "https://www.regionalstatistik.de/genesis//online?operation=table&code=41120-12-01-4",
            downloadDate = ymd("2024-07-30"),
-           updateFrequency = "annual",
+           updateFrequency = "annually",
            metadataPath = "",
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
 
   regTable(al1 = !!thisNation,
-           label = "al3",
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -127,13 +125,13 @@ if(build_livestock){
            archive = "41141-03-02-4_2010.csv",
            archiveLink = "https://www.regionalstatistik.de/genesis//online?operation=table&code=41141-03-02-4",
            downloadDate = ymd("2024-07-30"),
-           updateFrequency = "annual",
+           updateFrequency = "annually",
            metadataPath = "",
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
 
   regTable(al1 = !!thisNation,
-           label = "al3",
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -143,13 +141,13 @@ if(build_livestock){
            archive = "41141-03-02-4_2016.csv",
            archiveLink = "https://www.regionalstatistik.de/genesis//online?operation=table&code=41141-03-02-4",
            downloadDate = ymd("2024-07-30"),
-           updateFrequency = "annual",
+           updateFrequency = "annually",
            metadataPath = "",
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
 
   regTable(al1 = !!thisNation,
-           label = "al3",
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -159,13 +157,13 @@ if(build_livestock){
            archive = "41141-03-02-4_2020.csv",
            archiveLink = "https://www.regionalstatistik.de/genesis//online?operation=table&code=41141-03-02-4",
            downloadDate = ymd("2024-07-30"),
-           updateFrequency = "annual",
+           updateFrequency = "annually",
            metadataPath = "",
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
 
   regTable(al1 = !!thisNation,
-           label = "al3",
+           label = "ADM2",
            subset = "cattle",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -175,7 +173,7 @@ if(build_livestock){
            archive = "41312-01-01-4.csv",
            archiveLink = "https://www.regionalstatistik.de/genesis//online?operation=table&code=41312-01-01-4",
            downloadDate = ymd("2024-07-30"),
-           updateFrequency = "annual",
+           updateFrequency = "annuallyly",
            metadataPath = "",
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
@@ -190,15 +188,15 @@ if(build_landuse){
 
   schema_landuse <- setCluster() %>%
     setFormat() %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
+    setIDVar(name = "ADM1", ) %>%
+    setIDVar(name = "ADM2", ) %>%
     setIDVar(name = "year", ) %>%
     setIDVar(name = "methdod", value = "") %>%
     setIDVar(name = "landuse", ) %>%
     setObsVar(name = "hectares_covered", )
 
   regTable(nation = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],

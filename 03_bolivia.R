@@ -44,7 +44,7 @@ regDataseries(name = ds[2],
 #
 regGeometry(nation = !!thisNation,
             gSeries = gs[],
-            label = list(al_ = ""),
+            label = list(ADM_ = ""),
             archive = "|",
             archiveLink = _INSERT,
             downloadDate = _INSERT,
@@ -63,8 +63,8 @@ if(build_crops){
     setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
               na_values = _INSERT) |>
     setFilter() |>
-    setIDVar(name = "al2", ) |>
-    setIDVar(name = "al3", ) |>
+    setIDVar(name = "ADM1", ) |>
+    setIDVar(name = "ADM2", ) |>
     setIDVar(name = "year", ) |>
     setIDVar(name = "method", value = "") |>
     setIDVar(name = "crop", ) |>
@@ -73,7 +73,7 @@ if(build_crops){
     setObsVar(name = "kiloPerHectare_yield", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -100,15 +100,15 @@ if(build_livestock){
     setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
               na_values = _INSERT) |>
     setFilter() |>
-    setIDVar(name = "al2", ) |>
-    setIDVar(name = "al3", ) |>
+    setIDVar(name = "ADM1", ) |>
+    setIDVar(name = "ADM2", ) |>
     setIDVar(name = "year", ) |>
     setIDVar(name = "method", value = "") |>
     setIDVar(name = "animal", ) |>
     setObsVar(name = "number_heads", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -135,15 +135,15 @@ if(build_landuse){
     setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
               na_values = _INSERT) |>
     setFilter() |>
-    setIDVar(name = "al2", ) |>
-    setIDVar(name = "al3", ) |>
+    setIDVar(name = "ADM1", ) |>
+    setIDVar(name = "ADM2", ) |>
     setIDVar(name = "year", ) |>
     setIDVar(name = "methdod", value = "") |>
     setIDVar(name = "landuse", ) |>
     setObsVar(name = "hectares_covered", )
 
   regTable(al1 = !!thisNation,
-           label = "al_",
+           label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
            gSeries = gs[],
@@ -166,7 +166,7 @@ if(build_landuse){
 #### test schemas
 #
 myRoot <- paste0(dir_census_data, "tables/stage2/")
-myFile <- "Brazil_al3_bubalino_1990_2022_ibge.csv"
+myFile <- ""
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
                   col_types = cols(.default = "c"))
@@ -187,9 +187,9 @@ obs <- schema |>
 output <- reorganise(input = input, schema = schema)
 
 
-adb_visualise(territory = list(al1 = "Russian Federation"),
+adb_visualise(territory = list(al1 = ""),
               concept = list(animal = "cattle"),
               variable = "number_heads",
-              level = "al3",
+              level = "ADM2",
               year = 2000:2020,
               animate = TRUE)

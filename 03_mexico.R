@@ -27,17 +27,17 @@ thisNation <- "Mexico"
 ds <- c("inegi", "gobmx")
 gs <- c("gadm")
 
-regDataseries(name = ds[1],
-              description = "National Institute of Statistics and Geography",
-              homepage = "https://en.www.inegi.org.mx/",
-              version = _INSERT,
-              licence_link = _INSERT)
+# regDataseries(name = ds[1],
+#               description = "National Institute of Statistics and Geography",
+#               homepage = "https://en.www.inegi.org.mx/",
+#               version = _INSERT,
+#               licence_link = _INSERT)
 
 regDataseries(name = ds[2],
               description = "Gobierno de Mexico",
               homepage = "https://www.gob.mx/siap/acciones-y-programas/produccion-pecuaria",
-              version = _INSERT,
-              licence_link = _INSERT)
+              version = "2025.01",
+              licence_link = "unknown")
 
 
 # 2. geometries ----
