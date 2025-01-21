@@ -55,20 +55,20 @@ if(build_crops){
     thisFile <- rosstat_yield[i]
     name <- str_split(thisFile, "_")[[1]]
     munst <- name[2]
-    al2Val <- str_split(name[4], "[.]")[[1]][1]
+    ADM1Val <- str_split(name[4], "[.]")[[1]][1]
 
-    schema_yield <- setCluster(id = "al3", left = 1, top = .find(pattern = "центнеров с гектара", col = 1)) %>%
+    schema_yield <- setCluster(id = "ADM2", left = 1, top = .find(pattern = "центнеров с гектара", col = 1)) %>%
       setFormat(decimal = ".") %>%
-      setIDVar(name = "al2", value = al2Val) %>%
-      setIDVar(name = "al3", columns = 1, split = "(?<=год\\. ).*", rows = .find(row = 1, relative = TRUE)) %>%
+      setIDVar(name = "ADM1", value = ADM1Val) %>%
+      setIDVar(name = "ADM2", columns = 1, split = "(?<=год\\. ).*", rows = .find(row = 1, relative = TRUE)) %>%
       setIDVar(name = "year", columns = .find(fun = is.numeric, row = 2, relative = TRUE), rows = .find(row = 2, relative = TRUE)) %>%
       setIDVar(name = "method", value = "survey") %>%
       setIDVar(name = "crop", columns = 1) %>%
       setObsVar(name = "kiloPerHectare_yield", factor = 100, columns = .find(fun = is.numeric, row = 2, relative = TRUE)) # russian centner to kilogram
 
     regTable(al1 = !!thisNation,
-             label = "al3",
-             subset = paste0("yield", al2Val),
+             label = "ADM2",
+             subset = paste0("yield", ADM1Val),
              dSeries = ds[1],
              gSeries = gs[1],
              schema = schema_yield,
@@ -93,21 +93,21 @@ if(build_crops){
     thisFile <- rosstat_planted[i]
     name <- str_split(thisFile, "_")[[1]]
     munst <- name[2]
-    al2Val <- str_split(name[4], "[.]")[[1]][1]
+    ADM1Val <- str_split(name[4], "[.]")[[1]][1]
 
-    schema_planted <- setCluster(id = "al3", left = 1, top = .find(pattern = "Посевные площади сельскохозяйственных культур", col = 1)) %>%
+    schema_planted <- setCluster(id = "ADM2", left = 1, top = .find(pattern = "Посевные площади сельскохозяйственных культур", col = 1)) %>%
       setFilter(rows = .find(pattern = "Вся посевная площадь.", col = 1, invert = TRUE)) %>%
       setFormat(decimal = ".") %>%
-      setIDVar(name = "al2", value = al2Val) %>%
-      setIDVar(name = "al3", columns = 1, split = "(?<=год\\. ).*", rows = .find(row = 1, relative = TRUE)) %>%
+      setIDVar(name = "ADM1", value = ADM1Val) %>%
+      setIDVar(name = "ADM2", columns = 1, split = "(?<=год\\. ).*", rows = .find(row = 1, relative = TRUE)) %>%
       setIDVar(name = "year", columns = .find(fun = is.numeric, row = 2, relative = TRUE), rows = .find(row = 2, relative = TRUE)) %>%
       setIDVar(name = "method", value = "survey") %>%
       setIDVar(name = "crop", columns = 1) %>%
       setObsVar(name = "hectares_harvested", columns = .find(fun = is.numeric, row = 2, relative = TRUE))
 
     regTable(al1 = !!thisNation,
-             label = "al3",
-             subset = paste0("planted", al2Val),
+             label = "ADM2",
+             subset = paste0("planted", ADM1Val),
              dSeries = ds[1],
              gSeries = gs[1],
              schema = schema_planted,
@@ -132,20 +132,20 @@ if(build_crops){
     thisFile <- rosstat_production[i]
     name <- str_split(thisFile, "_")[[1]]
     munst <- name[2]
-    al2Val <- str_split(name[4], "[.]")[[1]][1]
+    ADM1Val <- str_split(name[4], "[.]")[[1]][1]
 
-    schema_production <- setCluster(id = "al3", left = 1, top = .find(pattern = "Валовые сборы сельскохозяйственных культур", col = 1)) %>%
+    schema_production <- setCluster(id = "ADM2", left = 1, top = .find(pattern = "Валовые сборы сельскохозяйственных культур", col = 1)) %>%
       setFormat(decimal = ".") %>%
-      setIDVar(name = "al2", value = al2Val) %>%
-      setIDVar(name = "al3", columns = 1, split = "(?<=год\\. ).*", rows = .find(row = 1, relative = TRUE)) %>%
+      setIDVar(name = "ADM1", value = ADM1Val) %>%
+      setIDVar(name = "ADM2", columns = 1, split = "(?<=год\\. ).*", rows = .find(row = 1, relative = TRUE)) %>%
       setIDVar(name = "year", columns = .find(fun = is.numeric, row = 2, relative = TRUE), rows = .find(row = 2, relative = TRUE)) %>%
       setIDVar(name = "method", value = "survey") %>%
       setIDVar(name = "crop", columns = 1) %>%
       setObsVar(name = "tons_produced", factor = 0.1, columns = .find(fun = is.numeric, row = 2, relative = TRUE))
 
     regTable(al1 = !!thisNation,
-             label = "al3",
-             subset = paste0("production", al2Val),
+             label = "ADM2",
+             subset = paste0("production", ADM1Val),
              dSeries = ds[1],
              gSeries = gs[1],
              schema = schema_production,
@@ -170,20 +170,20 @@ if(build_crops){
     thisFile <- rosstat_perennial[i]
     name <- str_split(thisFile, "_")[[1]]
     munst <- name[2]
-    al2Val <- str_split(name[4], "[.]")[[1]][1]
+    ADM1Val <- str_split(name[4], "[.]")[[1]][1]
 
-    schema_perennial <- setCluster(id = "al3", left = 1, top = .find(pattern = "Площадь многолетних насаждений", col = 1)) %>%
+    schema_perennial <- setCluster(id = "ADM2", left = 1, top = .find(pattern = "Площадь многолетних насаждений", col = 1)) %>%
       setFormat(decimal = ".") %>%
-      setIDVar(name = "al2", value = al2Val) %>%
-      setIDVar(name = "al3", columns = 1, split = "(?<=год\\. ).*", rows = .find(row = 1, relative = TRUE)) %>%
+      setIDVar(name = "ADM1", value = ADM1Val) %>%
+      setIDVar(name = "ADM2", columns = 1, split = "(?<=год\\. ).*", rows = .find(row = 1, relative = TRUE)) %>%
       setIDVar(name = "year", columns = .find(fun = is.numeric, row = 2, relative = TRUE), rows = .find(row = 2, relative = TRUE)) %>%
       setIDVar(name = "method", value = "survey") %>%
       setIDVar(name = "crop", columns = 1) %>%
       setObsVar(name = "hectares_planted", columns = .find(fun = is.numeric, row = 2, relative = TRUE))
 
     regTable(al1 = !!thisNation,
-             label = "al3",
-             subset = paste0("perennial", al2Val),
+             label = "ADM2",
+             subset = paste0("perennial", ADM1Val),
              dSeries = ds[1],
              gSeries = gs[1],
              schema = schema_perennial,
@@ -217,20 +217,20 @@ if(build_livestock){
     thisFile <- rosstat_livestock[i]
     name <- str_split(thisFile, "_")[[1]]
     munst <- name[2]
-    al2Val <- str_split(name[4], "[.]")[[1]][1]
+    ADM1Val <- str_split(name[4], "[.]")[[1]][1]
 
-    schema_livestock <- setCluster(id = "al3", left = 1, top = .find(pattern = "Поголовье скота и птицы", col = 1)) %>%
+    schema_livestock <- setCluster(id = "ADM2", left = 1, top = .find(pattern = "Поголовье скота и птицы", col = 1)) %>%
       setFormat(decimal = ".") %>%
-      setIDVar(name = "al2", value = al2Val) %>%
-      setIDVar(name = "al3", columns = 1, split = "[^,|.]+$", rows = .find(row = 1, relative = TRUE)) %>%
+      setIDVar(name = "ADM1", value = ADM1Val) %>%
+      setIDVar(name = "ADM2", columns = 1, split = "[^,|.]+$", rows = .find(row = 1, relative = TRUE)) %>%
       setIDVar(name = "year", columns = .find(fun = is.numeric, row = 2, relative = TRUE), rows = .find(row = 2, relative = TRUE)) %>%
       setIDVar(name = "method", value = "survey") %>%
       setIDVar(name = "animal", columns = 1) %>%
       setObsVar(name = "number_heads", columns = .find(fun = is.numeric, row = 2, relative = TRUE))
 
     regTable(al1 = !!thisNation,
-             label = "al3",
-             subset = paste0("livestock", al2Val),
+             label = "ADM2",
+             subset = paste0("livestock", ADM1Val),
              dSeries = ds[1],
              gSeries = gs[1],
              schema = schema_livestock,
