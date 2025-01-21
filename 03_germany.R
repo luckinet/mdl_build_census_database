@@ -44,37 +44,7 @@ regDataseries(name = ds[1],
 if(build_crops){
   ## crops ----
 
-  schema_crops <- setCluster(id = _INSERT) %>%
-    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) %>%
-    setIDVar(name = "al2", ) %>%
-    setIDVar(name = "al3", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "method", value = "") %>%
-    setIDVar(name = "crop", ) %>%
-    setObsVar(name = "hectares_harvested", ) %>%
-    setObsVar(name = "tons_produced", ) %>%
-    setObsVar(name = "kiloPerHectare_yield", )
-
-  regTable(nation = !!thisNation,
-           label = "al_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_crops,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "crop",
-            beep = 10)
+  # work in progress
 }
 
 if(build_livestock){

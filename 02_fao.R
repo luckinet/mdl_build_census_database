@@ -154,7 +154,6 @@ if(build_livestock){
 
   normTable(pattern = paste0("livestock.*", ds[1]),
             ontoMatch = "animal",
-            # query = "ADM0 == 'Russian Federation'",
             beep = 10)
 
 }

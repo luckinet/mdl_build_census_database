@@ -56,43 +56,43 @@ regDataseries(name = gs[1],
 # 2. geometries ----
 #
 regGeometry(gSeries = gs[1],
-            label = list(al1 = "CNTR_CODE"),
+            label = list(ADM0 = "CNTR_CODE"),
             ancillary = list(name_ltn = "NAME_LATN", name_lcl = "NUTS_NAME"),
             archive = "ref-nuts-2021-01m.shp.zip|NUTS_RG_01M_2021_3035_LEVL_0.shp",
             archiveLink = "https://gisco-services.ec.europa.eu/distribution/v2/nuts/download/ref-nuts-2021-01m.shp.zip",
-            downloadDate = ymd("2019-10-10"),
+            downloadDate = ymd("2023-11-29"),
             updateFrequency = "unknown",
             overwrite = TRUE)
 
 regGeometry(gSeries = gs[1],
-            label = list(al1 = "CNTR_CODE", al2 = "NUTS_ID"),
+            label = list(ADM0 = "CNTR_CODE", ADM1 = "NUTS_ID"),
             ancillary = list(name_ltn = "NAME_LATN", name_lcl = "NUTS_NAME"),
             archive = "ref-nuts-2021-01m.shp.zip|NUTS_RG_01M_2021_3035_LEVL_1.shp",
             archiveLink = "https://gisco-services.ec.europa.eu/distribution/v2/nuts/download/ref-nuts-2021-01m.shp.zip",
-            downloadDate = ymd("2019-10-10"),
+            downloadDate = ymd("2023-11-29"),
             updateFrequency = "unknown",
             overwrite = TRUE)
 
 regGeometry(gSeries = gs[1],
-            label = list(al1 = "CNTR_CODE", al3 = "NUTS_ID"),
+            label = list(ADM0 = "CNTR_CODE", ADM2 = "NUTS_ID"),
             ancillary = list(name_ltn = "NAME_LATN", name_lcl = "NUTS_NAME"),
             archive = "ref-nuts-2021-01m.shp.zip|NUTS_RG_01M_2021_3035_LEVL_2.shp",
             archiveLink = "https://gisco-services.ec.europa.eu/distribution/v2/nuts/download/ref-nuts-2021-01m.shp.zip",
-            downloadDate = ymd("2019-10-10"),
+            downloadDate = ymd("2023-11-29"),
             updateFrequency = "unknown",
             overwrite = TRUE)
 
 regGeometry(gSeries = gs[1],
-            label = list(al1 = "CNTR_CODE", al4 = "NUTS_ID"),
+            label = list(ADM0 = "CNTR_CODE", ADM3 = "NUTS_ID"),
             ancillary = list(name_ltn = "NAME_LATN", name_lcl = "NUTS_NAME"),
             archive = "ref-nuts-2021-01m.shp.zip|NUTS_RG_01M_2021_3035_LEVL_3.shp",
             archiveLink = "https://gisco-services.ec.europa.eu/distribution/v2/nuts/download/ref-nuts-2021-01m.shp.zip",
-            downloadDate = ymd("2019-10-10"),
+            downloadDate = ymd("2023-11-29"),
             updateFrequency = "unknown",
             overwrite = TRUE)
 
 normGeometry(pattern = gs[1],
-             # query = "where CNTR_CODE = 'DK'",
+             # query = "where CNTR_CODE = 'DE'",
              beep = 10)
 
 
@@ -102,17 +102,17 @@ schema_eurostat <-
   setFormat(na_values = ":", flags = flags, decimal = ".") %>%
   setIDVar(name = "year", columns = .find(fun = is.numeric, row = 1), rows = 1)
 
-schema_al1 <- schema_eurostat %>%
-  setIDVar(name = "al1", columns = .find(pattern = "^geo", row = 1))
+schema_ADM0 <- schema_eurostat %>%
+  setIDVar(name = "ADM0", columns = .find(pattern = "^geo", row = 1))
 
-schema_al2 <- schema_eurostat %>%
-  setIDVar(name = "al1", columns = .find(pattern = "^geo$", row = 1), split = "(.{2})") %>%
-  setIDVar(name = "al2", columns = .find(pattern = "^geo", row = 1), split = "(.{3})")
+schema_ADM1 <- schema_eurostat %>%
+  setIDVar(name = "ADM0", columns = .find(pattern = "^geo$", row = 1), split = "(.{2})") %>%
+  setIDVar(name = "ADM1", columns = .find(pattern = "^geo", row = 1), split = "(.{3})")
 
-schema_al3 <- schema_eurostat %>%
-  setIDVar(name = "al1", columns = .find(pattern = "^geo$", row = 1), split = "(.{2})") %>%
-  setIDVar(name = "al2", columns = .find(pattern = "^geo$", row = 1), split = "(.{3})") %>%
-  setIDVar(name = "al3", columns = .find(pattern = "^geo", row = 1))
+schema_ADM2 <- schema_eurostat %>%
+  setIDVar(name = "ADM0", columns = .find(pattern = "^geo$", row = 1), split = "(.{2})") %>%
+  setIDVar(name = "ADM1", columns = .find(pattern = "^geo$", row = 1), split = "(.{3})") %>%
+  setIDVar(name = "ADM2", columns = .find(pattern = "^geo", row = 1))
 
 if(build_crops){
   ## crops ----
@@ -124,13 +124,13 @@ if(build_livestock){
   ## livestock ----
 
   ### Animal populations (agr_r_animal) ----
-  schema_agrranimal <- schema_al3 %>%
+  schema_agrranimal <- schema_ADM2 %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", columns = 2) %>%
     setObsVar(name = "number_heads", factor = 1000, columns = .find(fun = is.numeric, row = 1))
 
   regTable(un_region = thisNation,
-           label = "al3",
+           label = "ADM2",
            subset = "agrranimal",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -146,17 +146,17 @@ if(build_livestock){
            overwrite = TRUE)
 
   # as some nations don't have recent data at level 3 (looking at you, Germany!), also read in level 2 data
-  schema_agrranimal2 <- schema_al2 %>%
+  schema_agrranimADM1 <- schema_ADM1 %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", columns = 2) %>%
     setObsVar(name = "number_heads", factor = 1000, columns = .find(fun = is.numeric, row = 1))
 
   regTable(un_region = thisNation,
-           label = "al2",
+           label = "ADM1",
            subset = "agrranimal",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_agrranimal2,
+           schema = schema_agrranimADM1,
            begin = 1977,
            end = 2023,
            archive = "agr_r_animal.tsv.gz",
@@ -175,7 +175,7 @@ if(build_livestock){
 
   normTable(pattern = paste0("agrranimal.*", ds[1]),
             ontoMatch = "animal",
-            # query = "al1 == 'DK'",
+            # query = "ADM0 == 'DK'",
             beep = 10)
 }
 

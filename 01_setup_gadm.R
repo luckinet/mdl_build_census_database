@@ -3,13 +3,13 @@
 # description : this script integrates data of 'Database of Global Administrative Areas' (https://gadm.org/index.html)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-04-03
+# date        : 2025-01-20
 # version     : 1.0.0
 # status      : done
 # comment     : version 4.1
 # ----
 # geography   : Global
-# spatial     : GADM0, GADM1, GADM2, GADM3, GADM4, GADM5
+# spatial     : ADM0, ADM1, ADM2, ADM3 (ADM4, ADM5)
 # period      : -
 # variables   :
 # - land      : -
@@ -60,14 +60,14 @@ regGeometry(gSeries = "gadm",
             updateFrequency = "unknown")
 
 # regGeometry(gSeries = "gadm",
-#             label = list(ADM0 = "NAME_0", ADM1 = "NAME_1", ADM2 = "NAME_2", ADM3 = "NAME_3", ADM4 = "NAME_4"),
+#             label = list(ADM0 = "COUNTRY", ADM1 = "NAME_1", ADM2 = "NAME_2", ADM3 = "NAME_3", ADM4 = "NAME_4"),
 #             archive = "gadm_410-levels.zip|gadm36_levels.gpkg",
 #             archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm_410-levels.zip",
 #             downloadDate = ymd("2024-01-04"),
 #             updateFrequency = "unknown")
 #
 # regGeometry(gSeries = "gadm",
-#             label = list(ADM0 = "NAME_0", ADM1 = "NAME_1", ADM2 = "NAME_2", ADM3 = "NAME_3", ADM4 = "NAME_4", ADM5 = "NAME_5"),
+#             label = list(ADM0 = "COUNTRY", ADM1 = "NAME_1", ADM2 = "NAME_2", ADM3 = "NAME_3", ADM4 = "NAME_4", ADM5 = "NAME_5"),
 #             archive = "gadm_410-levels.zip|gadm36_levels.gpkg",
 #             archiveLink = "https://geodata.ucdavis.edu/gadm/gadm4.1/gadm_410-levels.zip",
 #             downloadDate = ymd("2024-01-04"),
@@ -77,9 +77,6 @@ regGeometry(gSeries = "gadm",
 # normalise geometries ----
 #
 normGeometry(pattern = "gadm",
-             # query = "WHERE COUNTRY IN ('Brazil', 'Indonesia')",
+             # query = paste0("WHERE COUNTRY IN ('Germany')"),
              stringdist = FALSE, strictMatch = TRUE,
              beep = 10)
-
-
-# Châu Thành (ADM2) Bến Tre (ADM1)
