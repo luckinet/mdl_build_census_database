@@ -21,37 +21,28 @@
 # ----
 
 thisNation <- "Bolivia"
+# source(paste0(mdl0301, "src/preprocess_ineBo.R"))
 
 # 1. dataseries ----
 #
 ds <- c("ine_bo", "siip")
-gs <- c(_INSERT)
+gs <- c("gadm")
 
 regDataseries(name = ds[1],
               description = "Instituto Nacional de Estadística",
               homepage = "https://www.ine.gob.bo/",
-              version = _INSERT,
-              licence_link = _INSERT)
+              version = "2025.01",
+              licence_link = "unknown")
 
 regDataseries(name = ds[2],
               description = "Sistema integrado de información productiva",
               homepage = "https://siip.produccion.gob.bo/repSIIP2/formulario_pecuario.php",
-              version = _INSERT,
-              licence_link = _INSERT)
+              version = "2025.01",
+              licence_link = "unknown")
 
 
 # 2. geometries ----
 #
-regGeometry(nation = !!thisNation,
-            gSeries = gs[],
-            label = list(ADM_ = ""),
-            archive = "|",
-            archiveLink = _INSERT,
-            downloadDate = _INSERT,
-            updateFrequency = _INSERT)
-
-normGeometry(pattern = gs[],
-             beep = 10)
 
 
 # 3. tables ----
@@ -65,34 +56,44 @@ if(build_crops){
 if(build_livestock){
   ## livestock ----
 
-  schema_livestock <- setCluster(id = _INSERT) |>
-    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) |>
-    setFilter() |>
-    setIDVar(name = "ADM1", ) |>
-    setIDVar(name = "ADM2", ) |>
-    setIDVar(name = "year", ) |>
-    setIDVar(name = "method", value = "") |>
-    setIDVar(name = "animal", ) |>
-    setObsVar(name = "number_heads", )
+  allFiles <- list.files(path = paste0(.get_path("cens", "_data"), "tables/stage1/siip"))
+  allFiles <- allFiles[!str_detect(allFiles, "avicola")]
 
-  regTable(al1 = !!thisNation,
-           label = "ADM_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
+  for(i in seq_along(allFiles)){
 
-  normTable(pattern = ds[],
+    thisFile <- allFiles[i]
+    name <- str_split(thisFile, "-|_")[[1]]
+    year <- as.integer(name[1])
+    animal <- str_split(name[3], "[.]")[[1]][1]
+
+    schema_livestock_ineBo <-
+      setFilter(rows = .find(fun = is.numeric, col = 2)) |>
+      setIDVar(name = "ADM1", value = str_to_title(name[2])) %>%
+      setIDVar(name = "ADM3", columns = 1) |>
+      setIDVar(name = "year", value = name[1]) |>
+      setIDVar(name = "method", value = "survey") |>
+      setIDVar(name = "animal", value = animal) |>
+      setObsVar(name = "number_heads", columns = 2)
+
+    regTable(ADM0 = !!thisNation,
+             label = "ADM3",
+             subset = paste0(animal, str_to_title(name[2])),
+             dSeries = ds[2],
+             gSeries = gs[1],
+             schema = schema_livestock_ineBo,
+             begin = year,
+             end = year,
+             archive = thisFile,
+             archiveLink = "https://siip.produccion.gob.bo/repSIIP2/formulario_pecuario.php",
+             downloadDate = ymd("2024-05-22"),
+             updateFrequency = "annually",
+             metadataLink = "https://siip.produccion.gob.bo/repSIIP2/formulario_pecuario.php",
+             metadataPath = "unknown",
+             overwrite = TRUE)
+
+  }
+
+  normTable(pattern = ds[2],
             ontoMatch = "animal",
             beep = 10)
 }
@@ -100,63 +101,34 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  schema_landuse <- setCluster(id = _INSERT) |>
-    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) |>
-    setFilter() |>
-    setIDVar(name = "ADM1", ) |>
-    setIDVar(name = "ADM2", ) |>
-    setIDVar(name = "year", ) |>
-    setIDVar(name = "methdod", value = "") |>
-    setIDVar(name = "landuse", ) |>
-    setObsVar(name = "hectares_covered", )
-
-  regTable(al1 = !!thisNation,
-           label = "ADM_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_landuse,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "landuse",
-            beep = 10)
+  # work in progress
 }
 
 #### test schemas
 #
-myRoot <- paste0(dir_census_data, "tables/stage2/")
-myFile <- ""
+myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
+myFile <- "Bolivia_ADM2_avicolaBeni_2013_2013_siip.csv"
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
                   col_types = cols(.default = "c"))
 
-schema <- schema_ibge2
+schema <- schema_livestock_ineBo
 
-schema <- schema |>
+schema_test <- schema |>
   validateSchema(input = input)
-input <- input |>
-  validateInput(schema = schema)
+input_test <- input |>
+  validateInput(schema = schema_test)
 
-ids <- schema |>
-  getIDVars(input = input)
+ids <- schema_test |>
+  getIDVars(input = input_test)
 
-obs <- schema |>
-  getObsVars(input = input)
+obs <- schema_test |>
+  getObsVars(input = input_test)
 
 output <- reorganise(input = input, schema = schema)
 
 
-adb_visualise(territory = list(al1 = ""),
+adb_visualise(territory = list(ADM0 = ""),
               concept = list(animal = "cattle"),
               variable = "number_heads",
               level = "ADM2",

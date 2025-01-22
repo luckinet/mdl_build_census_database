@@ -25,27 +25,17 @@ thisNation <- "Paraguay"
 # 1. dataseries ----
 #
 ds <- c("senacsa")
-gs <- c(_INSERT)
+gs <- c("gadm")
 
 regDataseries(name = ds[1],
               description = "Instituto Nacional de Estadística y Censos",
               homepage = "http://www.senacsa.gov.py/",
-              version = _INSERT,
-              licence_link = _INSERT)
+              version = "2025.01",
+              licence_link = "unknown")
 
 
 # 2. geometries ----
 #
-regGeometry(nation = !!thisNation,
-            gSeries = gs[],
-            label = list(al_ = ""),
-            archive = "|",
-            archiveLink = _INSERT,
-            downloadDate = _INSERT,
-            updateFrequency = _INSERT)
-
-normGeometry(pattern = gs[],
-             beep = 10)
 
 
 # 3. tables ----
@@ -94,36 +84,7 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  schema_landuse <- setCluster(id = _INSERT) |>
-    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) |>
-    setFilter() |>
-    setIDVar(name = "al2", ) |>
-    setIDVar(name = "al3", ) |>
-    setIDVar(name = "year", ) |>
-    setIDVar(name = "methdod", value = "") |>
-    setIDVar(name = "landuse", ) |>
-    setObsVar(name = "hectares_covered", )
-
-  regTable(al1 = !!thisNation,
-           label = "al_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_landuse,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "landuse",
-            beep = 10)
+  # work in progress
 }
 
 #### test schemas

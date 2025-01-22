@@ -27,7 +27,7 @@ thisNation <- "Ukraine"
 # 1. dataseries ----
 #
 ds <- c("ukrstat")
-gs <- c(_INSERT)
+gs <- c("gadm")
 
 regDataseries(name = ds[1],
               description = "State Statistics Service of Ukraine",
@@ -35,26 +35,9 @@ regDataseries(name = ds[1],
               version = "2024.10",
               licence_link = "unknown")
 
-# regDataseries(name = ds[1],
-#               description = "State statistic service of Urkaine",
-#               homepage = "https://ukrstat.gov.ua/",
-#               licence_link = "https://ukrstat.gov.ua/",
-#               licence_path = "unknown",
-#               update = updateTables)
-
 
 # 2. geometries ----
 #
-regGeometry(nation = !!thisNation,
-            gSeries = gs[],
-            label = list(ADM_ = ""),
-            archive = "|",
-            archiveLink = _INSERT,
-            downloadDate = _INSERT,
-            updateFrequency = _INSERT)
-
-normGeometry(pattern = gs[],
-             beep = 10)
 
 
 # 3. tables ----
@@ -81,7 +64,7 @@ if(build_crops){
   #   thisFile <- crops2021[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -107,7 +90,7 @@ if(build_crops){
   #   thisFile <- crops2020[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -136,7 +119,7 @@ if(build_crops){
   #   thisFile <- crops2019[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -165,7 +148,7 @@ if(build_crops){
   #   thisFile <- crops2018[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -201,7 +184,7 @@ if(build_crops){
   #   thisFile <- crops2017[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -232,7 +215,7 @@ if(build_crops){
   #   thisFile <- crops2016[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -261,7 +244,7 @@ if(build_crops){
   #   thisFile <- crops2016_02[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -290,7 +273,7 @@ if(build_crops){
   #   thisFile <- crops2015[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -319,7 +302,7 @@ if(build_crops){
   #   thisFile <- crops2014[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -348,7 +331,7 @@ if(build_crops){
   #   thisFile <- crops2013[i]
   #   munst <- str_split(thisFile, "_")[[1]][2]
   #
-  #   regTable(nation = "ukr",
+  #   regTable(ADM0 = "ukr",
   #            level = 2,
   #            subset = munst,
   #            dSeries = ds[1],
@@ -376,7 +359,7 @@ if(build_crops){
   #   setObsVar(name = "production", unit = "t", factor = 100, columns = 4) %>%
   #   setObsVar(name = "yield", unit = "kg/ha", factor = 100, columns = 5)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -393,7 +376,7 @@ if(build_crops){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -413,7 +396,7 @@ if(build_crops){
   # schema_ukr_l2_10 <- schema_ukr_l2_09 %>%
   #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=October).*(?=1)")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -433,7 +416,7 @@ if(build_crops){
   # schema_ukr_l2_11 <- schema_ukr_l2_09 %>%
   #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=November).*(?=1)")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -453,7 +436,7 @@ if(build_crops){
   # schema_ukr_l2_12 <- schema_ukr_l2_09 %>%
   #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=листопада).*(?=року)")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -474,7 +457,7 @@ if(build_crops){
   #   setCluster(id = "al1", left = 3, top = 6, height = 4) %>%
   #   setIDVar(name = "year", value = "2016")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -494,7 +477,7 @@ if(build_crops){
   # schema_ukr_l2_14 <- schema_ukr_l2_13 %>%
   #   setIDVar(name = "year", value = "2015")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -514,7 +497,7 @@ if(build_crops){
   # schema_ukr_l2_15 <- schema_ukr_l2_13 %>%
   #   setIDVar(name = "year", value = "2014")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -534,7 +517,7 @@ if(build_crops){
   # schema_ukr_l2_16 <- schema_ukr_l2_13 %>%
   #   setIDVar(name = "year", value = "2013")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "rice",
   #          dSeries = ds[1],
@@ -555,7 +538,7 @@ if(build_crops){
   #   setIDVar(name = "year", value = "2016") %>%
   #   setIDVar(name = "commodities", columns = 2, rows = 1, split = "(?<=Виробництво).*(?=станом )")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "corn",
   #          dSeries = ds[1],
@@ -572,7 +555,7 @@ if(build_crops){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sugarbeet",
   #          dSeries = ds[1],
@@ -592,7 +575,7 @@ if(build_crops){
   # schema_ukr_l2_21 <- schema_ukr_l2_20 %>%
   #   setIDVar(name = "year", value = "2015")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "corn",
   #          dSeries = ds[1],
@@ -609,7 +592,7 @@ if(build_crops){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sugarbeet",
   #          dSeries = ds[1],
@@ -629,7 +612,7 @@ if(build_crops){
   # schema_ukr_l2_22 <- schema_ukr_l2_20 %>%
   #   setIDVar(name = "year", value = "2014")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "corn",
   #          dSeries = ds[1],
@@ -646,7 +629,7 @@ if(build_crops){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sugarbeet",
   #          dSeries = ds[1],
@@ -666,7 +649,7 @@ if(build_crops){
   # schema_ukr_l2_22 <- schema_ukr_l2_20 %>%
   #   setIDVar(name = "year", value = "2013")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "maize01",
   #          dSeries = ds[1],
@@ -683,7 +666,7 @@ if(build_crops){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sugarbeet",
   #          dSeries = ds[1],
@@ -704,7 +687,7 @@ if(build_crops){
   #   setCluster(id = "al1", left = 3, top = 5, height = 25) %>%
   #   setIDVar(name = "year", value = "2013")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "millet",
   #          dSeries = ds[1],
@@ -729,7 +712,7 @@ if(build_crops){
   # schema_ukr_01 <- schema_ukr_00 %>%
   #   setObsVar(name = "planted", unit = "ha", factor = 1000, columns = c(3:8))
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 1,
   #          subset = "cropsPlant",
   #          dSeries = ds[1],
@@ -751,7 +734,7 @@ if(build_crops){
   #   setIDVar(name = "commodities", columns = c(3:8), rows = 3, split = "(?<=/).*") %>%
   #   setObsVar(name = "production", unit = "t", factor = 1000, columns = c(3:8))
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 1,
   #          subset = "cropsProd",
   #          dSeries = ds[1],
@@ -773,7 +756,7 @@ if(build_crops){
   #   setIDVar(name = "commodities", columns = c(3:8), rows = 3, split = "(?<=/).*") %>%
   #   setObsVar(name = "yield", unit = "kg/ha", factor = 100, columns = c(3:8))
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 1,
   #          subset = "cropsYield",
   #          dSeries = ds[1],
@@ -802,7 +785,7 @@ if(build_crops){
     setObsVar(name = "tons_produced", ) %>%
     setObsVar(name = "kiloPerHectare_yield", )
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM_",
            subset = _INSERT,
            dSeries = ds[],
@@ -835,7 +818,7 @@ if(build_livestock){
   #   setIDVar(name = "commodities", columns = 1, rows = 1, split = ".*(?=number)") %>%
   #   setObsVar(name = "headcount", unit = "n", factor = 1000, columns = c(2, 3))
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "pigs",
   #          dSeries = ds[1],
@@ -852,7 +835,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "cattle",
   #          dSeries = ds[1],
@@ -869,7 +852,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "poultry",
   #          dSeries = ds[1],
@@ -886,7 +869,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sheepGoat",
   #          dSeries = ds[1],
@@ -903,7 +886,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "pigs",
   #          dSeries = ds[1],
@@ -920,7 +903,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "cattle",
   #          dSeries = ds[1],
@@ -937,7 +920,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "poultry",
   #          dSeries = ds[1],
@@ -954,7 +937,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sheepGoat",
   #          dSeries = ds[1],
@@ -971,7 +954,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "pigs",
   #          dSeries = ds[1],
@@ -988,7 +971,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "cattle",
   #          dSeries = ds[1],
@@ -1005,7 +988,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "poultry",
   #          dSeries = ds[1],
@@ -1022,7 +1005,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sheepGoat",
   #          dSeries = ds[1],
@@ -1045,7 +1028,7 @@ if(build_livestock){
   #   setIDVar(name = "year", columns = c(2, 3), rows = 6) %>%
   #   setIDVar(name = "commodities", columns = 1, rows = 1, split = "(?<=КІЛЬКІСТЬ).*(?=ТА)")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sheepGoat",
   #          dSeries = ds[1],
@@ -1062,7 +1045,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "cattle",
   #          dSeries = ds[1],
@@ -1079,7 +1062,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "pigs",
   #          dSeries = ds[1],
@@ -1096,7 +1079,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "poultry",
   #          dSeries = ds[1],
@@ -1116,7 +1099,7 @@ if(build_livestock){
   # schema_ukr_l2_19 <- schema_ukr_l2_18 %>%
   #   setIDVar(name = "commodities", columns = 1, rows = 1, split = "(?<='Я).*")
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "sheepGoat",
   #          dSeries = ds[1],
@@ -1133,7 +1116,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "poultry",
   #          dSeries = ds[1],
@@ -1150,7 +1133,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "pigs",
   #          dSeries = ds[1],
@@ -1167,7 +1150,7 @@ if(build_livestock){
   #          update = updateTables,
   #          overwrite = overwriteTables)
   #
-  # regTable(nation = "ukr",
+  # regTable(ADM0 = "ukr",
   #          level = 2,
   #          subset = "cattle",
   #          dSeries = ds[1],
@@ -1194,7 +1177,7 @@ if(build_livestock){
     setObsVar(name = "number_heads", )
 
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM0",
            subset = "livestock",
            dSeries = ds[],
@@ -1210,7 +1193,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
            dSeries = ds[],
@@ -1226,7 +1209,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "cattlePig",
            dSeries = ds[],
@@ -1242,7 +1225,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
            dSeries = ds[],
@@ -1258,7 +1241,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "cattlePig",
            dSeries = ds[],
@@ -1274,7 +1257,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
            dSeries = ds[],
@@ -1290,7 +1273,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "cattlePig",
            dSeries = ds[],
@@ -1306,7 +1289,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
            dSeries = ds[],
@@ -1322,7 +1305,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "cattlePig",
            dSeries = ds[],
@@ -1338,7 +1321,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
            dSeries = ds[],
@@ -1354,7 +1337,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "cattlePig",
            dSeries = ds[],
@@ -1370,7 +1353,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1386,7 +1369,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1402,7 +1385,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1418,7 +1401,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1435,7 +1418,7 @@ if(build_livestock){
            overwrite = TRUE,
            notes = "csv copied and checked from pdf")
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1452,7 +1435,7 @@ if(build_livestock){
            overwrite = TRUE,
            notes = "csv copied and checked from pdf")
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1469,7 +1452,7 @@ if(build_livestock){
            overwrite = TRUE,
            notes = "csv copied and checked from pdf")
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1485,7 +1468,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1501,7 +1484,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1517,7 +1500,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1533,7 +1516,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1549,7 +1532,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1565,7 +1548,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1581,7 +1564,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1597,7 +1580,7 @@ if(build_livestock){
            metadataPath = _INSERT,
            overwrite = TRUE)
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1614,7 +1597,7 @@ if(build_livestock){
            overwrite = TRUE,
            notes = "only data for january available")
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1631,7 +1614,7 @@ if(build_livestock){
            overwrite = TRUE,
            notes = "only data for january available")
 
-  regTable(nation = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[],
@@ -1658,34 +1641,7 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  schema_landuse <- setCluster() %>%
-    setFormat() %>%
-    setIDVar(name = "ADM1", ) %>%
-    setIDVar(name = "ADM2", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "methdod", value = "") %>%
-    setIDVar(name = "landuse", ) %>%
-    setObsVar(name = "hectares_covered", )
-
-  regTable(nation = !!thisNation,
-           label = "ADM_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_landuse,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "landuse",
-            beep = 10)
+  # work in progress
 }
 
 #### test schemas

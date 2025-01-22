@@ -20,10 +20,6 @@
 # sampling    : survey, census
 # ----
 
-
-
-
-
 thisNation <- "Denmark"
 
 # 1. dataseries ----
@@ -40,16 +36,6 @@ regDataseries(name = ds[1],
 
 # 2. geometries ----
 #
-regGeometry(nation = !!thisNation,
-            gSeries = gs[],
-            label = list(ADM_ = ""),
-            archive = "|",
-            archiveLink = _INSERT,
-            downloadDate = _INSERT,
-            updateFrequency = _INSERT)
-
-normGeometry(pattern = gs[1],
-             beep = 10)
 
 
 # 3. tables ----
@@ -120,34 +106,7 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  schema_landuse <- setCluster() %>%
-    setFormat() %>%
-    setIDVar(name = "ADM1", ) %>%
-    setIDVar(name = "ADM2", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "methdod", value = "") %>%
-    setIDVar(name = "landuse", ) %>%
-    setObsVar(name = "hectares_covered", )
-
-  regTable(al1 = !!thisNation,
-           label = "ADM_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_landuse,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "landuse",
-            beep = 10)
+  # work in progress
 }
 
 #### test schemas

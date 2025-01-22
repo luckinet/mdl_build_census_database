@@ -27,7 +27,6 @@ thisNation <- "Germany"
 ds <- c("genesis")
 gs <- c("gadm")
 
-
 regDataseries(name = ds[1],
               description = "Regionaldatenbank Deutschland",
               homepage = "https://www.regionalstatistik.de/genesis/online",
@@ -156,34 +155,7 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  schema_landuse <- setCluster() %>%
-    setFormat() %>%
-    setIDVar(name = "ADM1", ) %>%
-    setIDVar(name = "ADM2", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "methdod", value = "") %>%
-    setIDVar(name = "landuse", ) %>%
-    setObsVar(name = "hectares_covered", )
-
-  regTable(nation = !!thisNation,
-           label = "ADM_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_landuse,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "landuse",
-            beep = 10)
+  # work in progress
 }
 
 #### test schemas

@@ -36,25 +36,25 @@ regDataseries(name = ds[1],
 
 # 2. geometries ----
 #
-regGeometry(nation = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al1 = "fylkesnavn"),
+            label = list(ADM1 = "fylkesnavn"),
             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|fylke.shp",
             archiveLink = "https://kart.ssb.no/",
             downloadDate = ymd("2024-07-22"),
             updateFrequency = "unknown")
 
-regGeometry(nation = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(ADM1 = "kommunenum"),
+            label = list(ADM2 = "kommunenum"),
             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|kommune.shp",
             archiveLink = "https://kart.ssb.no/",
             downloadDate = ymd("2024-07-22"),
             updateFrequency = "unknown")
 
-regGeometry(nation = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(ADM1 = "kommunenum", ADM2 = "grunnkre_1"),
+            label = list(ADM2 = "kommunenum", ADM3 = "grunnkre_1"),
             archive = "45ce04cf-b10b-4277-a64f-2a2d14e886c1.zip|grunnkrets.shp",
             archiveLink = "https://kart.ssb.no/",
             downloadDate = ymd("2024-07-22"),
@@ -85,7 +85,7 @@ if(build_livestock){
     setObsVar(name = "number_heads", )
 
   ### detailed species ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "surveySpecies",
            dSeries = ds[1],
@@ -102,7 +102,7 @@ if(build_livestock){
            overwrite = TRUE)
 
   ### detailed admin units ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "surveyAdmin",
            dSeries = ds[1],
@@ -126,34 +126,7 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  schema_landuse <- setCluster() %>%
-    setFormat() %>%
-    setIDVar(name = "ADM1", ) %>%
-    setIDVar(name = "ADM2", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "methdod", value = "") %>%
-    setIDVar(name = "landuse", ) %>%
-    setObsVar(name = "hectares_covered", )
-
-  regTable(al1 = !!thisNation,
-           label = "ADM_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_landuse,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "landuse",
-            beep = 10)
+  # work in progress
 }
 
 #### test schemas
