@@ -38,32 +38,32 @@ regDataseries(name = ds[1],
 
 # 2. geometries ----
 #
-regGeometry(al1 = !!thisNation, # provinces/territories
+regGeometry(ADM0 = !!thisNation, # provinces/territories
             gSeries = gs[1],
-            label = list(al2 = "PRENAME"),
+            label = list(ADM1 = "PRENAME"),
             archive = "lpr_000b21a_e.zip|lpr_000b21a_e.shp",
             archiveLink = "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lpr_000b21a_e.zip",
             downloadDate = ymd("2019-10-10"),
             updateFrequency = "unknown")
 
-# regGeometry(al1 = !!thisNation, # census agricultural regions
+# regGeometry(ADM0 = !!thisNation, # census agricultural regions
 #             gSeries = gs[1],
-#             label = list(al2 = "CARENAME"),
+#             label = list(ADM1 = "CARENAME"),
 #             archive = "lcar000b21a_e.zip|lcar000b21a_e.shp",
 #             archiveLink = "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcar000b21a_e.zip",
 #             updateFrequency = "unknown")
 
-regGeometry(al1 = !!thisNation,  # census divisions
+regGeometry(ADM0 = !!thisNation,  # census divisions
             gSeries = gs[1],
-            label = list(al3 = "CDNAME"),
+            label = list(ADM2 = "CDNAME"),
             archive = "lcd_000b21a_e.zip|lcd_000b21a_e.shp",
             archiveLink = "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcd_000b21a_e.zip",
             downloadDate = ymd("2019-10-10"),
             updateFrequency = "unknown")
 
-regGeometry(al1 = !!thisNation,  # census consolidated subdivisions
+regGeometry(ADM0 = !!thisNation,  # census consolidated subdivisions
             gSeries = gs[1],
-            label = list(al4 = "CCSNAME"),
+            label = list(ADM3 = "CCSNAME"),
             archive = "lccs000b21a_e.zip|lccs000b21a_e.shp",
             archiveLink = "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lccs000b21a_e.zip",
             downloadDate = ymd("2019-10-10"),
@@ -76,14 +76,14 @@ normGeometry(pattern = gs[1],
 # 3. tables ----
 #
 schema_statcan <-
-  setIDVar(name = "al1", value = "Canada") %>%
-  setIDVar(name = "al2", columns = .find(pattern = "al2", row = 1)) %>%
+  setIDVar(name = "ADM0", value = "Canada") %>%
+  setIDVar(name = "ADM1", columns = .find(pattern = "ADM1", row = 1)) %>%
   setIDVar(name = "year", columns = .find(pattern = "REF_DATE", row = 1))
 
 schema_statcan_census <- schema_statcan %>%
   setIDVar(name = "method", value = "census") %>%
-  setIDVar(name = "al3", columns = .find(pattern = "al3", row = 1), split = "^(.*),[^,]*$") %>%
-  setIDVar(name = "al4", columns = .find(pattern = "al4", row = 1), split = "^(.*),[^,]*$")
+  setIDVar(name = "ADM2", columns = .find(pattern = "ADM2", row = 1), split = "^(.*),[^,]*$") %>%
+  setIDVar(name = "ADM3", columns = .find(pattern = "ADM3", row = 1), split = "^(.*),[^,]*$")
 
 schema_statcan_survey <- schema_statcan %>%
   setIDVar(name = "method", value = "survey")
@@ -96,8 +96,8 @@ if(build_crops){
               key = .find(pattern = "Unit of measure", row = 1), value = "Hectares")
 
   ### various crops (historic) ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "censusSelectedCropsHistoric",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -118,8 +118,8 @@ if(build_crops){
     setObsVar(name = "hectares_harvested", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Hectares")
 
-    regTable(al1 = !!thisNation,
-           label = "al4",
+    regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusFieldCropsHay",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -135,8 +135,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### principal crops ----
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "principalCropsSmallArea",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -151,8 +151,8 @@ if(build_crops){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210000201",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "principalCrops",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -168,8 +168,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### potatoes ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "potatoes",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -185,8 +185,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### fruit ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "surveyFruits",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -201,8 +201,8 @@ if(build_crops){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210036401",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusFruit",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -218,8 +218,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### vegetables ----
-  # regTable(al1 = !!thisNation,
-  #          label = "al2",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM1",
   #          subset = "surveyVegetablesHistoric",
   #          dSeries = ds[1],
   #          gSeries = gs[1],
@@ -234,8 +234,8 @@ if(build_crops){
   #          metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210026301",
   #          overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "surveyVegetables",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -250,8 +250,8 @@ if(build_crops){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210036501",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusVegetables",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -267,8 +267,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### fruit and vegetables (organic) ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "surveyFruitVegetablesOrganic",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -284,8 +284,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### corn and soybean (gmo) ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "censusVegetables",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -301,8 +301,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### greenhouse and mushrooms ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "surveyGreenhouse",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -317,8 +317,8 @@ if(build_crops){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210045601",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "SurveyMushrooms",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -338,8 +338,8 @@ if(build_crops){
     setObsVar(name = "hectares_harvested", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Hectares")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "censusGreenhouseMushroomsHistoric",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -354,8 +354,8 @@ if(build_crops){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210015901",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "censusGreenhouseMushrooms",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -370,8 +370,8 @@ if(build_crops){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210042001",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusMushrooms",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -386,8 +386,8 @@ if(build_crops){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210036101",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusGreenhouse",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -403,8 +403,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### sod and nurseries ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "surveyNuerseries",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -419,8 +419,8 @@ if(build_crops){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210002901",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusSodNurseries",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -436,8 +436,8 @@ if(build_crops){
            overwrite = TRUE)
 
   # this is part of landuse in 2021
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusChristmastrees",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -453,8 +453,8 @@ if(build_crops){
            overwrite = TRUE)
 
   ### flowers ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "surveyFlowers",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -484,8 +484,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number of animals")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "otherLivestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -505,8 +505,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number of animals")
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "otherLivestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -521,8 +521,8 @@ if(build_livestock){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210042701",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "otherLivestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -544,8 +544,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", factor = 1000, columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Farm type", row = 1), value = "On all cattle operations")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "cattle",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -565,8 +565,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number of animals")
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "cattle",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -586,8 +586,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number of animals")
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "cattle",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -608,8 +608,8 @@ if(build_livestock){
     setIDVar(name = "animal", columns = .find(pattern = "Livestock", row = 1)) %>%
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1))
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "pigs",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -629,8 +629,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number of animals")
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "pigs",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -645,8 +645,8 @@ if(build_livestock){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210042601",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "pigs",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -667,8 +667,8 @@ if(build_livestock){
     setIDVar(name = "animal", columns = .find(pattern = "Livestock", row = 1)) %>%
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1))
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "sheep",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -688,8 +688,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number of animals")
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "sheep",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -709,8 +709,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number of animals")
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "sheep",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -730,8 +730,8 @@ if(build_livestock){
     setIDVar(name = "animal", columns = .find(pattern = "Commodity", row = 1)) %>%
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1))
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "poultry",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -751,8 +751,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number of birds")
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "poultry",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -767,8 +767,8 @@ if(build_livestock){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210042801",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "poultry",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -789,8 +789,8 @@ if(build_livestock){
     setObsVar(name = "colonies", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Estimates", row = 1), value = "Colonies")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "bees",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -810,8 +810,8 @@ if(build_livestock){
     setObsVar(name = "colonies", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Unit of measure", row = 1), value = "Number")
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "bees",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -826,8 +826,8 @@ if(build_livestock){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210043201",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "bees",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -848,8 +848,8 @@ if(build_livestock){
     setObsVar(name = "number_heads", columns = .find(pattern = "VALUE", row = 1),
               key = .find(pattern = "Supply and disposition", row = 1), value = "On farms at December 31")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "minkFox",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -873,13 +873,13 @@ if(build_landuse){
   ## landuse ----
 
   schema_statcan_landuse <-
-    setIDVar(name = "al2", columns = 2) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
     setIDVar(name = "year", columns = 1) %>%
     setIDVar(name = "use", columns = 4) %>%
     setObsVar(name = "area", columns = 12)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusLanduse",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -894,8 +894,8 @@ if(build_landuse){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210040601",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "censusLanduse",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -911,8 +911,8 @@ if(build_landuse){
            overwrite = TRUE)
 
   ### land under glass ----
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "greenhouseSpecialised",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -927,8 +927,8 @@ if(build_landuse){
            metadataLink = "https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3210001901",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "greenhouseTotal",
            dSeries = ds[1],
            gSeries = gs[1],

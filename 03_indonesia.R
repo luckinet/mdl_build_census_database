@@ -23,12 +23,11 @@
 thisNation <- "Indonesia"
 # source(paste0(mdl0301, "src/preprocess_bps.R"))
 
+# 1. dataseries ----
+#
 ds <- c("bps")
 gs <- c("gadm", "bps")
 
-
-# 1. register dataseries ----
-#
 regDataseries(name = ds[1],
               description = "Badan Pusat Statistik",
               homepage = "https://www.bps.go.id",
@@ -39,36 +38,36 @@ regDataseries(name = ds[1],
 
 # 2. register geometries ----
 #
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[2],
-            label = list(al1 = "ADM0_EN"),
+            label = list(ADM0 = "ADM0_EN"),
             archive = "idn_adm_bps_20200401_shp.zip|idn_admbnda_adm0_bps_20200401.shp",
             archiveLink = "https://data.amerigeoss.org/ro/dataset/indonesia-central-sulawesi-administrative-boundary-polygons-levels-1-4",
             updateFrequency = "notplanned",
             downloadDate = ymd("2022-03-14"),
             overwrite = TRUE)
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[2],
-            label = list(al1 = "ADM0_EN", al2 = "ADM1_EN"),
+            label = list(ADM0 = "ADM0_EN", ADM1 = "ADM1_EN"),
             archive = "idn_adm_bps_20200401_shp.zip|idn_admbnda_adm1_bps_20200401.shp",
             archiveLink = "https://data.amerigeoss.org/ro/dataset/indonesia-central-sulawesi-administrative-boundary-polygons-levels-1-4",
             updateFrequency = "notplanned",
             downloadDate = ymd("2022-03-14"),
             overwrite = TRUE)
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[2],
-            label = list(al1 = "ADM0_EN", al2 = "ADM1_EN", al3 = "ADM2_EN"),
+            label = list(ADM0 = "ADM0_EN", ADM1 = "ADM1_EN", ADM2 = "ADM2_EN"),
             archive = "idn_adm_bps_20200401_shp.zip|idn_admbnda_adm2_bps_20200401.shp",
             archiveLink = "https://data.amerigeoss.org/ro/dataset/indonesia-central-sulawesi-administrative-boundary-polygons-levels-1-4",
             updateFrequency = "notplanned",
             downloadDate = ymd("2022-03-14"),
             overwrite = TRUE)
 
-# regGeometry(al1 = !!thisNation,
+# regGeometry(ADM0 = !!thisNation,
 #             gSeries = gs[2],
-#             label = list(al1 = "ADM0_EN", al2 = "ADM1_EN", al3 = "ADM2_EN", al4 = "ADM3_EN"),
+#             label = list(ADM0 = "ADM0_EN", ADM1 = "ADM1_EN", ADM2 = "ADM2_EN", ADM3 = "ADM3_EN"),
 #             archive = "idn_adm_bps_20200401_shp.zip|idn_admbnda_adm3_bps_20200401.shp",
 #             archiveLink = "https://data.amerigeoss.org/ro/dataset/indonesia-central-sulawesi-administrative-boundary-polygons-levels-1-4",
 #             updateFrequency = "notplanned",
@@ -90,21 +89,21 @@ if(build_crops){
 if(build_livestock){
   ## livestock ----
 
-  schema_livestock_bps_al2 <-
+  schema_livestock_bps_ADM1 <-
     setFormat(na_values = "-", decimal = ",") %>%
     setFilter(rows = 1, invert = TRUE) |>
-    setIDVar(name = "al2", columns = 1) %>%
+    setIDVar(name = "ADM1", columns = 1) %>%
     setIDVar(name = "year", columns = .find(fun = is.numeric, row = 2), rows = 2) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", columns = 2, rows = 1, distinct = TRUE)  %>%
     setObsVar(name = "number_heads", columns = .find(fun = is.numeric, row = 2), top = 3)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "buffalo",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "buffalo_headcount_province_2000-2022.csv",
@@ -115,12 +114,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "cattleBeef",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "cattle_beef_headcount_province_2000-2022.csv",
@@ -131,12 +130,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "cattleDairy",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "cattle_dairy_headcount_province_2000-2022.csv",
@@ -147,12 +146,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "chickenBroiler",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "chicken_broiler_headcount_province_2000-2022.csv",
@@ -163,12 +162,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "chickenLayer",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "chicken_layer_headcount_province_2000-2022.csv",
@@ -179,12 +178,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "chickenNative",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "chicken_native_headcount_province_2000-2022.csv",
@@ -195,12 +194,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "duck",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "duck_headcount_province_2000-2022.csv",
@@ -211,12 +210,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "goat",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "goat_headcount_province_2000-2022.csv",
@@ -227,12 +226,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "horse",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "horse_headcount_province_2000-2022.csv",
@@ -243,12 +242,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "pig",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "pig_headcount_province_2000-2022.csv",
@@ -259,12 +258,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "sheep",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock_bps_al2,
+           schema = schema_livestock_bps_ADM1,
            begin = 2000,
            end = 2022,
            archive = "sheep_headcount_province_2000-2022.csv",

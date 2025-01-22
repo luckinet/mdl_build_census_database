@@ -43,25 +43,25 @@ regDataseries(name = ds[1],
 
 # 2. geometries ----
 #
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al1 = "NAM"),
+            label = list(ADM0 = "NAM"),
             archive = "pais.zip|País.shp",
             archiveLink = "http://www.ign.gob.ar/NuestrasActividades/InformacionGeoespacial/CapasSIG",
             downloadDate = ymd("2019-10-10"),
             updateFrequency = "notPlanned")
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al2 = "NAM"),
+            label = list(ADM1 = "NAM"),
             archive = "PROVINCIAS.zip|Provincias.shp",
             archiveLink = "http://www.ign.gob.ar/NuestrasActividades/InformacionGeoespacial/CapasSIG",
             downloadDate = ymd("2019-10-10"),
             updateFrequency = "notPlanned")
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al3 = "NAM"),
+            label = list(ADM2 = "NAM"),
             archive = "DEPARTAMENTOS.zip|Departamentos.shp",
             archiveLink = "http://www.ign.gob.ar/NuestrasActividades/InformacionGeoespacial/CapasSIG",
             downloadDate = ymd("2019-10-10"),
@@ -77,8 +77,8 @@ if(build_crops){
   ## crops ----
 
   schema_senasa1 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 4) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 4) %>%
     setIDVar(name = "year", columns = 8, split = "((?<=\\/).*)") %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "crop", columns = 6) %>%
@@ -87,8 +87,8 @@ if(build_crops){
     setObsVar(name = "tons_produced", columns = 11) %>%
     setObsVar(name = "kilo_per_hectare_yield", columns = 12)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "crops",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -112,15 +112,15 @@ if(build_livestock){
   ## livestock ----
 
   schema_senasa2 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 4) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 4) %>%
     setIDVar(name = "year", columns = 1) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", columns = c(6:14), rows = 1) %>%
     setObsVar(name = "number_heads", columns = c(6:14))
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "bovines",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -136,15 +136,15 @@ if(build_livestock){
            overwrite = TRUE)
 
   schema_senasa3 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 4) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 4) %>%
     setIDVar(name = "year", columns = 1) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", columns = c(6:11), rows = 1) %>%
     setObsVar(name = "number_heads", columns = c(6:11))
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "equines",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -159,8 +159,8 @@ if(build_livestock){
            metadataLink = "https://datos.agroindustria.gob.ar/dataset/senasa-existencias-equinas",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "goats",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -176,15 +176,15 @@ if(build_livestock){
            overwrite = TRUE)
 
   schema_senasa4 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 4) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 4) %>%
     setIDVar(name = "year", columns = 1) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", columns = c(6:10), rows = 1) %>%
     setObsVar(name = "number_heads", columns = c(6:10))
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "sheep",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -200,15 +200,15 @@ if(build_livestock){
            overwrite = TRUE)
 
   schema_senasa5 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 4) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 4) %>%
     setIDVar(name = "year", columns = 1) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", columns = c(6:12), rows = 1) %>%
     setObsVar(name = "number_heads", columns = c(6:12))
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "pigs",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -223,7 +223,7 @@ if(build_livestock){
            metadataLink = "https://datos.agroindustria.gob.ar/dataset/senasa-existencias-porcinas",
            overwrite = TRUE)
 
-  normTable(pattern = paste0("al3.*", ds[1]),
+  normTable(pattern = paste0("ADM2.*", ds[1]),
             ontoMatch = "animal",
             beep = 10)
 
@@ -233,15 +233,15 @@ if(build_landuse){
   ## landuse ----
 
   schema_senasa6 <-
-    setIDVar(name = "al1", columns = 2) %>%
-    setIDVar(name = "al2", columns = 4) %>%
+    setIDVar(name = "ADM0", columns = 2) %>%
+    setIDVar(name = "ADM1", columns = 4) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "year", columns = 14) %>%
     setIDVar(name = "landuse", columns = c(7:10), rows = 1) %>%
     setObsVar(name = "hectares_covered", columns = c(7:10), key = 5, value = "macizo")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "plantation",
            dSeries = ds[1],
            gSeries = gs[1],

@@ -42,18 +42,18 @@ regDataseries(name = gs[1],
 
 # 2. geometries ----
 #
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al2 = "REGC2023_V1_00_NAME"), # REGional Council
+            label = list(ADM1 = "REGC2023_V1_00_NAME"), # REGional Council
             archive = "statsnz-regional-council-2023-clipped-generalised-GPKG.zip|regional-council-2023-clipped-generalised.gpkg",
             archiveLink = "https://datafinder.stats.govt.nz/layer/111181-regional-council-2023-clipped-generalised/",
             updateFrequency = "annual",
             downloadDate = ymd("2019-10-10"),
             overwrite = TRUE)
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al3 = "TA2023_V1_00_NAME"), # Territorial Authority
+            label = list(ADM2 = "TA2023_V1_00_NAME"), # Territorial Authority
             archive = "statsnz-territorial-authority-2023-clipped-generalised-GPKG.zip|territorial-authority-2023-clipped-generalised.gpkg",
             archiveLink = "https://datafinder.stats.govt.nz/layer/111204-statistical-area-3-2023-clipped-generalised/",
             updateFrequency = "annual",
@@ -69,8 +69,8 @@ normGeometry(pattern = gs[1],
 if(build_crops){
   ## crops ----
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "horticulture",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -84,8 +84,8 @@ if(build_crops){
            metadataPath = "",
            metadataLink = "https://nzdotstat.stats.govt.nz/wbos/index.aspx")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "grain",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -99,8 +99,8 @@ if(build_crops){
            metadataPath = "",
            metadataLink = "https://www.stats.govt.nz/large-datasets/csv-files-for-download")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "grain",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -114,8 +114,8 @@ if(build_crops){
            metadataPath = "",
            metadataLink = "https://www.stats.govt.nz/large-datasets/csv-files-for-download")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "grain",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -129,8 +129,8 @@ if(build_crops){
            metadataPath = "",
            metadataLink = "https://www.stats.govt.nz/large-datasets/csv-files-for-download")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "grain",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -144,8 +144,8 @@ if(build_crops){
            metadataPath = "",
            metadataLink = "https://www.stats.govt.nz/large-datasets/csv-files-for-download")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "grain",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -159,8 +159,8 @@ if(build_crops){
            metadataPath = "",
            metadataLink = "https://www.stats.govt.nz/large-datasets/csv-files-for-download")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "grain",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -174,8 +174,8 @@ if(build_crops){
            metadataPath = "",
            metadataLink = "https://www.stats.govt.nz/large-datasets/csv-files-for-download")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "grain",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -189,8 +189,8 @@ if(build_crops){
            metadataPath = "",
            metadataLink = "https://www.stats.govt.nz/large-datasets/csv-files-for-download")
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "grain",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -215,17 +215,17 @@ if(build_livestock){
 
   schema_nzstat_livestock <-
     setFormat(na_values = c("..", "..C", "..S", "-")) %>%
-    setIDVar(name = "al1", value = "New Zealand")
+    setIDVar(name = "ADM0", value = "New Zealand")
 
   schema_nzstat_livestock_detailed <- schema_nzstat_livestock %>%
     setFilter(rows = .find(is.na, col = 3, invert = TRUE)) %>%
-    setIDVar(name = "al3", columns = 1) %>%
+    setIDVar(name = "ADM2", columns = 1) %>%
     setIDVar(name = "animal", columns = 2) %>%
     setIDVar(name = "year", columns = .find(fun = is.numeric, row = 2), rows = 2) %>%
     setObsVar(name = "number_heads", columns = .find(fun = is.numeric, row = 2), top = 3)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "detailedLivestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -241,13 +241,13 @@ if(build_livestock){
 
   schema_nzstat_livestock_totals <- schema_nzstat_livestock %>%
     setFilter(rows = .find(is.na, col = 3, invert = TRUE)) %>%
-    setIDVar(name = "al2", columns = 1) %>%
+    setIDVar(name = "ADM1", columns = 1) %>%
     setIDVar(name = "animal", columns = 2) %>%
     setIDVar(name = "year", columns = .find(fun = is.numeric, row = 2), rows = 2) %>%
     setObsVar(name = "number_heads", columns = .find(fun = is.numeric, row = 2), top = 3)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "totalsLivestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -262,8 +262,8 @@ if(build_livestock){
            metadataLink = "https://infoshare.stats.govt.nz/Default.aspx")
 
   # # ignored because detailed classes are not needed for now and totals are with more time steps in the previous table
-  # regTable(al1 = !!thisNation,
-  #          label = "al2",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM1",
   #          subset = "detailedLivestock",
   #          dSeries = ds[1],
   #          gSeries = gs[1],
@@ -279,13 +279,13 @@ if(build_livestock){
 
   schema_nzstat_livestock_poultry <- schema_nzstat_livestock %>%
     setFilter(rows = .find(is.na, col = 3, invert = TRUE)) %>%
-    setIDVar(name = "al3", columns = 1) %>%
+    setIDVar(name = "ADM2", columns = 1) %>%
     setIDVar(name = "year", value = "2002") %>%
     setIDVar(name = "animal", columns = c(3, 5, 7, 9), rows = 5) %>%
     setObsVar(name = "number_heads", columns = c(3, 5, 7, 9), top = 8)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "poultry",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -301,13 +301,13 @@ if(build_livestock){
 
   schema_nzstat_livestock_deer <- schema_nzstat_livestock %>%
     setFilter(rows = .find(is.na, col = 3, invert = TRUE)) %>%
-    setIDVar(name = "al3", columns = 1) %>%
+    setIDVar(name = "ADM2", columns = 1) %>%
     setIDVar(name = "year", value = "2002") %>%
     setIDVar(name = "animal", columns = c(3, 5, 7, 9, 11), rows = 6) %>%
     setObsVar(name = "number_heads", columns = c(3, 5, 7, 9, 11), top = 9)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "deer",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -323,13 +323,13 @@ if(build_livestock){
 
   schema_nzstat_livestock_pigs <- schema_nzstat_livestock %>%
     setFilter(rows = .find(is.na, col = 3, invert = TRUE)) %>%
-    setIDVar(name = "al3", columns = 1) %>%
+    setIDVar(name = "ADM2", columns = 1) %>%
     setIDVar(name = "year", value = "2002") %>%
     setIDVar(name = "animal", columns = c(3, 5, 7, 9), rows = 6) %>%
     setObsVar(name = "number_heads", columns = c(3, 5, 7, 9), top = 8)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "pigs",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -345,13 +345,13 @@ if(build_livestock){
 
   schema_nzstat_livestock_sheep <- schema_nzstat_livestock %>%
     setFilter(rows = .find(is.na, col = 2, invert = TRUE)) %>%
-    setIDVar(name = "al3", columns = 1) %>%
+    setIDVar(name = "ADM2", columns = 1) %>%
     setIDVar(name = "year", value = "2002") %>%
     setIDVar(name = "animal", columns = c(2, 4, 6, 8, 10, 12, 14, 16, 18, 19), rows = 6) %>%
     setObsVar(name = "number_heads", columns = c(2, 4, 6, 8, 10, 12, 14, 16, 18, 19), top = 8)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "sheep",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -367,13 +367,13 @@ if(build_livestock){
 
   schema_nzstat_livestock_cattleBeef <- schema_nzstat_livestock %>%
     setFilter(rows = .find(is.na, col = 2, invert = TRUE)) %>%
-    setIDVar(name = "al3", columns = 1) %>%
+    setIDVar(name = "ADM2", columns = 1) %>%
     setIDVar(name = "year", value = "2002") %>%
     setIDVar(name = "animal", columns = c(2, 4, 6, 8, 9, 10, 11, 13, 14, 16, 18, 19, 21), rows = 6) %>%
     setObsVar(name = "number_heads", columns = c(2, 4, 6, 8, 9, 10, 11, 13, 14, 16, 18, 19, 21), top = 8)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "cattleBeef",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -389,13 +389,13 @@ if(build_livestock){
 
   schema_nzstat_livestock_cattleDairy <- schema_nzstat_livestock %>%
     setFilter(rows = .find(is.na, col = 3, invert = TRUE)) %>%
-    setIDVar(name = "al3", columns = 1) %>%
+    setIDVar(name = "ADM2", columns = 1) %>%
     setIDVar(name = "year", value = "2002") %>%
     setIDVar(name = "animal", columns = c(3, 5, 7, 9, 11, 13), rows = 7) %>%
     setObsVar(name = "number_heads", columns = c(3, 5, 7, 9, 11, 13), top = 9)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "cattleDairy",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -418,8 +418,8 @@ if(build_livestock){
 if(build_landuse){
   ## landuse ----
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "forest",
            dSeries = ds[1],
            gSeries = gs[1],

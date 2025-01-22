@@ -49,18 +49,18 @@ regDataseries(name = gs[2],
 
 # 2. geometries ----
 #
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al2 = "STATE_CODE"),
+            label = list(ADM1 = "STATE_CODE"),
             archive = "1259030001_ste11aaust_shape.zip|STE11aAust.shp",
             archiveLink = "https://www.abs.gov.au/ausstats/subscriber.nsf/log?openagent&1259030001_ste11aaust_shape.zip&1259.0.30.001&Data%20Cubes&D39E28B23F39F498CA2578CC00120E25&0&July%202011&14.07.2011&Latest",
             updateFrequency = "unknown",
             downloadDate = ymd("2019-10-10"),
             overwrite = TRUE)
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al2 = "STATE_CODE", al3 = "SD_NAME11"),
+            label = list(ADM1 = "STATE_CODE", ADM2 = "SD_NAME11"),
             archive = "1259030001_sd11aaust_shape.zip|SD11aAust.shp",
             archiveLink = "https://www.abs.gov.au/ausstats/subscriber.nsf/log?openagent&1259030001_sd11aaust_shape.zip&1259.0.30.001&Data%20Cubes&A2521D72ABA3D177CA2578CC0011FBFE&0&July%202011&14.07.2011&Latest",
             updateFrequency = "unknown",
@@ -70,36 +70,36 @@ regGeometry(al1 = !!thisNation,
 normGeometry(pattern = gs[1],
              beep = 10)
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[2],
-            label = list(al1 = "AUS_NAME_2021"),
+            label = list(ADM0 = "AUS_NAME_2021"),
             archive = "ASGS_2021_MAIN_STRUCTURE_GPKG_GDA2020.zip|ASGS_2021_Main_Structure_GDA2020.gpkg",
             archiveLink = "https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files/ASGS_2021_MAIN_STRUCTURE_GPKG_GDA2020.zip",
             updateFrequency = "quinquennial",
             downloadDate = ymd("2019-10-10"),
             overwrite = TRUE)
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[2],
-            label = list(al1 = "AUS_NAME_2021", al2 = "STATE_NAME_2021"),
+            label = list(ADM0 = "AUS_NAME_2021", ADM1 = "STATE_NAME_2021"),
             archive = "ASGS_2021_MAIN_STRUCTURE_GPKG_GDA2020.zip|ASGS_2021_Main_Structure_GDA2020.gpkg",
             archiveLink = "https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files/ASGS_2021_MAIN_STRUCTURE_GPKG_GDA2020.zip",
             updateFrequency = "quinquennial",
             downloadDate = ymd("2019-10-10"),
             overwrite = TRUE)
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[2],
-            label = list(al1 = "AUS_NAME_2021", al2 = "STATE_NAME_2021", al3 = "SA4_NAME_2021"),
+            label = list(ADM0 = "AUS_NAME_2021", ADM1 = "STATE_NAME_2021", ADM2 = "SA4_NAME_2021"),
             archive = "ASGS_2021_MAIN_STRUCTURE_GPKG_GDA2020.zip|ASGS_2021_Main_Structure_GDA2020.gpkg",
             archiveLink = "https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files/ASGS_2021_MAIN_STRUCTURE_GPKG_GDA2020.zip",
             updateFrequency = "quinquennial",
             downloadDate = ymd("2019-10-10"),
             overwrite = TRUE)
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[2],
-            label = list(al1 = "AUS_NAME_2021", al2 = "STATE_NAME_2021", al3 = "SA4_NAME_2021", al4 = "SA2_NAME_2021"),
+            label = list(ADM0 = "AUS_NAME_2021", ADM1 = "STATE_NAME_2021", ADM2 = "SA4_NAME_2021", ADM3 = "SA2_NAME_2021"),
             archive = "ASGS_2021_MAIN_STRUCTURE_GPKG_GDA2020.zip|ASGS_2021_Main_Structure_GDA2020.gpkg",
             archiveLink = "https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files/ASGS_2021_MAIN_STRUCTURE_GPKG_GDA2020.zip",
             updateFrequency = "quinquennial",
@@ -122,13 +122,13 @@ if(build_livestock){
   ## livestock ----
 
   schema_abs_livestockHistoric <-
-    setIDVar(name = "al2", columns = 2) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
     setIDVar(name = "year", columns = .find(fun = is.numeric, row = 1), rows = 1) %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = .find(fun = is.numeric, row = 1), top = 2)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "livestockHistoric",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -143,14 +143,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7124.0Quality%20Declaration02010-11?OpenDocument")
 
   schema_abs_livestock2001 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2001") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -165,8 +165,8 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7125.0Explanatory%20Notes12000-01?OpenDocument")
 
   # tales not yet extracted from PDFs
-  # regTable(al1 = !!thisNation,
-  #          label = "al2",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM1",
   #          subset = "livestock",
   #          dSeries = ds[1],
   #          gSeries = gs[],
@@ -180,8 +180,8 @@ if(build_livestock){
   #          metadataPath = "7121.0 - Agricultural Commodities, Australia, 2000-01.html",
   #          metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Technical%20Note12000-01?OpenDocument")
   #
-  # regTable(al1 = !!thisNation,
-  #          label = "al2",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM1",
   #          subset = "livestock",
   #          dSeries = ds[1],
   #          gSeries = gs[],
@@ -195,8 +195,8 @@ if(build_livestock){
   #          metadataPath = "7121.0 - Agricultural Commodities, Australia, 2001-02.html",
   #          metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12001-02?OpenDocument")
   #
-  # regTable(al1 = !!thisNation,
-  #          label = "al2",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM1",
   #          subset = "livestock",
   #          dSeries = ds[1],
   #          gSeries = gs[],
@@ -210,8 +210,8 @@ if(build_livestock){
   #          metadataPath = "7121.0 - Agricultural Commodities, Australia, 2003-04.html",
   #          metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12003-04?OpenDocument")
   #
-  # regTable(al1 = !!thisNation,
-  #          label = "al2",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM1",
   #          subset = "livestock",
   #          dSeries = ds[1],
   #          gSeries = gs[],
@@ -225,8 +225,8 @@ if(build_livestock){
   #          metadataPath = "7121.0 - Agricultural Commodities, Australia, 2001-02.html",
   #          metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12001-02?OpenDocument")
   #
-  # regTable(al1 = !!thisNation,
-  #          label = "al2",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM1",
   #          subset = "livestock",
   #          dSeries = ds[1],
   #          gSeries = gs[],
@@ -240,8 +240,8 @@ if(build_livestock){
   #          metadataPath = "7121.0 - Agricultural Commodities, Australia, 2004-05.html",
   #          metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12004-05?OpenDocument")
   #
-  # regTable(al1 = !!thisNation,
-  #          label = "al2",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM1",
   #          subset = "livestock",
   #          dSeries = ds[1],
   #          gSeries = gs[],
@@ -256,14 +256,14 @@ if(build_livestock){
   #          metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12005-06?OpenDocument")
 
   schema_abs_livestock2006 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2006") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -278,14 +278,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7125.0Explanatory%20Notes12005-06%20(Reissue)?OpenDocument")
 
   schema_abs_livestock2007 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2007") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -300,14 +300,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7125.0Explanatory%20Notes12006-07?OpenDocument")
 
   schema_abs_livestock2008 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2008") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -322,14 +322,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12007-08?OpenDocument")
 
   schema_abs_livestock2009 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2009") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -344,14 +344,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12008-09?OpenDocument")
 
   schema_abs_livestock2010 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2010") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -366,15 +366,15 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12009-10?OpenDocument")
 
   schema_abs_livestock2011 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
-    setIDVar(name = "al4", columns = 4) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
+    setIDVar(name = "ADM3", columns = 4) %>%
     setIDVar(name = "year", value = "2011") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 5)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -389,14 +389,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12010-11?OpenDocument")
 
   schema_abs_livestock2012 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2012") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -411,14 +411,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12011-12?OpenDocument")
 
   schema_abs_livestock2013 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2013") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -433,14 +433,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12012-2013?OpenDocument")
 
   schema_abs_livestock2014 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2014") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -455,14 +455,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12013-14?OpenDocument")
 
   schema_abs_livestock2015 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2015") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -477,14 +477,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12014-15?OpenDocument")
 
   schema_abs_livestock2016 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2016") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -499,14 +499,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Explanatory%20Notes12015-16?OpenDocument")
 
   schema_abs_livestock2017 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2017") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -522,14 +522,14 @@ if(build_livestock){
 
   schema_abs_livestock2018 <-
     setFormat(thousand = ",") %>%
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2018") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -544,14 +544,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/methodologies/agricultural-commodities-australia-methodology/2017-18")
 
   schema_abs_livestock2019 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2019") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -566,14 +566,14 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/methodologies/agricultural-commodities-australia-methodology/2018-19")
 
   schema_abs_livestock2020 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
     setIDVar(name = "year", value = "2020") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -588,15 +588,15 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/methodologies/agricultural-commodities-australia-methodology/2019-20")
 
   schema_abs_livestock2021 <-
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 3) %>%
-    setIDVar(name = "al4", columns = 4) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 3) %>%
+    setIDVar(name = "ADM3", columns = 4) %>%
     setIDVar(name = "year", value = "2021") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 5)
 
-  regTable(al1 = !!thisNation,
-           label = "al4",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[2],
@@ -611,13 +611,13 @@ if(build_livestock){
            metadataLink = "https://www.abs.gov.au/methodologies/agricultural-commodities-australia-methodology/2020-21")
 
   schema_abs_livestock2022 <-
-    setIDVar(name = "al2", columns = 2) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
     setIDVar(name = "year", value = "2022") %>%
     setIDVar(name = "animal", columns = 1) %>%
     setObsVar(name = "number_heads", columns = 3)
 
-  regTable(al1 = !!thisNation,
-           label = "al2",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[1],
@@ -633,7 +633,7 @@ if(build_livestock){
 
   normTable(pattern = paste0("livestock.*", ds[1]),
             ontoMatch = "animal",
-            beep = 10)
+            beep = 10) match aligned
 
 }
 

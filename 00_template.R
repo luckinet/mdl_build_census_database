@@ -36,7 +36,7 @@ regDataseries(name = ds[],
 
 # 2. geometries ----
 #
-regGeometry(nation = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[],
             label = list(ADM_ = ""),
             archive = "|",

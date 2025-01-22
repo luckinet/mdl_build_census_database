@@ -56,8 +56,8 @@ nbs_data <- list.files(path = paste0(.get_path("cens", "_data"), "/tables/stage1
 
 schema_nbs <- setCluster(id = "animal", left = 1, top = 4) %>%
   setFormat(decimal = ".") |>
-  setIDVar(name = "al1", value = "China") |>
-  setIDVar(name = "al2", rows = 4, columns = .find(fun = is.na, row = 3)) |>
+  setIDVar(name = "ADM0", value = "China") |>
+  setIDVar(name = "ADM1", rows = 4, columns = .find(fun = is.na, row = 3)) |>
   setIDVar(name = "year", columns = 1) |>
   setIDVar(name = "method", value = "survey")
 
@@ -82,8 +82,8 @@ if(build_livestock){
       setIDVar(name = "animal", value = temp[2]) |>
       setObsVar(name = "number_heads", factor = 10000, columns = .find(fun = is.na, row = 3))
 
-    regTable(al1 = !!thisNation,
-             label = "al2",
+    regTable(ADM0 = !!thisNation,
+             label = "ADM1",
              subset = paste0(temp[2], .toCap(temp[1])),
              dSeries = ds[1],
              gSeries = gs[1],

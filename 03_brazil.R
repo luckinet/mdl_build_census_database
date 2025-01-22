@@ -43,17 +43,17 @@ regDataseries(name = ds[2],
 
 # 2. geometries ----
 #
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al2 = "NM_ESTADO"),
+            label = list(ADM1 = "NM_ESTADO"),
             archive = "br_unidades_da_federacao.zip|BRUFE250GC_SIR.shp",
             archiveLink = "https://mapas.ibge.gov.br/bases-e-referenciais/bases-cartograficas/malhas-digitais",
             downloadDate = ymd("2019-10-10"),
             updateFrequency = "notPlanned")
 
-regGeometry(al1 = !!thisNation,
+regGeometry(ADM0 = !!thisNation,
             gSeries = gs[1],
-            label = list(al3 = "NM_MUNICIP"),
+            label = list(ADM2 = "NM_MUNICIP"),
             archive = "br_municipios.zip|BRMUE250GC_SIR.shp",
             archiveLink = "https://mapas.ibge.gov.br/bases-e-referenciais/bases-cartograficas/malhas-digitais",
             downloadDate = ymd("2019-10-10"),
@@ -69,8 +69,8 @@ if(build_crops){
 
   schema_ibge1 <-
     setCluster(id = "year", left = 1, top = 3, height = 400536) %>%
-    setIDVar(name = "al2", columns = 1, split = "((?<=\\().*(?=\\)))") %>%
-    setIDVar(name = "al3", columns = 1, split = "(^.*?(?=\\s\\())") %>%
+    setIDVar(name = "ADM1", columns = 1, split = "((?<=\\().*(?=\\)))") %>%
+    setIDVar(name = "ADM2", columns = 1, split = "(^.*?(?=\\s\\())") %>%
     setIDVar(name = "year", columns = 3) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "crop", columns = 2) %>%
@@ -79,9 +79,9 @@ if(build_crops){
     setObsVar(name = "tons_produced", columns = 6) %>%
     setObsVar(name = "kilo_per_hectare_yield", factor = 0.001, columns = 7)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -95,9 +95,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -111,9 +111,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -127,9 +127,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -143,9 +143,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1= !!thisNation,
+  regTable(ADM0= !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -159,9 +159,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -175,9 +175,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -191,9 +191,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -207,9 +207,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -223,9 +223,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -239,9 +239,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -255,9 +255,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -271,9 +271,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -287,9 +287,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -303,9 +303,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -319,9 +319,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -335,9 +335,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -351,9 +351,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -367,9 +367,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -383,9 +383,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -399,9 +399,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -415,9 +415,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -431,9 +431,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -447,9 +447,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -463,9 +463,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -479,9 +479,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -495,9 +495,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -511,9 +511,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -527,9 +527,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -543,9 +543,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -559,9 +559,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -575,9 +575,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -591,9 +591,9 @@ if(build_crops){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "crops",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge1,
@@ -618,16 +618,16 @@ if(build_livestock){
   schema_ibge2 <-
     setFormat(na_values = c("...", "-")) %>%
     setFilter(rows = c(1:3), invert = TRUE) |>
-    setIDVar(name = "al2", columns = 1, split = "((?<=\\().*(?=\\)))") %>%
-    setIDVar(name = "al3", columns = 1, split = "(^.*?(?=\\s\\())") %>%
+    setIDVar(name = "ADM1", columns = 1, split = "((?<=\\().*(?=\\)))") %>%
+    setIDVar(name = "ADM2", columns = 1, split = "(^.*?(?=\\s\\())") %>%
     setIDVar(name = "year", columns = 3) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "animal", columns = 2) %>%
     setObsVar(name = "number_heads", columns = 4)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "bovino",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge2,
@@ -641,9 +641,9 @@ if(build_livestock){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "bubalino",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge2,
@@ -657,9 +657,9 @@ if(build_livestock){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "equino",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge2,
@@ -673,9 +673,9 @@ if(build_livestock){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "suino",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge2,
@@ -689,9 +689,9 @@ if(build_livestock){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "caprino",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge2,
@@ -705,9 +705,9 @@ if(build_livestock){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "ovino",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge2,
@@ -721,9 +721,9 @@ if(build_livestock){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "galinaceos",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge2,
@@ -737,9 +737,9 @@ if(build_livestock){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "codornas",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[1],
            gSeries = gs[1],
            schema = schema_ibge2,
@@ -763,16 +763,16 @@ if(build_landuse){
   ## landuse ----
 
   schema_mapb1 <- setFormat(thousand = ",") %>%
-    setIDVar(name = "al2", columns = 2) %>%
-    setIDVar(name = "al3", columns = 4) %>%
+    setIDVar(name = "ADM1", columns = 2) %>%
+    setIDVar(name = "ADM2", columns = 4) %>%
     setIDVar(name = "year", columns = c(9:41), rows = 1) %>%
     setIDVar(name = "method", value = "survey") %>%
     setIDVar(name = "use", columns = 7) %>%
     setObsVar(name = "hectares_covered", columns = c(9:41))
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            subset = "forest",
-           label = "al3",
+           label = "ADM2",
            dSeries = ds[2],
            gSeries = gs[1],
            schema = schema_mapb1,
