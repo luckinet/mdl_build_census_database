@@ -162,7 +162,7 @@ if(build_landuse){
 
 #### test schemas
 #
-myRoot <- paste0(dir_census_data, "tables/stage2/")
+myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
 myFile <- ""
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
@@ -170,16 +170,16 @@ input <- read_csv(file = paste0(myRoot, myFile),
 
 schema <- schema_ibge2
 
-schema <- schema |>
+schema_test <- schema |>
   validateSchema(input = input)
-input <- input |>
-  validateInput(schema = schema)
+input_test <- input |>
+  validateInput(schema = schema_test)
 
-ids <- schema |>
-  getIDVars(input = input)
+ids <- schema_test |>
+  getIDVars(input = input_test)
 
-obs <- schema |>
-  getObsVars(input = input)
+obs <- schema_test |>
+  getObsVars(input = input_test)
 
 output <- reorganise(input = input, schema = schema)
 
