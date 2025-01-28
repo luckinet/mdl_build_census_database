@@ -1,22 +1,22 @@
 # ----
-# title       : build census database - _INESRT
-# description : this script integrates data of '_INSERT' (LINK)
+# title       : build census database - siap, inegi
+# description : this script integrates data of 'Servicio de Información Agroalimentaria y Pesquera' (https://www.gob.mx/siap/), National Institute of Statistics and Geography (https://en.www.inegi.org.mx/)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-01-14
-# version     : 0.0.0
-# status      : find data, update, inventarize, validate, normalize, done
+# date        : 2025-01-22
+# version     : 0.0.3
+# status      : normalize, done
 # comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
-# geography   : _INSERT
-# spatial     : _INSERT
-# period      : _INSERT
+# geography   : Mexico
+# spatial     : ADM0, ADM1
+# period      : 2012, 2014, 2017, 2019 (census); 2014 - 2023 (survey)
 # variables   :
-# - land      : hectares_covered
-# - crops     : hectares_planted, hectares_harvested, tons_produced, kiloPerHectare_yield
-# - livestock : number_heads, colonies
-# - tech      : number_machines, tons_applied (fertilizer)
-# - social    : _INSERT
+# - land      : -
+# - crops     : -
+# - livestock : number_heads (ave, bovino, caprino, guajolote, ovino, porcino), colonies (abeja)
+# - tech      : -
+# - social    : -
 # sampling    : survey, census
 # ----
 
@@ -24,8 +24,8 @@ thisNation <- "Mexico"
 
 # 1. dataseries ----
 #
-ds <- c("inegi", "gobmx")
-gs <- c("gadm")
+ds <- c("inegi", "siap")
+gs <- c("hdx")
 
 # regDataseries(name = ds[1],
 #               description = "National Institute of Statistics and Geography",
@@ -34,7 +34,7 @@ gs <- c("gadm")
 #               licence_link = _INSERT)
 
 regDataseries(name = ds[2],
-              description = "Gobierno de Mexico",
+              description = "Gobierno de Mexico - ",
               homepage = "https://www.gob.mx/siap/acciones-y-programas/produccion-pecuaria",
               version = "2025.01",
               licence_link = "unknown")
@@ -42,6 +42,25 @@ regDataseries(name = ds[2],
 
 # 2. geometries ----
 #
+# https://data.humdata.org/dataset/cod-ab-mex
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES"),
+            archive = "mex_admbnda_govmex_20210618_shp.zip|mex_admbnda_adm0_govmex_20210618.shp",
+            archiveLink = "https://data.humdata.org/dataset/9721eaf0-5663-4137-b3a2-c21dc8fac15a/resource/f151b1c1-1353-4f57-bdb2-b1b1c18a1fd1/download/mex_admbnda_govmex_20210618_shp.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES", ADM1 = "ADM1_ES"),
+            archive = "mex_admbnda_govmex_20210618_shp.zip|mex_admbnda_adm1_govmex_20210618.shp",
+            archiveLink = "https://data.humdata.org/dataset/9721eaf0-5663-4137-b3a2-c21dc8fac15a/resource/f151b1c1-1353-4f57-bdb2-b1b1c18a1fd1/download/mex_admbnda_govmex_20210618_shp.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+normGeometry(pattern = gs[1],
+             beep = 10)
 
 
 # 3. tables ----
@@ -56,17 +75,14 @@ if(build_livestock){
   ## livestock ----
 
   schema_livestock_gobmx <-
-    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) |>
-    setFilter() |>
-    setIDVar(name = "ADM1", ) |>
-    setIDVar(name = "ADM2", ) |>
-    setIDVar(name = "year", ) |>
-    setIDVar(name = "method", value = "") |>
-    setIDVar(name = "animal", ) |>
-    setObsVar(name = "number_heads", )
+    setFormat(thousand = ",") |>
+    setIDVar(name = "ADM1", columns = 1) |>
+    setIDVar(name = "year", columns = c(2:11), rows = 9) |>
+    setIDVar(name = "method", value = "survey") |>
+    setIDVar(name = "animal", columns = 1, rows = 1) |>
+    setObsVar(name = "number_heads", columns = c(2:11), top = 9)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "abeja",
            dSeries = ds[2],
@@ -82,7 +98,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "avesCarne",
            dSeries = ds[2],
@@ -98,7 +114,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "avesHuevo",
            dSeries = ds[2],
@@ -114,7 +130,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "avesTotal",
            dSeries = ds[2],
@@ -130,7 +146,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "bovinoCarne",
            dSeries = ds[2],
@@ -146,7 +162,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "bovinoLeche",
            dSeries = ds[2],
@@ -162,7 +178,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "bovinoTotal",
            dSeries = ds[2],
@@ -178,7 +194,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "caprino",
            dSeries = ds[2],
@@ -194,7 +210,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "guajolote",
            dSeries = ds[2],
@@ -210,7 +226,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "ovino",
            dSeries = ds[2],
@@ -226,7 +242,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "porcino",
            dSeries = ds[2],
@@ -255,29 +271,31 @@ if(build_landuse){
 
 #### test schemas
 #
-myRoot <- paste0(dir_census_data, "tables/stage2/")
-myFile <- "Brazil_al3_bubalino_1990_2022_ibge.csv"
+myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
+myFile <- "Mexico_ADM1_bovinoCarne_2014_2023_siap.csv"
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
                   col_types = cols(.default = "c"))
 
-schema <- schema_ibge2
 
-schema <- schema |>
+
+schema <- schema_livestock_gobmx
+
+schema_test <- schema |>
   validateSchema(input = input)
-input <- input |>
-  validateInput(schema = schema)
+input_test <- input |>
+  validateInput(schema = schema_test)
 
-ids <- schema |>
-  getIDVars(input = input)
+ids <- schema_test |>
+  getIDVars(input = input_test)
 
-obs <- schema |>
-  getObsVars(input = input)
+obs <- schema_test |>
+  getObsVars(input = input_test)
 
 output <- reorganise(input = input, schema = schema)
 
 
-adb_visualise(territory = list(al1 = "Russian Federation"),
+adb_visualise(territory = list(ADM0 = "Russian Federation"),
               concept = list(animal = "cattle"),
               variable = "number_heads",
               level = "al3",

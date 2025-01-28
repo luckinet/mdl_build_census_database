@@ -1,3 +1,7 @@
+# 2025-01-28
+
+- scripts for Mexico, Bolivia, Colombia, Peru, Paraguay, Chile and Ukraine
+
 # 2025-01-14 - v0.8.1
 
 - starting to include remaining south american countries

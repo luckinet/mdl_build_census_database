@@ -3,20 +3,20 @@
 # description : this script integrates data of 'State Statistics Service of Ukraine' (https://www.ukrstat.gov.ua/)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-09-27
-# version     : 0.0.1
+# date        : 2025-01-22
+# version     : 0.0.3
 # status      : work in progress
 # comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
 # geography   : Ukraine
-# spatial     : _INSERT
-# period      : _INSERT
+# spatial     : ADM0, ADM1
+# period      : 2003 - 2024 (ADM1), 1990 -  2020 (ADM0)
 # variables   :
-# - land      : hectares_covered
-# - crops     : hectares_harvested, tons_produced, kiloPerHectare_yield
+# - land      : -
+# - crops     : -
 # - livestock : number_heads
-# - tech      : number_machines, tons_applied (fertilizer)
-# - social    : _INSERT
+# - tech      : -
+# - social    : -
 # sampling    : survey, census
 # ----
 
@@ -27,17 +27,44 @@ thisNation <- "Ukraine"
 # 1. dataseries ----
 #
 ds <- c("ukrstat")
-gs <- c("gadm")
+gs <- c("hdx")
 
 regDataseries(name = ds[1],
               description = "State Statistics Service of Ukraine",
               homepage = "https://www.ukrstat.gov.ua/",
               version = "2024.10",
-              licence_link = "unknown")
+              licence_link = licenses$cc0)
 
 
 # 2. geometries ----
 #
+# https://data.humdata.org/dataset/cod-ab-ukr
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_UA"),
+            archive = "ukr_admbnd_sspe_20240416_ab_shp.zip|ukr_admbnda_adm0_sspe_20240416.shp",
+            archiveLink = "https://data.humdata.org/dataset/d23f529f-31e4-4021-a65b-13987e5cfb42/resource/4105bb4d-5a9d-4824-a1d7-53141cf47c44/download/ukr_admbnd_sspe_20240416_ab_shp.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_UA", ADM1 = "ADM1_UA"),
+            archive = "ukr_admbnd_sspe_20240416_ab_shp.zip|ukr_admbnda_adm1_sspe_20240416.shp",
+            archiveLink = "https://data.humdata.org/dataset/d23f529f-31e4-4021-a65b-13987e5cfb42/resource/4105bb4d-5a9d-4824-a1d7-53141cf47c44/download/ukr_admbnd_sspe_20240416_ab_shp.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_UA", ADM1 = "ADM1_UA", ADM2 = "ADM2_UA"),
+            archive = "ukr_admbnd_sspe_20240416_ab_shp.zip|ukr_admbnda_adm2_sspe_20240416.shp",
+            archiveLink = "https://data.humdata.org/dataset/d23f529f-31e4-4021-a65b-13987e5cfb42/resource/4105bb4d-5a9d-4824-a1d7-53141cf47c44/download/ukr_admbnd_sspe_20240416_ab_shp.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+normGeometry(pattern = gs[1],
+             beep = 10)
 
 
 # 3. tables ----
@@ -45,1595 +72,510 @@ regDataseries(name = ds[1],
 if(build_crops){
   ## crops ----
 
-  ### ukrstat ----
-  # crops2021 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2021*.csv")
-  #
-  # schema_ukr_l2_01 <- setCluster(id = "al1", left = 3, top = 4, height = 25) %>%
-  #   setFilter(rows = .find("Ukraine", col = 12, invert = TRUE)) %>%
-  #   setIDVar(name = "al1", value = "Ukraine") %>%
-  #   setIDVar(name = "ADM1", columns = 12) %>%
-  #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=December).*(?=1)") %>%
-  #   setIDVar(name = "commodities", columns = 1, rows = 1, split = "(?<=of).*(?=as|of)") %>%
-  #   setObsVar(name = "harvested", unit = "ha", factor = 1000, columns = 3) %>%
-  #   setObsVar(name = "production", unit = "t", factor = 100, columns = 4) %>%
-  #   setObsVar(name = "yield", unit = "kg/ha", factor = 100, columns = 5)
-  #
-  # for(i in seq_along(crops2021)){
-  #
-  #   thisFile <- crops2021[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_01,
-  #            begin = 2021,
-  #            end = 2021,
-  #            archive = "ovuzpsg_1221.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2020 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2020*.csv")
-  #
-  # for(i in seq_along(crops2020)){
-  #
-  #   thisFile <- crops2020[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_01,
-  #            begin = 2020,
-  #            end = 2020,
-  #            archive = "ovuzpsg_1220.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2019 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2019*.csv")
-  #
-  # schema_ukr_l2_02 <- schema_ukr_l2_01 %>%
-  #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=October).*(?=1)")
-  #
-  # for(i in seq_along(crops2019)){
-  #
-  #   thisFile <- crops2019[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_02,
-  #            begin = 2019,
-  #            end = 2019,
-  #            archive = "ovuzpsg_10_2019.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2018 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2018*.csv")
-  #
-  # schema_ukr_l2_03 <- schema_ukr_l2_01 %>%
-  #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=November).*(?=1)")
-  #
-  # for(i in seq_along(crops2018)){
-  #
-  #   thisFile <- crops2018[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_03,
-  #            begin = 2018,
-  #            end = 2018,
-  #            archive = "ovuzpsg_0111.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2017 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2017*.csv")
-  #
-  # schema_ukr_l2_04 <- setCluster(id = "al1", left = 3, top = 4, height = 25) %>%
-  #   setFilter(rows = .find("Україна", col = 1, invert = TRUE)) %>%
-  #   setIDVar(name = "al1", value = "Ukraine") %>%
-  #   setIDVar(name = "ADM1", columns = 2) %>%
-  #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=листопада).*(?=року)") %>%
-  #   setIDVar(name = "commodities", columns = 1, rows = 1, split = "(?<=Виробництво).*(?=станом )") %>%
-  #   setObsVar(name = "harvested", unit = "ha", factor = 1000, columns = 3) %>%
-  #   setObsVar(name = "production", unit = "t", factor = 100, columns = 4) %>%
-  #   setObsVar(name = "yield", unit = "kg/ha", factor = 100, columns = 5)
-  #
-  # for(i in seq_along(crops2017)){
-  #
-  #   thisFile <- crops2017[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_04,
-  #            begin = 2017,
-  #            end = 2017,
-  #            archive = "bl_zv_08_2017_x.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2016 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2016*.csv")
-  #
-  # schema_ukr_l2_05 <- schema_ukr_l2_04 %>%
-  #   setCluster(id = "al1", left = 3, top = 6, height = 25) %>%
-  #   setIDVar(name = "year", value = "2016") %>%
-  #   setIDVar(name = "commodities", columns = 1, rows = 1, split = "(?<=Виробництво).*")
-  #
-  # for(i in seq_along(crops2016)){
-  #
-  #   thisFile <- crops2016[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_05,
-  #            begin = 2016,
-  #            end = 2016,
-  #            archive = "bl_zvsgk1116xl.zip.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2016 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2016_2*.csv")
-  #
-  # schema_ukr_l2_24 <- schema_ukr_l2_23 %>%
-  #   setIDVar(name = "year", value = "2013")
-  #
-  # for(i in seq_along(crops2016_02)){
-  #
-  #   thisFile <- crops2016_02[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_24,
-  #            begin = 2016,
-  #            end = 2016,
-  #            archive = "bl_zvsgk1116xl.zip.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2015 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2015*.csv")
-  #
-  # schema_ukr_l2_06 <- schema_ukr_l2_05 %>%
-  #   setIDVar(name = "year", value = "2015")
-  #
-  # for(i in seq_along(crops2015)){
-  #
-  #   thisFile <- crops2015[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_06,
-  #            begin = 2015,
-  #            end = 2015,
-  #            archive = "bl_zvsk01_11_15xl.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2014 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2014*.csv")
-  #
-  # schema_ukr_l2_07 <- schema_ukr_l2_05 %>%
-  #   setIDVar(name = "year", value = "2014")
-  #
-  # for(i in seq_along(crops2014)){
-  #
-  #   thisFile <- crops2014[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_07,
-  #            begin = 2014,
-  #            end = 2014,
-  #            archive = "bl_zvsk_xl.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # crops2013 <- list.files(path = paste0(censusDBDir, "adb_tables/stage1/ukrstat/"),
-  #                         pattern = "crops_2013*.csv")
-  #
-  # schema_ukr_l2_08 <- schema_ukr_l2_05 %>%
-  #   setIDVar(name = "year", value = "2013")
-  #
-  # for(i in seq_along(crops2013)){
-  #
-  #   thisFile <- crops2013[i]
-  #   munst <- str_split(thisFile, "_")[[1]][2]
-  #
-  #   regTable(ADM0 = "ukr",
-  #            level = 2,
-  #            subset = munst,
-  #            dSeries = ds[1],
-  #            gSeries = gs[1],
-  #            schema = schema_ukr_l2_08,
-  #            begin = 2013,
-  #            end = 2013,
-  #            archive = "bl_zb_11_2013.xls",
-  #            archiveLink = "https://ukrstat.gov.ua/",
-  #            updateFrequency = "annually",
-  #            nextUpdate = "unknown",
-  #            metadataLink = "https://ukrstat.gov.ua/",
-  #            metadataPath = "unknown",
-  #            update = updateTables,
-  #            overwrite = overwriteTables)
-  # }
-  #
-  # schema_ukr_l2_09 <- setCluster(id = "al1", left = 3, top = 4, height = 3) %>%
-  #   setFilter(rows = .find("Україна", col = 1, invert = TRUE)) %>%
-  #   setIDVar(name = "al1", value = "Ukraine") %>%
-  #   setIDVar(name = "ADM1", columns = 2) %>%
-  #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=December).*(?=1)") %>%
-  #   setIDVar(name = "commodities", value = "rice") %>%
-  #   setObsVar(name = "harvested", unit = "ha", factor = 1000, columns = 3) %>%
-  #   setObsVar(name = "production", unit = "t", factor = 100, columns = 4) %>%
-  #   setObsVar(name = "yield", unit = "kg/ha", factor = 100, columns = 5)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_09,
-  #          begin = 2021,
-  #          end = 2021,
-  #          archive = "ovuzpsg_1221.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_09,
-  #          begin = 2020,
-  #          end = 2020,
-  #          archive = "ovuzpsg_1220.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_10 <- schema_ukr_l2_09 %>%
-  #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=October).*(?=1)")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_10,
-  #          begin = 2019,
-  #          end = 2019,
-  #          archive = "ovuzpsg_10_2019.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_11 <- schema_ukr_l2_09 %>%
-  #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=November).*(?=1)")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_11,
-  #          begin = 2018,
-  #          end = 2018,
-  #          archive = "ovuzpsg_0111.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_12 <- schema_ukr_l2_09 %>%
-  #   setIDVar(name = "year", columns = 1, rows = 1, split = "(?<=листопада).*(?=року)")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_12,
-  #          begin = 2017,
-  #          end = 2017,
-  #          archive = "bl_zv_08_2017_x.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_13 <- schema_ukr_l2_09 %>%
-  #   setCluster(id = "al1", left = 3, top = 6, height = 4) %>%
-  #   setIDVar(name = "year", value = "2016")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_13,
-  #          begin = 2016,
-  #          end = 2016,
-  #          archive = "bl_zvsgk1116xl.zip.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_14 <- schema_ukr_l2_13 %>%
-  #   setIDVar(name = "year", value = "2015")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_14,
-  #          begin = 2015,
-  #          end = 2015,
-  #          archive = "bl_zvsk01_11_15xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_15 <- schema_ukr_l2_13 %>%
-  #   setIDVar(name = "year", value = "2014")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_15,
-  #          begin = 2014,
-  #          end = 2014,
-  #          archive = "bl_zvsk_xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_16 <- schema_ukr_l2_13 %>%
-  #   setIDVar(name = "year", value = "2013")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "rice",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_16,
-  #          begin = 2013,
-  #          end = 2013,
-  #          archive = "bl_zb_11_2013.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_20 <- schema_ukr_l2_04 %>%
-  #   setIDVar(name = "year", value = "2016") %>%
-  #   setIDVar(name = "commodities", columns = 2, rows = 1, split = "(?<=Виробництво).*(?=станом )")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "corn",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_20,
-  #          begin = 2016,
-  #          end = 2016,
-  #          archive = "bl_zvsgk1116xl.zip.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sugarbeet",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_20,
-  #          begin = 2016,
-  #          end = 2016,
-  #          archive = "bl_zvsgk1116xl.zip.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_21 <- schema_ukr_l2_20 %>%
-  #   setIDVar(name = "year", value = "2015")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "corn",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_21,
-  #          begin = 2015,
-  #          end = 2015,
-  #          archive = "bl_zvsk01_11_15xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sugarbeet",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_21,
-  #          begin = 2015,
-  #          end = 2015,
-  #          archive = "bl_zvsk01_11_15xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_22 <- schema_ukr_l2_20 %>%
-  #   setIDVar(name = "year", value = "2014")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "corn",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_22,
-  #          begin = 2014,
-  #          end = 2014,
-  #          archive = "bl_zvsk_xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sugarbeet",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_22,
-  #          begin = 2014,
-  #          end = 2014,
-  #          archive = "bl_zvsk_xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_22 <- schema_ukr_l2_20 %>%
-  #   setIDVar(name = "year", value = "2013")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "maize01",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_22,
-  #          begin = 2013,
-  #          end = 2013,
-  #          archive = "bl_zb_11_2013.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sugarbeet",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_22,
-  #          begin = 2013,
-  #          end = 2013,
-  #          archive = "bl_zb_11_2013.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_23 <- schema_ukr_l2_04 %>%
-  #   setCluster(id = "al1", left = 3, top = 5, height = 25) %>%
-  #   setIDVar(name = "year", value = "2013")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "millet",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_22,
-  #          begin = 2013,
-  #          end = 2013,
-  #          archive = "bl_zb_11_2013.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_00 <- setCluster(id = "al1", left = 2, top = 2) %>%
-  #   setIDVar(name = "al1", value = "Ukraine") %>%
-  #   setIDVar(name = "year", columns = 2) %>%
-  #   setIDVar(name = "commodities", columns = c(3:8), rows = 2, split = "(?<=/).*")
-  #
-  # schema_ukr_01 <- schema_ukr_00 %>%
-  #   setObsVar(name = "planted", unit = "ha", factor = 1000, columns = c(3:8))
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 1,
-  #          subset = "cropsPlant",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_01,
-  #          begin = 1991,
-  #          end = 2021,
-  #          archive = "rosl_1991-2020_ue.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_02 <- schema_ukr_00 %>%
-  #   setCluster(id = "al1", left = 2, top = 3) %>%
-  #   setIDVar(name = "commodities", columns = c(3:8), rows = 3, split = "(?<=/).*") %>%
-  #   setObsVar(name = "production", unit = "t", factor = 1000, columns = c(3:8))
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 1,
-  #          subset = "cropsProd",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_02,
-  #          begin = 1991,
-  #          end = 2021,
-  #          archive = "rosl_1991-2020_ue.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_03 <- schema_ukr_00 %>%
-  #   setCluster(id = "al1", left = 2, top = 3) %>%
-  #   setIDVar(name = "commodities", columns = c(3:8), rows = 3, split = "(?<=/).*") %>%
-  #   setObsVar(name = "yield", unit = "kg/ha", factor = 100, columns = c(3:8))
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 1,
-  #          subset = "cropsYield",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_03,
-  #          begin = 1991,
-  #          end = 2021,
-  #          archive = "rosl_1991-2020_ue.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-
-  schema_crops <- setCluster(id = _INSERT) %>%
-    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) %>%
-    setIDVar(name = "ADM1", ) %>%
-    setIDVar(name = "ADM2", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "method", value = "") %>%
-    setIDVar(name = "crop", ) %>%
-    setObsVar(name = "hectares_harvested", ) %>%
-    setObsVar(name = "tons_produced", ) %>%
-    setObsVar(name = "kiloPerHectare_yield", )
-
-  regTable(ADM0 = !!thisNation,
-           label = "ADM_",
-           subset = _INSERT,
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_crops,
-           begin = _INSERT,
-           end = _INSERT,
-           archive = _INSERT,
-           archiveLink = _INSERT,
-           downloadDate = ymd(_INSERT),
-           updateFrequency = _INSERT,
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  normTable(pattern = ds[],
-            ontoMatch = "crop",
-            beep = 10)
+  # work in progress
 }
 
 if(build_livestock){
   ## livestock ----
 
-  ### ukrstat ----
-  # schema_ukr_l2_17 <- setCluster(id = "al1", left = 1, top = 4, height = 26) %>%
-  #   setFilter(rows = .find("Україна", col = 1, invert = TRUE)) %>%
-  #   setIDVar(name = "al1", value = "Ukraine") %>%
-  #   setIDVar(name = "ADM1", columns = 1) %>%
-  #   setIDVar(name = "year", columns = c(2, 3), rows = 4) %>%
-  #   setIDVar(name = "commodities", columns = 1, rows = 1, split = ".*(?=number)") %>%
-  #   setObsVar(name = "headcount", unit = "n", factor = 1000, columns = c(2, 3))
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "pigs",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2021,
-  #          end = 2022,
-  #          archive = "ksgt0222.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "cattle",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2021,
-  #          end = 2022,
-  #          archive = "ksgt0222.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "poultry",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2021,
-  #          end = 2022,
-  #          archive = "ksgt0222.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sheepGoat",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2021,
-  #          end = 2022,
-  #          archive = "ksgt0222.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "pigs",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2019,
-  #          end = 2020,
-  #          archive = "ksgt1220.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "cattle",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2019,
-  #          end = 2020,
-  #          archive = "ksgt1220.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "poultry",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2019,
-  #          end = 2020,
-  #          archive = "ksgt1220.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sheepGoat",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2019,
-  #          end = 2020,
-  #          archive = "ksgt1220.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "pigs",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2017,
-  #          end = 2018,
-  #          archive = "ksgt1218_xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "cattle",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2017,
-  #          end = 2018,
-  #          archive = "ksgt1218_xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "poultry",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2017,
-  #          end = 2018,
-  #          archive = "ksgt1218_xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sheepGoat",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_17,
-  #          begin = 2017,
-  #          end = 2018,
-  #          archive = "ksgt1218_xl.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  #
-  # schema_ukr_l2_18 <- schema_ukr_l2_17 %>%
-  #   setCluster(id = "al1", left = 1, top = 6, height = 26) %>%
-  #   setIDVar(name = "year", columns = c(2, 3), rows = 6) %>%
-  #   setIDVar(name = "commodities", columns = 1, rows = 1, split = "(?<=КІЛЬКІСТЬ).*(?=ТА)")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sheepGoat",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_18,
-  #          begin = 2015,
-  #          end = 2016,
-  #          archive = "24-сг за 11 2016.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "cattle",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_18,
-  #          begin = 2015,
-  #          end = 2016,
-  #          archive = "24-сг за 11 2016.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "pigs",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_18,
-  #          begin = 2015,
-  #          end = 2016,
-  #          archive = "24-сг за 11 2016.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "poultry",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_18,
-  #          begin = 2015,
-  #          end = 2016,
-  #          archive = "24-сг за 11 2016.xls",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # schema_ukr_l2_19 <- schema_ukr_l2_18 %>%
-  #   setIDVar(name = "commodities", columns = 1, rows = 1, split = "(?<='Я).*")
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "sheepGoat",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_19,
-  #          begin = 2013,
-  #          end = 2014,
-  #          archive = "bl_st_xl.XLS",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "poultry",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_19,
-  #          begin = 2013,
-  #          end = 2014,
-  #          archive = "bl_st_xl.XLS",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "pigs",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_19,
-  #          begin = 2013,
-  #          end = 2014,
-  #          archive = "bl_st_xl.XLS",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
-  #
-  # regTable(ADM0 = "ukr",
-  #          level = 2,
-  #          subset = "cattle",
-  #          dSeries = ds[1],
-  #          gSeries = gs[1],
-  #          schema = schema_ukr_l2_19,
-  #          begin = 2013,
-  #          end = 2014,
-  #          archive = "bl_st_xl.XLS",
-  #          archiveLink = "https://ukrstat.gov.ua/",
-  #          updateFrequency = "annually",
-  #          nextUpdate = "unknown",
-  #          metadataLink = "https://ukrstat.gov.ua/",
-  #          metadataPath = "unknown",
-  #          update = updateTables,
-  #          overwrite = overwriteTables)
+  # tvar_1990-2020_ue.xls (all livestock at ADM0)
+  schema_livestock_ukrstat_sheep <-
+    setFilter(rows = c(1, 3), invert = TRUE) |>
+    setFormat(decimal = ",") |>
+    setIDVar(name = "ADM1", columns = 1) |>
+    setIDVar(name = "method", value = "survey") |>
+    setIDVar(name = "animal", columns = c(2, 4), rows = 2)  |>
+    setObsVar(name = "number_heads", columns = c(2, 4), top = 3)
 
-  schema_livestock_ukrstat <- setCluster() %>%
-    setFormat() %>%
-    setIDVar(name = "ADM1", ) %>%
-    setIDVar(name = "ADM2", ) %>%
-    setIDVar(name = "year", ) %>%
-    setIDVar(name = "method", value = "") %>%
-    setIDVar(name = "animal", )  %>%
-    setObsVar(name = "number_heads", )
+  schema_livestock_ukrstat_sheep_2003 <- schema_livestock_ukrstat_sheep |>
+    setIDVar(name = "year", value = "2003")
 
+  schema_livestock_ukrstat_sheep_2004 <- schema_livestock_ukrstat_sheep |>
+    setIDVar(name = "year", value = "2004")
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM0",
-           subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
-           begin = 1990,
-           end = 2020,
-           archive = "tvar_1990-2020_ue.xls",
-           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2021/sg/sg_rik/tvar_1990-2020_ue.xls",
-           downloadDate = ymd("2025-01-17"),
-           updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
+  schema_livestock_ukrstat_sheep_2005 <- schema_livestock_ukrstat_sheep |>
+    setIDVar(name = "year", value = "2005")
+
+  schema_livestock_ukrstat_sheep_2006 <- schema_livestock_ukrstat_sheep |>
+    setIDVar(name = "year", value = "2006")
+
+  schema_livestock_ukrstat_sheep_2007 <- schema_livestock_ukrstat_sheep |>
+    setIDVar(name = "year", value = "2007")
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_sheep_2003,
            begin = 2003,
            end = 2003,
            archive = "Pok092003.htm",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2003/sg/pok/pok_e/Pok092003.htm",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "cattlePig",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
-           begin = 2003,
-           end = 2003,
-           archive = "Vrh092003.htm",
-           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2003/sg/vrh/vrh_e/Vrh092003.htm",
-           downloadDate = ymd("2025-01-17"),
-           updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_sheep_2004,
            begin = 2004,
            end = 2004,
            archive = "Pok0904.htm",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2004/sg/pok/pok_e/Pok0904.htm",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "cattlePig",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
-           begin = 2004,
-           end = 2004,
-           archive = "Vrh0904.htm",
-           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2004/sg/vrh/vrh_e/Vrh0904.htm",
-           downloadDate = ymd("2025-01-17"),
-           updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_sheep_2005,
            begin = 2005,
            end = 2005,
            archive = "pok0905_e.html",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2005/sg/pok/pok_e/pok0905_e.html",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "cattlePig",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
-           begin = 2005,
-           end = 2005,
-           archive = "vrh0905_e.html",
-           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2005/sg/vrh/vrh_e/vrh0905_e.html",
-           downloadDate = ymd("2025-01-17"),
-           updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_sheep_2006,
            begin = 2006,
            end = 2006,
            archive = "pok0906_e.html",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2006/sg/pok/pok_e/pok0906_e.html",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
-
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "cattlePig",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
-           begin = 2006,
-           end = 2006,
-           archive = "vrh0906_e.html",
-           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2006/sg/vrh/vrh_e/vrh0906_e.html",
-           downloadDate = ymd("2025-01-17"),
-           updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "sheepGoatPoult",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_sheep_2007,
            begin = 2007,
            end = 2007,
            archive = "pok0907_e.html",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2007/sg/pok/pok_e/pok0907_e.html",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
+           overwrite = TRUE)
+
+
+  schema_livestock_ukrstat_pig <-
+    setFilter(rows = c(1, 3), invert = TRUE) |>
+    setFormat(decimal = ",") |>
+    setIDVar(name = "ADM1", columns = 1) |>
+    setIDVar(name = "method", value = "survey") |>
+    setIDVar(name = "animal", columns = c(2, 4, 6), rows = 2)  |>
+    setObsVar(name = "number_heads", columns = c(2, 4, 6), top = 3)
+
+  schema_livestock_ukrstat_pig_2003 <- schema_livestock_ukrstat_pig |>
+    setIDVar(name = "year", value = "2003")
+
+  schema_livestock_ukrstat_pig_2004 <- schema_livestock_ukrstat_pig |>
+    setIDVar(name = "year", value = "2004")
+
+  schema_livestock_ukrstat_pig_2005 <- schema_livestock_ukrstat_pig |>
+    setIDVar(name = "year", value = "2005")
+
+  schema_livestock_ukrstat_pig_2006 <- schema_livestock_ukrstat_pig |>
+    setIDVar(name = "year", value = "2006")
+
+  schema_livestock_ukrstat_pig_2007 <- schema_livestock_ukrstat_pig |>
+    setIDVar(name = "year", value = "2007")
+
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
+           subset = "cattlePig",
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_pig_2003,
+           begin = 2003,
+           end = 2003,
+           archive = "Vrh092003.htm",
+           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2003/sg/vrh/vrh_e/Vrh092003.htm",
+           downloadDate = ymd("2025-01-17"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "cattlePig",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_pig_2004,
+           begin = 2004,
+           end = 2004,
+           archive = "Vrh0904.htm",
+           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2004/sg/vrh/vrh_e/Vrh0904.htm",
+           downloadDate = ymd("2025-01-17"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
+           overwrite = TRUE)
+
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
+           subset = "cattlePig",
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_pig_2005,
+           begin = 2005,
+           end = 2005,
+           archive = "vrh0905_e.html",
+           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2005/sg/vrh/vrh_e/vrh0905_e.html",
+           downloadDate = ymd("2025-01-17"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
+           overwrite = TRUE)
+
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
+           subset = "cattlePig",
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_pig_2006,
+           begin = 2006,
+           end = 2006,
+           archive = "vrh0906_e.html",
+           archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2006/sg/vrh/vrh_e/vrh0906_e.html",
+           downloadDate = ymd("2025-01-17"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
+           overwrite = TRUE)
+
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
+           subset = "cattlePig",
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_pig_2007,
            begin = 2007,
            end = 2007,
            archive = "vrh0907_e.html",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2007/sg/vrh/vrh_e/vrh0907_e.html",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
+
+
+  schema_livestock_ukrstat_livestock <-
+    setFilter(rows = c(1, 3), invert = TRUE) |>
+    setFormat(decimal = ",") |>
+    setIDVar(name = "ADM1", columns = 1) |>
+    setIDVar(name = "year", columns = 1, rows = 1, split = "(\\d+)(?!.*\\d)") |>
+    setIDVar(name = "method", value = "survey") |>
+    setIDVar(name = "animal", columns = c(2, 4, 6), rows = 2)  |>
+    setObsVar(name = "number_heads", columns = c(2, 4, 6), top = 3)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2008,
            end = 2008,
            archive = "php0908_e.html",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2008/sg/sg_reg/php_reg/php_e/php0908_e.html",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2009,
            end = 2009,
            archive = "php0909_e.html",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2009/sg/sg_reg/php_reg/php_e/php0909_e.html",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2010,
            end = 2010,
            archive = "php0910_e.html",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2010/sg/sg_reg/php_reg/php_e/php0910_e.html",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2011,
            end = 2011,
-           archive = "b_st_01_10_11.zip|b_st_01_10_11.pdf",
+           archive = "b_st_01_09_11.zip|b_st_01_09_11.pdf",
            archiveLink = "https://www.ukrstat.gov.ua/druk/katalog/selo/b_st_01_10_11.zip",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE,
            notes = "csv copied and checked from pdf")
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2012,
            end = 2012,
            archive = "bl_st_09_12.zip|bl_st_09_12.pdf",
            archiveLink = "https://www.ukrstat.gov.ua/druk/publicat/kat_u/2012/10_2012/bl_st_09_12.zip",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE,
            notes = "csv copied and checked from pdf")
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2013,
            end = 2013,
            archive = "bl_st_09_13.zip|bl_st_09_13.pdf",
            archiveLink = "https://www.ukrstat.gov.ua/druk/publicat/kat_u/2013/bl/10/bl_st_09_13.zip",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE,
            notes = "csv copied and checked from pdf")
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2014,
            end = 2014,
            archive = "st_09_14.xl.zip|st_09_14.xl.XLS",
            archiveLink = "https://www.ukrstat.gov.ua/druk/publicat/kat_u/2014/bl/10/st_09_14.xl.zip",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2015,
            end = 2015,
            archive = "bl_st15_xl.zip|bl_st15_xl.XLS",
            archiveLink = "https://www.ukrstat.gov.ua/druk/publicat/kat_u/2015/bl/10/bl_st15_xl.zip",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2016,
            end = 2016,
            archive = "bl_vptu0916xl.zip|bl_vptu0916.xls",
            archiveLink = "https://www.ukrstat.gov.ua/druk/publicat/kat_u/2016/bl/10/bl_vptu0916xl.zip",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2017,
            end = 2017,
            archive = "bl_vpt_10_2017_x.zip|bl_vpt_10_2017_x.xls",
            archiveLink = "https://www.ukrstat.gov.ua/druk/publicat/kat_u/2017/bl/10/bl_vpt_10_2017_x.zip",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2018,
            end = 2018,
            archive = "ksgt1018_xl.xls",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2018/sg/ph/xls/ksgt1018_xl.xls",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
-           overwrite = TRUE)
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
+           overwrite = TRUE,
+           notes = "Data exclude the temporarily occupied territory of the Autonomous Republic of Crimea, the city of Sevastopol and a part of temporarily occupied territories in the Donetsk and Luhansk regions.")
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2019,
            end = 2019,
            archive = "ksgt1019.xls",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2019/sg/ksgt/ksgt1019.xls",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2020,
            end = 2020,
            archive = "ksgt1020.xls",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2020/sg/ksgt/ksgt1020.xls",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2021,
            end = 2021,
            archive = "ksgt1021.xls",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2021/sg/ksgt/ksgt1021.xls",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE)
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2022,
            end = 2022,
            archive = "ksgt0122.xls",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2022/sg/ksgt/ksgt0122.xls",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE,
            notes = "only data for january available")
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2023,
            end = 2023,
            archive = "ksgt0123.xls",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2023/sg/ksgt/ksgt0123.xls",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE,
            notes = "only data for january available")
 
   regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
-           dSeries = ds[],
-           gSeries = gs[],
-           schema = schema_livestock_ukrstat,
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_livestock_ukrstat_livestock,
            begin = 2024,
            end = 2024,
            archive = "ksgt0124.xls",
            archiveLink = "https://www.ukrstat.gov.ua/operativ/operativ2023/sg/ksgt/ksgt0124.xls",
            downloadDate = ymd("2025-01-17"),
            updateFrequency = "annually",
-           metadataLink = _INSERT,
-           metadataPath = _INSERT,
+           metadataLink = "https://www.ukrstat.gov.ua/metod_polog/titul_mps.html",
+           metadataPath = "unknown",
            overwrite = TRUE,
            notes = "only data for january available")
 
-
-
-  normTable(pattern = ds[],
+  normTable(pattern = ds[1],
             ontoMatch = "animal",
             beep = 10)
 }
@@ -1646,16 +588,28 @@ if(build_landuse){
 
 #### test schemas
 #
-# myRoot <- paste0(census_dir, "tables/stage2/")
-# myFile <- ""
-# input <- read_csv(file = paste0(myRoot, myFile),
-#                   col_names = FALSE,
-#                   col_types = cols(.default = "c"))
-#
-# schema <-
-# validateSchema(schema = schema, input = input)
-#
-# output <- reorganise(input = input, schema = schema)
-#
-# https://github.com/luckinet/tabshiftr/issues
-#### delete this section after finalising script
+myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
+myFile <- "Ukraine_ADM1_livestock_2014_2014_ukrstat.csv"
+input <- read_csv(file = paste0(myRoot, myFile),
+                  col_names = FALSE,
+                  col_types = cols(.default = "c"))
+
+
+
+schema <- schema_livestock_ukrstat_livestock
+
+schema_test <- schema |>
+  validateSchema(input = input)
+input_test <- input |>
+  validateInput(schema = schema_test)
+
+ids <- schema_test |>
+  getIDVars(input = input_test)
+
+obs <- schema_test |>
+  getObsVars(input = input_test)
+
+output <- reorganise(input = input, schema = schema)
+
+
+

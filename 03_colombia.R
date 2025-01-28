@@ -1,31 +1,32 @@
 # ----
-# title       : build census database - _INESRT
-# description : this script integrates data of '_INSERT' (LINK)
+# title       : build census database - ica
+# description : this script integrates data of 'Instituto Colombiano Agropecuario' (https://www.ica.gov.co/)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-10-14
-# version     : 0.0.0
-# status      : find data, update, inventarize, validate, normalize, done
+# date        : 2025-01-22
+# version     : 0.0.3
+# status      : normalize, done
 # comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
-# geography   : _INSERT
-# spatial     : _INSERT
-# period      : _INSERT
+# geography   : Colombia
+# spatial     : ADM0, ADM1, ADM2
+# period      : 2017 - 2024
 # variables   :
-# - land      : hectares_covered
-# - crops     : hectares_planted, hectares_harvested, tons_produced, kiloPerHectare_yield
-# - livestock : number_heads, colonies
-# - tech      : number_machines, tons_applied (fertilizer)
-# - social    : _INSERT
+# - land      : -
+# - crops     : -
+# - livestock : number_heads (aves, bovinos, bufalos, caprinos, equinos, ovinos, porcinos)
+# - tech      : -
+# - social    : -
 # sampling    : survey, census
 # ----
 
 thisNation <- "Colombia"
+# source(paste0(mdl0301, "src/preprocess_ica.R"))
 
 # 1. dataseries ----
 #
 ds <- c("dane", "ica")
-gs <- c("gadm")
+gs <- c("hdx")
 
 # regDataseries(name = ds[1],
 #               description = "Departamento Estadistico Nacional de Estadistica",
@@ -42,6 +43,33 @@ regDataseries(name = ds[2],
 
 # 2. geometries ----
 #
+# https://data.humdata.org/dataset/cod-ab-col
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES"),
+            archive = "col-administrative-divisions-shapefiles.zip|col_admbnda_adm0_mgn_itos_20200416.shp",
+            archiveLink = "https://data.humdata.org/dataset/50ea7fee-f9af-45a7-8a52-abb9c790a0b6/resource/32fba556-0109-4d1c-84cb-c8abddf7775b/download/col-administrative-divisions-shapefiles.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES", ADM1 = "ADM1_ES"),
+            archive = "col-administrative-divisions-shapefiles.zip|col_admbnda_adm1_mgn_20200416.shp",
+            archiveLink = "https://data.humdata.org/dataset/50ea7fee-f9af-45a7-8a52-abb9c790a0b6/resource/32fba556-0109-4d1c-84cb-c8abddf7775b/download/col-administrative-divisions-shapefiles.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES", ADM1 = "ADM1_ES", ADM2 = "ADM2_ES"),
+            archive = "col-administrative-divisions-shapefiles.zip|col_admbnda_adm2_mgn_20200416.shp",
+            archiveLink = "https://data.humdata.org/dataset/50ea7fee-f9af-45a7-8a52-abb9c790a0b6/resource/32fba556-0109-4d1c-84cb-c8abddf7775b/download/col-administrative-divisions-shapefiles.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+normGeometry(pattern = gs[1],
+             beep = 10)
 
 
 # 3. tables ----
@@ -55,24 +83,52 @@ if(build_crops){
 if(build_livestock){
   ## livestock ----
 
-  schema_livestock_ica <- setCluster(id = _INSERT) |>
-    setFormat(header = _INSERT, decimal = _INSERT, thousand = _INSERT,
-              na_values = _INSERT) |>
-    setFilter() |>
-    setIDVar(name = "ADM1", ) |>
-    setIDVar(name = "ADM2", ) |>
-    setIDVar(name = "year", ) |>
-    setIDVar(name = "method", value = "") |>
-    setIDVar(name = "animal", ) |>
-    setObsVar(name = "number_heads", )
+  schema_livestock_ica <-
+    setFormat(na_values = "-") |>
+    setFilter(rows = .find(fun = is.na, col = 2, invert = TRUE)) |>
+    setIDVar(name = "ADM0", value = thisNation) |>
+    setIDVar(name = "ADM1", columns = 1) |>
+    setIDVar(name = "ADM2", columns = 2) |>
+    setIDVar(name = "method", value = "census") |>
+    setIDVar(name = "animal", columns = .find(pattern = "Departamento|Departamentos|Municipio", invert = TRUE),
+             rows = .find(pattern = "Departamento|Departamentos", col = 1)) |>
+    setObsVar(name = "number_heads", columns = .find(pattern = "Departamento|Departamentos|Municipio", invert = TRUE),
+              top = .find(pattern = "Departamento|Departamentos", col = 1))
+
+  schema_livestock_ica_2016 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2016")
+
+  schema_livestock_ica_2017 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2017")
+
+  schema_livestock_ica_2018 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2018")
+
+  schema_livestock_ica_2019 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2019")
+
+  schema_livestock_ica_2020 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2020")
+
+  schema_livestock_ica_2021 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2021")
+
+  schema_livestock_ica_2022 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2022")
+
+  schema_livestock_ica_2023 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2023")
+
+  schema_livestock_ica_2024 <- schema_livestock_ica |>
+    setIDVar(name = "year", value = "2024")
 
   ### 2016 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2016,
            begin = 2016,
            end = 2016,
            archive = "Aves-por-Muni-y-Dpto-2016.xlsx",
@@ -83,12 +139,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2016,
            begin = 2016,
            end = 2016,
            archive = "Bovinos-por-Muni-y-Dpto-2016.xlsx",
@@ -99,76 +155,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
-           label = "ADM2",
-           subset = "bufalos",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_ica,
-           begin = 2016,
-           end = 2016,
-           archive = "Bufalos-por-Muni-y-Dpto-2016.xlsx",
-           archiveLink = "https://www.ica.gov.co/Areas/Pecuaria/Servicios/Epidemiologia-Veterinaria/Censos-2016/Censo-2016/Bufalos-por-Muni-y-Dpto-2016.aspx",
-           downloadDate = ymd("2025-01-15"),
-           updateFrequency = "annually",
-           metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016",
-           metadataPath = "unknown",
-           overwrite = TRUE)
-
-  regTable(al1 = !!thisNation,
-           label = "ADM2",
-           subset = "caprinos",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_ica,
-           begin = 2016,
-           end = 2016,
-           archive = "Caprinos-por-Muni-y-Dpto-2016.xlsx",
-           archiveLink = "https://www.ica.gov.co/Areas/Pecuaria/Servicios/Epidemiologia-Veterinaria/Censos-2016/Censo-2016/Caprinos-por-Muni-y-Dpto-2016.aspx",
-           downloadDate = ymd("2025-01-15"),
-           updateFrequency = "annually",
-           metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016",
-           metadataPath = "unknown",
-           overwrite = TRUE)
-
-  regTable(al1 = !!thisNation,
-           label = "ADM2",
-           subset = "equinos",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_ica,
-           begin = 2016,
-           end = 2016,
-           archive = "Equinos-por-Muni-y-Dpto-2016.xlsx",
-           archiveLink = "https://www.ica.gov.co/Areas/Pecuaria/Servicios/Epidemiologia-Veterinaria/Censos-2016/Censo-2016/Equinos-por-Muni-y-Dpto-2016.aspx",
-           downloadDate = ymd("2025-01-15"),
-           updateFrequency = "annually",
-           metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016",
-           metadataPath = "unknown",
-           overwrite = TRUE)
-
-  regTable(al1 = !!thisNation,
-           label = "ADM2",
-           subset = "ovinos",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_ica,
-           begin = 2016,
-           end = 2016,
-           archive = "Ovinos-por-Muni-y-Dpto-2016.xlsx",
-           archiveLink = "https://www.ica.gov.co/Areas/Pecuaria/Servicios/Epidemiologia-Veterinaria/Censos-2016/Censo-2016/Ovinos-por-Muni-y-Dpto-2016.aspx",
-           downloadDate = ymd("2025-01-15"),
-           updateFrequency = "annually",
-           metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016",
-           metadataPath = "unknown",
-           overwrite = TRUE)
-
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "porcinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2016,
            begin = 2016,
            end = 2016,
            archive = "Porcinos-por-Muni-y-Dpto-2016.xlsx",
@@ -179,13 +171,29 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
+           subset = "otras",
+           dSeries = ds[2],
+           gSeries = gs[1],
+           schema = schema_livestock_ica_2016,
+           begin = 2016,
+           end = 2016,
+           archive = "Bufalos-por-Muni-y-Dpto-2016.xlsx",
+           archiveLink = "https://www.ica.gov.co/Areas/Pecuaria/Servicios/Epidemiologia-Veterinaria/Censos-2016/Censo-2016/Bufalos-por-Muni-y-Dpto-2016.aspx",
+           downloadDate = ymd("2025-01-15"),
+           updateFrequency = "annually",
+           metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016",
+           metadataPath = "unknown",
+           overwrite = TRUE)
+
   ### 2017 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2017,
            begin = 2017,
            end = 2017,
            archive = "CENSO-AVES-2017-3.xlsx",
@@ -196,12 +204,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bovino",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2017,
            begin = 2017,
            end = 2017,
            archive = "CENSO-BOVINO-2017.xlsx",
@@ -212,12 +220,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bufalino",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2017,
            begin = 2017,
            end = 2017,
            archive = "CENSO-BUFALINO-2017.xlsx",
@@ -228,12 +236,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "caprino",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2017,
            begin = 2017,
            end = 2017,
            archive = "CENSO-CAPRINO-2017.xlsx",
@@ -244,12 +252,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "equino",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2017,
            begin = 2017,
            end = 2017,
            archive = "CENSO-EQUINO-2017-1.xlsx",
@@ -260,12 +268,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "ovino",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2017,
            begin = 2017,
            end = 2017,
            archive = "CENSO-OVINO-2017.xlsx",
@@ -276,12 +284,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "porcino",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2017,
            begin = 2017,
            end = 2017,
            archive = "CENSO-PORCINO-2017.xlsx",
@@ -293,12 +301,12 @@ if(build_livestock){
            overwrite = TRUE)
 
   ### 2018 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2018,
            begin = 2018,
            end = 2018,
            archive = "CENSO-AVES-2018.xlsx",
@@ -309,12 +317,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2018,
            begin = 2018,
            end = 2018,
            archive = "CENSO-BOVINOS-POR-DEPARTAMENTO-2018.xlsx",
@@ -325,12 +333,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bufalos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2018,
            begin = 2018,
            end = 2018,
            archive = "CENSO-BUFALOS-2018.xlsx",
@@ -341,12 +349,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "caprinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2018,
            begin = 2018,
            end = 2018,
            archive = "CENSO-CAPRINOS-2018.xlsx",
@@ -357,12 +365,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "equinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2018,
            begin = 2018,
            end = 2018,
            archive = "CENSO-EQUINOS-2018.xlsx",
@@ -373,12 +381,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "ovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2018,
            begin = 2018,
            end = 2018,
            archive = "CENSO-OVINOS-2018.xlsx",
@@ -389,12 +397,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "porcinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2018,
            begin = 2018,
            end = 2018,
            archive = "CENSO-PORCINOS-2018.xlsx",
@@ -406,112 +414,112 @@ if(build_livestock){
            overwrite = TRUE)
 
   ### 2019 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
-           subset = "",
+           subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2019,
            begin = 2019,
            end = 2019,
-           archive = "",
-           archiveLink = "",
+           archive = "TABLA-AVES-MUNICIPIOS-DEPARTAMENTOS-2019.xlsx",
+           archiveLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018/tabla-aves-municipios-departamentos-2019.aspx",
            downloadDate = ymd("2025-01-15"),
            updateFrequency = "annually",
            metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018",
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
-           subset = "",
+           subset = "bovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2019,
            begin = 2019,
            end = 2019,
-           archive = "",
-           archiveLink = "",
+           archive = "TABLA-BOVINOS-MUNICIPIOS-DEPARTAMENTOS-2019.xls",
+           archiveLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018/tabla-bovinos-municipios-departamentos-2019.aspx",
            downloadDate = ymd("2025-01-15"),
            updateFrequency = "annually",
            metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018",
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
-           subset = "",
+           subset = "bufalos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2019,
            begin = 2019,
            end = 2019,
-           archive = "",
-           archiveLink = "",
+           archive = "TABLA-BUFALOS-MUNICIPIOS-DEPARTAMENTOS-2019.xls",
+           archiveLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018/tabla-bufalos-municipios-departamentos-2019.aspx",
            downloadDate = ymd("2025-01-15"),
            updateFrequency = "annually",
            metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018",
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
-           subset = "",
+           subset = "caprinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2019,
            begin = 2019,
            end = 2019,
-           archive = "",
-           archiveLink = "",
+           archive = "TABLA-CAPRINOS-MUNICIPIOS-DEPARTAMENTOS-2019.xls",
+           archiveLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018/tabla-caprinos-municipios-departamentos-2019.aspx",
            downloadDate = ymd("2025-01-15"),
            updateFrequency = "annually",
            metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018",
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
-           subset = "",
+           subset = "equinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2019,
            begin = 2019,
            end = 2019,
-           archive = "",
-           archiveLink = "",
+           archive = "TABLA-EQUINOS-MUNICIPIOS-DEPARTAMENTOS-2019.xls",
+           archiveLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018/tabla-equinos-municipios-departamentos-2019.aspx",
            downloadDate = ymd("2025-01-15"),
            updateFrequency = "annually",
            metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018",
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
-           subset = "",
+           subset = "ovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2019,
            begin = 2019,
            end = 2019,
-           archive = "",
-           archiveLink = "",
+           archive = "TABLA-OVINOS-MUNICIPIOS-DEPARTAMENTOS-2019.xls",
+           archiveLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018/tabla-ovinos-municipios-departamentos-2019.aspx",
            downloadDate = ymd("2025-01-15"),
            updateFrequency = "annually",
            metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018",
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
-           subset = "",
+           subset = "porcinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2019,
            begin = 2019,
            end = 2019,
-           archive = "",
-           archiveLink = "",
+           archive = "TABLA-PORCINOS-MUNICIPIOS-DEPARTAMENTOS-2019.xls",
+           archiveLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018/tabla-porcinos-municipios-departamentos-2019.aspx",
            downloadDate = ymd("2025-01-15"),
            updateFrequency = "annually",
            metadataLink = "https://www.ica.gov.co/areas/pecuaria/servicios/epidemiologia-veterinaria/censos-2016/censo-2018",
@@ -519,12 +527,12 @@ if(build_livestock){
            overwrite = TRUE)
 
   ### 2020 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2020,
            begin = 2020,
            end = 2020,
            archive = "AVES-CENSOS-2020.xlsx",
@@ -535,12 +543,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2020,
            begin = 2020,
            end = 2020,
            archive = "BOVINOS-CENSO-2020.xlsx",
@@ -551,12 +559,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bufalos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2020,
            begin = 2020,
            end = 2020,
            archive = "BUFALOS-CENSO-2020.xlsx",
@@ -567,12 +575,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "equinosCaprinosOvinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2020,
            begin = 2020,
            end = 2020,
            archive = "Equinos-Caprinos-Ovinos-CENSOS-2020.xlsx",
@@ -583,12 +591,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "porcinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2020,
            begin = 2020,
            end = 2020,
            archive = "PORCINOS-CENSOS-2020.xlsx",
@@ -600,12 +608,12 @@ if(build_livestock){
            overwrite = TRUE)
 
   ### 2021 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2021,
            begin = 2021,
            end = 2021,
            archive = "CENSO-AVES-2021.xlsx",
@@ -616,12 +624,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bovino",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2021,
            begin = 2021,
            end = 2021,
            archive = "CENSO-BOVINO-2021.xlsx",
@@ -632,12 +640,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bufalo",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2021,
            begin = 2021,
            end = 2021,
            archive = "CENSO-BUFALO-2021.xlsx",
@@ -648,12 +656,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "porcino",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2021,
            begin = 2021,
            end = 2021,
            archive = "CENSO-PORCINO-2021.xlsx",
@@ -664,12 +672,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "equinosOvinosCaprinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2021,
            begin = 2021,
            end = 2021,
            archive = "CENSOS-EQUINOS-OVINOS-CAPRINOS-2021.xlsx",
@@ -681,12 +689,12 @@ if(build_livestock){
            overwrite = TRUE)
 
   ### 2022 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2022,
            begin = 2022,
            end = 2022,
            archive = "CENSOS-AVES-2022.xlsx",
@@ -697,12 +705,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2022,
            begin = 2022,
            end = 2022,
            archive = "CENSOS-BOVINOS-2022.xlsx",
@@ -713,12 +721,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bufalos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2022,
            begin = 2022,
            end = 2022,
            archive = "CENSOS-BUFALOS-2022.xlsx",
@@ -729,12 +737,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "otras",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2022,
            begin = 2022,
            end = 2022,
            archive = "CENSOS-OTRAS-ESPECIES-2022.xlsx",
@@ -745,12 +753,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "porcinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2022,
            begin = 2022,
            end = 2022,
            archive = "CENSOS-PORCINOS-2022.xlsx",
@@ -762,12 +770,12 @@ if(build_livestock){
            overwrite = TRUE)
 
   ### 2023 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2023,
            begin = 2023,
            end = 2023,
            archive = "CENSOS-AVES-2023-Final.xls",
@@ -778,12 +786,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2023,
            begin = 2023,
            end = 2023,
            archive = "CENSOS-BOVINOS-2023-Final.xls",
@@ -794,12 +802,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bufalos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2023,
            begin = 2023,
            end = 2023,
            archive = "CENSOS-BUFALOS-2023-Final.xls",
@@ -810,12 +818,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "caprinosOvinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2023,
            begin = 2023,
            end = 2023,
            archive = "CENSOS-CAPRINOS-Y-OVINOS-2023-Final.xls",
@@ -826,12 +834,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "equinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2023,
            begin = 2023,
            end = 2023,
            archive = "CENSOS-EQUINOS-2023-Final.xls",
@@ -842,12 +850,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "porcinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2023,
            begin = 2023,
            end = 2023,
            archive = "CENSOS-PORCINOS-2023-filtros-habilitados.xlsx",
@@ -858,14 +866,13 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-
   ### 2024 ----
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bovinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2024,
            begin = 2024,
            end = 2024,
            archive = "CENSO-BOVINO-FINAL.xlsx",
@@ -876,12 +883,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "bufalos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2024,
            begin = 2024,
            end = 2024,
            archive = "CENSO-BUFALINO-FINAL.xlsx",
@@ -892,12 +899,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "caprinosOvinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2024,
            begin = 2024,
            end = 2024,
            archive = "censo-poblacion-ovina-por-municipio-y-departamento-2024_.xlsx",
@@ -908,12 +915,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "porcinos",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2024,
            begin = 2024,
            end = 2024,
            archive = "CENSOS-PORCINOS-2024_FINAL.xlsx",
@@ -924,12 +931,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "aves",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2024,
            begin = 2024,
            end = 2024,
            archive = "TABLA-DE-POBLACION-AVIAR-2024_final.xlsx",
@@ -940,12 +947,12 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "equina",
            dSeries = ds[2],
            gSeries = gs[1],
-           schema = schema_livestock_ica,
+           schema = schema_livestock_ica_2024,
            begin = 2024,
            end = 2024,
            archive = "Tabla-de-poblacion-equina-por-municipio-y-departamento-2024-final.xlsx",
@@ -969,31 +976,23 @@ if(build_landuse){
 
 #### test schemas
 #
-myRoot <- paste0(dir_census_data, "tables/stage2/")
-myFile <- "Brazil_ADM2_bubalino_1990_2022_ibge.csv"
-input <- read_csv(file = paste0(myRoot, myFile),
-                  col_names = FALSE,
-                  col_types = cols(.default = "c"))
-
-schema <- schema_ibge2
-
-schema <- schema |>
-  validateSchema(input = input)
-input <- input |>
-  validateInput(schema = schema)
-
-ids <- schema |>
-  getIDVars(input = input)
-
-obs <- schema |>
-  getObsVars(input = input)
-
-output <- reorganise(input = input, schema = schema)
-
-
-adb_visualise(territory = list(al1 = "Russian Federation"),
-              concept = list(animal = "cattle"),
-              variable = "number_heads",
-              level = "ADM2",
-              year = 2000:2020,
-              animate = TRUE)
+# myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
+# myFile <- "Colombia_ADM2_bovino_2017_2017_ica.csv"
+# input <- read_csv(file = paste0(myRoot, myFile),
+#                   col_names = FALSE,
+#                   col_types = cols(.default = "c"))
+#
+# schema <- schema_livestock_ica
+#
+# schema_test <- schema |>
+#   validateSchema(input = input)
+# input_test <- input |>
+#   validateInput(schema = schema_test)
+#
+# ids <- schema_test |>
+#   getIDVars(input = input_test)
+#
+# obs <- schema_test |>
+#   getObsVars(input = input_test)
+#
+# output <- reorganise(input = input, schema = schema)

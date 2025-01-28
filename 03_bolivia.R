@@ -1,23 +1,23 @@
 # ----
-# title       : build census database - _INESRT
-# description : this script integrates data of '_INSERT' (LINK)
+# title       : build census database - ineBo, siip
+# description : this script integrates data of 'Instituto Nacional de Estadística' (https://www.ine.gob.bo/), 'Sistema integrado de información productiva' (https://siip.produccion.gob.bo/)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-MM-DD
-# version     : 0.0.0
-# status      : find data, update, inventarize, validate, normalize, done
+# date        : 2025-01-22
+# version     : 0.0.3
+# status      : normalize, done
 # comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
 # ----
-# geography   : _INSERT
-# spatial     : _INSERT
-# period      : _INSERT
+# geography   : Bolivia
+# spatial     : ADM0, ADM1, ADM2, ADM3
+# period      : 2013 - 2023
 # variables   :
-# - land      : hectares_covered
-# - crops     : hectares_planted, hectares_harvested, tons_produced, kiloPerHectare_yield
-# - livestock : number_heads, colonies
-# - tech      : number_machines, tons_applied (fertilizer)
-# - social    : _INSERT
-# sampling    : survey, census
+# - land      : -
+# - crops     : -
+# - livestock : number_heads (avicola, bovino, caprino, ovino, porcino, alpaca, llama)
+# - tech      : -
+# - social    : -
+# sampling    : survey
 # ----
 
 thisNation <- "Bolivia"
@@ -25,8 +25,8 @@ thisNation <- "Bolivia"
 
 # 1. dataseries ----
 #
-ds <- c("ine_bo", "siip")
-gs <- c("gadm")
+ds <- c("ineBo", "siip")
+gs <- c("hdx")
 
 regDataseries(name = ds[1],
               description = "Instituto Nacional de Estadística",
@@ -43,6 +43,41 @@ regDataseries(name = ds[2],
 
 # 2. geometries ----
 #
+# https://data.humdata.org/dataset/cod-ab-bol
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES"),
+            archive = "bol_adm_mdrt_2013.zip|bol_admbnd_adm0_mdrt_2013_v01.shp",
+            archiveLink = "https://data.humdata.org/dataset/67333305-5479-4936-a7a3-1713ec3b7398/resource/4c37f36a-9916-4ea0-acff-baab539e3a23/download/bol_adm_mdrt_2013.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES", ADM1 = "ADM1_ES"),
+            archive = "bol_adm_mdrt_2013.zip|bol_admbnd_adm1_mdrt_2013_v01.shp",
+            archiveLink = "https://data.humdata.org/dataset/67333305-5479-4936-a7a3-1713ec3b7398/resource/4c37f36a-9916-4ea0-acff-baab539e3a23/download/bol_adm_mdrt_2013.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES", ADM1 = "ADM1_ES", ADM2 = "ADM2_ES"),
+            archive = "bol_adm_mdrt_2013.zip|bol_admbnd_adm2_mdrt_2013_v01.shp",
+            archiveLink = "https://data.humdata.org/dataset/67333305-5479-4936-a7a3-1713ec3b7398/resource/4c37f36a-9916-4ea0-acff-baab539e3a23/download/bol_adm_mdrt_2013.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+regGeometry(ADM0 = !!thisNation,
+            gSeries = gs[1],
+            label = list(ADM0 = "ADM0_ES", ADM1 = "ADM1_ES", ADM2 = "ADM2_ES", ADM3 = "ADM3_ES"),
+            archive = "bol_adm_mdrt_2013.zip|bol_admbnd_adm3_mdrt_2013_v01.shp",
+            archiveLink = "https://data.humdata.org/dataset/67333305-5479-4936-a7a3-1713ec3b7398/resource/4c37f36a-9916-4ea0-acff-baab539e3a23/download/bol_adm_mdrt_2013.zip",
+            downloadDate = ymd("2025-01-27"),
+            updateFrequency = "unknown")
+
+normGeometry(pattern = gs[1],
+             beep = 10)
 
 
 # 3. tables ----
