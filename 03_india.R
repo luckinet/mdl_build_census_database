@@ -5,17 +5,17 @@
 # authors     : Steffen Ehrmann
 # date        : 2024-09-19
 # version     : 0.6.0
-# status      : find data, update, inventarize, validate, normalize, done
+# status      : done
 # comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
 # ----
 # geography   : India
 # spatial     :
 # period      : 2003, 2007, 2012, 2019
 # variables   :
-# - land      : wip
-# - crops     : wip
+# - land      : -
+# - crops     : -
 # - livestock : number_heads
-# - tech      : wip
+# - tech      : -
 # - social    : -
 # sampling    : survey, census
 # ----
@@ -61,15 +61,15 @@ if(build_livestock){
   schema_livestock_indis2003 <-
     setFilter(rows = 1, invert = TRUE) |>
     setGroups(rows = .sum(c(2:6), fill = c("down", "right"), character = ~ paste0(unique(na.omit(.x)), collapse = "--"))) |>
-    setIDVar(name = "al2", columns = 1) |>
-    setIDVar(name = "al3", columns = 2) |>
+    setIDVar(name = "ADM1", columns = 1) |>
+    setIDVar(name = "ADM2", columns = 2) |>
     setIDVar(name = "year", value = "2003") |>
     setIDVar(name = "method", value = "census") |>
     setIDVar(name = "animal", columns = .find(is.numeric, row = 7), rows = 5) |>
     setObsVar(name = "number_heads", columns = .find(is.numeric, row = 7), top = 6, key = 3, value = "Total")
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestockCensus",
            dSeries = ds[2],
            gSeries = gs[1],
@@ -86,18 +86,18 @@ if(build_livestock){
 
 
   schema_livestock_indis2007 <-
-    setCluster(id = "al2", left = 1, top = .find(fun = is.na, col = c(2:10))) %>%
+    setCluster(id = "ADM1", left = 1, top = .find(fun = is.na, col = c(2:10))) %>%
     setFilter(rows = c(1, 8:115), invert = TRUE) |>
     setGroups(rows = .sum(c(2:7), fill = c("down", "right"), character = ~ paste0(unique(na.omit(.x)), collapse = "--"))) |>
-    setIDVar(name = "al2", columns = 1, rows = .find(fun = is.na, col = c(2:10))) |>
-    setIDVar(name = "al3", columns = 1) |>
+    setIDVar(name = "ADM1", columns = 1, rows = .find(fun = is.na, col = c(2:10))) |>
+    setIDVar(name = "ADM2", columns = 1) |>
     setIDVar(name = "year", value = "2007") |>
     setIDVar(name = "method", value = "census") |>
     setIDVar(name = "animal", columns = .find(is.numeric, row = 8), rows = 6) |>
     setObsVar(name = "number_heads", columns = .find(is.numeric, row = 8), top = 7, key = 2, value = "Total")
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestockCensus",
            dSeries = ds[2],
            gSeries = gs[1],
@@ -116,15 +116,15 @@ if(build_livestock){
   schema_livestock_indis2012 <-
     setFilter(rows = c(1, 7:114), invert = TRUE) |>
     setGroups(rows = .sum(c(2:6), fill = c("down", "right"), character = ~ paste0(unique(na.omit(.x)), collapse = "--"))) |>
-    setIDVar(name = "al2", columns = 1) |>
-    setIDVar(name = "al3", columns = 2) |>
+    setIDVar(name = "ADM1", columns = 1) |>
+    setIDVar(name = "ADM2", columns = 2) |>
     setIDVar(name = "year", value = "2012") |>
     setIDVar(name = "method", value = "census") |>
     setIDVar(name = "animal", columns = .find(is.numeric, row = 9), rows = 5) |>
     setObsVar(name = "number_heads", columns = .find(is.numeric, row = 9), top = 6, key = 3, value = "Total")
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestockCensus",
            dSeries = ds[2],
            gSeries = gs[1],
@@ -143,15 +143,15 @@ if(build_livestock){
   schema_livestock_indis2019 <-
     setFilter(rows = c(1, 5:41), invert = TRUE) |>
     setGroups(rows = .sum(c(2:4), fill = c("down", "right"), character = ~ paste0(unique(na.omit(.x)), collapse = "--"))) |>
-    setIDVar(name = "al2", columns = 1) |>
-    setIDVar(name = "al3", columns = 2) |>
+    setIDVar(name = "ADM1", columns = 1) |>
+    setIDVar(name = "ADM2", columns = 2) |>
     setIDVar(name = "year", value = "2019") |>
     setIDVar(name = "method", value = "census") |>
     setIDVar(name = "animal", columns = .find(is.numeric, row = 9), rows = 3) |>
     setObsVar(name = "number_heads", columns = .find(is.numeric, row = 9), top = 4)
 
-  regTable(al1 = !!thisNation,
-           label = "al3",
+  regTable(ADM0 = !!thisNation,
+           label = "ADM2",
            subset = "livestockCensus",
            dSeries = ds[2],
            gSeries = gs[1],
@@ -166,8 +166,8 @@ if(build_livestock){
            metadataPath = "unavailable",
            overwrite = TRUE)
 
-  # regTable(al1 = !!thisNation,
-  #          label = "al3",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM2",
   #          subset = "poultryCensus",
   #          dSeries = ds[2],
   #          gSeries = gs[1],
@@ -182,8 +182,8 @@ if(build_livestock){
   #          metadataPath = "unavailable",
   #          overwrite = TRUE)
   #
-  # regTable(al1 = !!thisNation,
-  #          label = "al3",
+  # regTable(ADM0 = !!thisNation,
+  #          label = "ADM2",
   #          subset = "poultryCensus",
   #          dSeries = ds[2],
   #          gSeries = gs[1],

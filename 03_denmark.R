@@ -25,7 +25,7 @@ thisNation <- "Denmark"
 # 1. dataseries ----
 #
 ds <- c("dstdk")
-gs <- c("dstdk")
+gs <- c("gadm")
 
 regDataseries(name = ds[1],
               description = "Statistics Denmark",
@@ -57,7 +57,7 @@ if(build_crops){
 if(build_livestock){
   ## livestock ----
 
-  schema_livestock <- setCluster() %>%
+  schema_livestock <-
     setFormat() %>%
     setIDVar(name = "ADM1", ) %>%
     setIDVar(name = "year", ) %>%
@@ -65,12 +65,12 @@ if(build_livestock){
     setIDVar(name = "animal", )  %>%
     setObsVar(name = "number_heads", )
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[1],
            gSeries = gs[1],
-           schema = schema_livestock,
+           schema = schema_default,
            begin = 1982,
            end = 2006,
            archive = "2025116204311516975717HDYR74683155415.csv",
@@ -81,7 +81,7 @@ if(build_livestock){
            metadataPath = "unknown",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM1",
            subset = "livestock",
            dSeries = ds[1],
@@ -89,7 +89,7 @@ if(build_livestock){
            schema = schema_livestock,
            begin = 2006,
            end = 2023,
-           archive = "2024726135823474083435HST7750306201535.csv",
+           archive = "2025125195843518822102HDYR0771926996370.csv",
            archiveLink = "https://www.statbank.dk/HDYR07",
            downloadDate = ymd("2025-01-16"),
            updateFrequency = "annually",

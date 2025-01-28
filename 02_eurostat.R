@@ -99,19 +99,19 @@ normGeometry(pattern = gs[1],
 # 3. tables ----
 #
 schema_eurostat <-
-  setFormat(na_values = ":", flags = flags, decimal = ".") %>%
+  setFormat(na_values = ":", flags = flags, decimal = ".") |>
   setIDVar(name = "year", columns = .find(fun = is.numeric, row = 1), rows = 1)
 
-schema_ADM0 <- schema_eurostat %>%
+schema_ADM0 <- schema_eurostat |>
   setIDVar(name = "ADM0", columns = .find(pattern = "^geo", row = 1))
 
-schema_ADM1 <- schema_eurostat %>%
-  setIDVar(name = "ADM0", columns = .find(pattern = "^geo$", row = 1), split = "(.{2})") %>%
+schema_ADM1 <- schema_eurostat |>
+  setIDVar(name = "ADM0", columns = .find(pattern = "^geo$", row = 1), split = "(.{2})") |>
   setIDVar(name = "ADM1", columns = .find(pattern = "^geo", row = 1), split = "(.{3})")
 
-schema_ADM2 <- schema_eurostat %>%
-  setIDVar(name = "ADM0", columns = .find(pattern = "^geo$", row = 1), split = "(.{2})") %>%
-  setIDVar(name = "ADM1", columns = .find(pattern = "^geo$", row = 1), split = "(.{3})") %>%
+schema_ADM2 <- schema_eurostat |>
+  setIDVar(name = "ADM0", columns = .find(pattern = "^geo$", row = 1), split = "(.{2})") |>
+  setIDVar(name = "ADM1", columns = .find(pattern = "^geo$", row = 1), split = "(.{3})") |>
   setIDVar(name = "ADM2", columns = .find(pattern = "^geo", row = 1))
 
 if(build_crops){
@@ -124,9 +124,9 @@ if(build_livestock){
   ## livestock ----
 
   ### Animal populations (agr_r_animal) ----
-  schema_agrranimal <- schema_ADM2 %>%
-    setIDVar(name = "method", value = "survey") %>%
-    setIDVar(name = "animal", columns = 2) %>%
+  schema_agrranimal <- schema_ADM2 |>
+    setIDVar(name = "method", value = "survey") |>
+    setIDVar(name = "animal", columns = 2) |>
     setObsVar(name = "number_heads", factor = 1000, columns = .find(fun = is.numeric, row = 1))
 
   regTable(un_region = thisNation,
@@ -146,9 +146,9 @@ if(build_livestock){
            overwrite = TRUE)
 
   # as some nations don't have recent data at level 3 (looking at you, Germany!), also read in level 2 data
-  schema_agrranimADM1 <- schema_ADM1 %>%
-    setIDVar(name = "method", value = "survey") %>%
-    setIDVar(name = "animal", columns = 2) %>%
+  schema_agrranimADM1 <- schema_ADM1 |>
+    setIDVar(name = "method", value = "survey") |>
+    setIDVar(name = "animal", columns = 2) |>
     setObsVar(name = "number_heads", factor = 1000, columns = .find(fun = is.numeric, row = 1))
 
   regTable(un_region = thisNation,

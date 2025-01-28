@@ -47,7 +47,7 @@ if(build_crops){
   ## crops ----
 
   ### yield ----
-  rosstat_yield <- list.files(path = paste0(dir_census_data, "tables/stage1/rosstat/"),
+  rosstat_yield <- list.files(path = paste0(.get_path("cens", "_data"), "tables/stage1/rosstat/"),
                               pattern = "yield")
 
   for(i in seq_along(rosstat_yield)){
@@ -66,7 +66,7 @@ if(build_crops){
       setIDVar(name = "crop", columns = 1) %>%
       setObsVar(name = "kiloPerHectare_yield", factor = 100, columns = .find(fun = is.numeric, row = 2, relative = TRUE)) # russian centner to kilogram
 
-    regTable(al1 = !!thisNation,
+    regTable(ADM0 = !!thisNation,
              label = "ADM2",
              subset = paste0("yield", ADM1Val),
              dSeries = ds[1],
@@ -85,7 +85,7 @@ if(build_crops){
   }
 
   ### plantations ----
-  rosstat_planted <- list.files(path = paste0(dir_census_data, "/tables/stage1/rosstat/"),
+  rosstat_planted <- list.files(path = paste0(.get_path("cens", "_data"), "/tables/stage1/rosstat/"),
                                 pattern = "planted")
 
   for(i in seq_along(rosstat_planted)){
@@ -105,7 +105,7 @@ if(build_crops){
       setIDVar(name = "crop", columns = 1) %>%
       setObsVar(name = "hectares_harvested", columns = .find(fun = is.numeric, row = 2, relative = TRUE))
 
-    regTable(al1 = !!thisNation,
+    regTable(ADM0 = !!thisNation,
              label = "ADM2",
              subset = paste0("planted", ADM1Val),
              dSeries = ds[1],
@@ -123,7 +123,7 @@ if(build_crops){
 
   }
 
-  rosstat_production <- list.files(path = paste0(dir_census_data, "/tables/stage1/rosstat/"),
+  rosstat_production <- list.files(path = paste0(.get_path("cens", "_data"), "/tables/stage1/rosstat/"),
                                    pattern = "production")
 
   ### production ----
@@ -143,7 +143,7 @@ if(build_crops){
       setIDVar(name = "crop", columns = 1) %>%
       setObsVar(name = "tons_produced", factor = 0.1, columns = .find(fun = is.numeric, row = 2, relative = TRUE))
 
-    regTable(al1 = !!thisNation,
+    regTable(ADM0 = !!thisNation,
              label = "ADM2",
              subset = paste0("production", ADM1Val),
              dSeries = ds[1],
@@ -161,7 +161,7 @@ if(build_crops){
 
   }
 
-  rosstat_perennial <- list.files(path = paste0(dir_census_data, "/tables/stage1/rosstat/"),
+  rosstat_perennial <- list.files(path = paste0(.get_path("cens", "_data"), "/tables/stage1/rosstat/"),
                                   pattern = "perennial")
 
   ### perennials ----
@@ -181,7 +181,7 @@ if(build_crops){
       setIDVar(name = "crop", columns = 1) %>%
       setObsVar(name = "hectares_planted", columns = .find(fun = is.numeric, row = 2, relative = TRUE))
 
-    regTable(al1 = !!thisNation,
+    regTable(ADM0 = !!thisNation,
              label = "ADM2",
              subset = paste0("perennial", ADM1Val),
              dSeries = ds[1],
@@ -228,7 +228,7 @@ if(build_livestock){
       setIDVar(name = "animal", columns = 1) %>%
       setObsVar(name = "number_heads", columns = .find(fun = is.numeric, row = 2, relative = TRUE))
 
-    regTable(al1 = !!thisNation,
+    regTable(ADM0 = !!thisNation,
              label = "ADM2",
              subset = paste0("livestock", ADM1Val),
              dSeries = ds[1],

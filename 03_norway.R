@@ -3,7 +3,7 @@
 # description : this script integrates data of 'Statistics Norway' (https://www.ssb.no/en/, https://www.ssb.no/en/statbank/list/stjord)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-01-16
+# date        : 2025-01-22
 # version     : 0.0.2
 # status      : work in progress
 # comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
@@ -12,10 +12,10 @@
 # spatial     : ADM1, ADM2
 # period      : 1969 - 2023
 # variables   :
-# - land      : hectares_covered
-# - crops     : hectares_planted, hectares_harvested, tons_produced, kiloPerHectare_yield
+# - land      : -
+# - crops     : -
 # - livestock : number_heads
-# - tech      : number_machines, tons_applied (fertilizer)
+# - tech      : -
 # - social    : -
 # sampling    : survey, census
 # ----

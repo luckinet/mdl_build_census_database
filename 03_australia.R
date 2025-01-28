@@ -9,7 +9,7 @@
 # comment     : missing some pdfs from 2002 - 2006
 # ----
 # geography   : Australia
-# spatial     : _INSERT
+# spatial     : ADM0, ADM1, ADM2, ADM3
 # period      : (1861)2000 - 2022
 # variables   :
 # - land      : wip
@@ -633,7 +633,7 @@ if(build_livestock){
 
   normTable(pattern = paste0("livestock.*", ds[1]),
             ontoMatch = "animal",
-            beep = 10) match aligned
+            beep = 10)
 
 }
 

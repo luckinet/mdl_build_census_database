@@ -67,7 +67,7 @@ if(build_livestock){
     setIDVar(name = "animal", )  %>%
     setObsVar(name = "number_heads", )
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
@@ -83,7 +83,7 @@ if(build_livestock){
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
@@ -99,7 +99,7 @@ if(build_livestock){
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
@@ -115,7 +115,7 @@ if(build_livestock){
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "livestock",
            dSeries = ds[1],
@@ -131,7 +131,7 @@ if(build_livestock){
            metadataLink = "https://www.regionalstatistik.de/genesis/online?operation=statistic&levelindex=0&levelid=1722440782412&code=41312",
            overwrite = TRUE)
 
-  regTable(al1 = !!thisNation,
+  regTable(ADM0 = !!thisNation,
            label = "ADM2",
            subset = "cattle",
            dSeries = ds[1],

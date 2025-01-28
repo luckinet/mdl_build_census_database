@@ -4,18 +4,18 @@
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
 # date        : 2024-09-23
-# version     : 0.0.0
+# version     : 0.0.3
 # status      : find data, update, inventarize, validate, normalize, done
 # comment     : level 4 data available at province-level websites
 # ----
 # geography   : Indonesia
-# spatial     :
+# spatial     : ADM0, ADM1, (ADM2)
 # period      : 2000 - 2022
 # variables   :
-# - land      : wip
-# - crops     : wip
+# - land      : -
+# - crops     : -
 # - livestock : number_heads
-# - tech      : wip
+# - tech      : -
 # - social    : -
 # sampling    : survey
 # ----
