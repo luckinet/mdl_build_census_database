@@ -272,7 +272,7 @@ if(build_landuse){
 #### test schemas
 #
 myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
-myFile <- "Mexico_ADM1_bovinoCarne_2014_2023_siap.csv"
+myFile <- "Mexico_ADM1_abeja_2014_2023_siap.csv"
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
                   col_types = cols(.default = "c"))

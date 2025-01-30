@@ -175,7 +175,7 @@ if(build_livestock){
 
   normTable(pattern = paste0("agrranimal.*", ds[1]),
             ontoMatch = "animal",
-            # query = "ADM0 == 'DK'",
+            query = "ADM0 == 'DK'",
             beep = 10)
 }
 

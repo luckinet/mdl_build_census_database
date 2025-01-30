@@ -90,6 +90,7 @@ if(build_livestock){
     setFilter(rows = .find(fun = is.na, col = 3, invert = TRUE)) |>
     setIDVar(name = "ADM0", value = thisNation) |>
     setIDVar(name = "method", value = "census") |>
+    setIDVar(name = "year", columns = 1, rows = 1, split = "(\\d+)(?!.*\\d)") |>
     setIDVar(name = "animal", columns = .find(pattern = "PAÍS|REGIÓN|Región|PROVINCIA", invert = TRUE),
              rows = .find(pattern = "PAÍS|REGIÓN|Región|PROVINCIA", col = 1)) |>
     setObsVar(name = "number_heads", columns = .find(pattern = "PAÍS|REGIÓN|Región|PROVINCIA", invert = TRUE),
@@ -311,7 +312,6 @@ if(build_livestock){
            metadataLink = "https://www.ine.gob.cl/estadisticas/economia/agricultura-agroindustria-y-pesca/produccion-pecuaria",
            metadataPath = "unknown",
            overwrite = TRUE)
-
 
   ### all ----
   regTable(ADM0 = !!thisNation,

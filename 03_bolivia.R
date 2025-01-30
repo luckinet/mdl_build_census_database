@@ -103,6 +103,7 @@ if(build_livestock){
 
     schema_livestock_ineBo <-
       setFilter(rows = .find(fun = is.numeric, col = 2)) |>
+      setIDVar(name = "ADM0", value = "Bolivia") |>
       setIDVar(name = "ADM1", value = str_to_title(name[2])) %>%
       setIDVar(name = "ADM3", columns = 1) |>
       setIDVar(name = "year", value = name[1]) |>
@@ -142,7 +143,7 @@ if(build_landuse){
 #### test schemas
 #
 myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
-myFile <- "Bolivia_ADM2_avicolaBeni_2013_2013_siip.csv"
+myFile <- "Bolivia_ADM3_bovinoBeni_2013_2013_siip.csv"
 input <- read_csv(file = paste0(myRoot, myFile),
                   col_names = FALSE,
                   col_types = cols(.default = "c"))

@@ -139,7 +139,7 @@ if(build_livestock){
            gSeries = gs[1],
            schema = schema_usda_census_livestock,
            begin = 1997,
-           end = 2018,
+           end = 2017,
            archive = "qs.animals_products_20231026.txt.gz",
            archiveLink = "https://www.nass.usda.gov/datasets/qs.animals_products_20231103.txt.gz",
            updateFrequency = "quinquennial",
