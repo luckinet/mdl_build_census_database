@@ -1,5 +1,5 @@
 
-allInput <- list.files(paste0(.get_path("cens", "_data"), "tables/stage2/"), pattern = "ica", full.names = TRUE)
+allInput <- list.files(paste0(.get_path("cens", "_data"), "tables/stage2/"), pattern = "aves", full.names = TRUE)
 
 for(i in seq_along(allInput)){
 

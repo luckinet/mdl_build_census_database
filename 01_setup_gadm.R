@@ -3,7 +3,7 @@
 # description : this script integrates data of 'Database of Global Administrative Areas' (https://gadm.org/index.html)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2025-01-20
+# date        : 2025-01-31
 # version     : 1.0.0
 # status      : done
 # comment     : version 4.1
@@ -83,6 +83,6 @@ regGeometry(gSeries = "gadm",
 # normalise geometries ----
 #
 normGeometry(pattern = "gadm",
-             # query = paste0("WHERE NAME_0 IN ('Germany')"),
+             query = paste0("WHERE NAME_0 IN ('Canada')"),
              stringdist = FALSE, strictMatch = TRUE,
              beep = 10)

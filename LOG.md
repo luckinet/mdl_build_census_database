@@ -1,3 +1,10 @@
+# 2025-02-15 - v0.8.2 (alpha version)
+
+- I re-ran the whole pipeline while fixing remaining issues in the data and double-checking every produced dataset (the current verison includes FAOstat, eurostat, agriwanet, Argentina, Australia, Bolivia, Brazil, Canada, Chile, China, Colombia, India, Indonesia, Mexico, New Zealand Norway, Paraguay, Peru, Russia, Ukraine, United States of America),
+- I revised the module structure so that it's fully self-contained (i.e., does not depend on other scripts/modules of the loca pipeline),
+- I simplified the data-series specific scripts so they are a bit more intuitive,
+- I revised the documentation ([README.md](README.md))
+
 # 2025-01-28
 
 - scripts for Mexico, Bolivia, Colombia, Peru, Paraguay, Chile and Ukraine

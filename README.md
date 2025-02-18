@@ -2,7 +2,7 @@
 
 ## Rationale
 
-This module has the purpose of building a harmonized database of census statistics on land use, forestry and agricultural commodities (crops and livestock). Basic data are sourced from the FAO and more detailed data are taken from open sources such as national or pan-regional statistical agencies (databases and yearbooks) or other collation efforts that produce sub-national census datasets (such as [countryStat](https://www.fao.org/in-action/countrystat/en/), [FAO Data Lab](https://www.fao.org/datalab/en)).
+This module has the purpose of building a harmonized database of census statistics on areal land use, forestry and agricultural commodities (crops and livestock). Basic data are sourced from the FAO and more detailed data are taken from open sources such as national or pan-regional statistical agencies (databases and yearbooks) or other collation efforts that produce sub-national census datasets (such as [countryStat](https://www.fao.org/in-action/countrystat/en/), [FAO Data Lab](https://www.fao.org/datalab/en)).
 
 
 ## The input data

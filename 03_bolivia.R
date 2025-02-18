@@ -82,91 +82,46 @@ normGeometry(pattern = gs[1],
 
 # 3. tables ----
 #
-if(build_crops){
-  ## crops ----
+## livestock ----
 
-  # work in progress
+allFiles <- list.files(path = paste0(.get_path("cens", "_data"), "tables/stage1/siip"))
+allFiles <- allFiles[!str_detect(allFiles, "avicola")]
+
+for(i in seq_along(allFiles)){
+
+  thisFile <- allFiles[i]
+  name <- str_split(thisFile, "-|_")[[1]]
+  year <- as.integer(name[1])
+  animal <- str_split(name[3], "[.]")[[1]][1]
+
+  schema_livestock_ineBo <-
+    setFilter(rows = .find(fun = is.numeric, col = 2)) |>
+    setIDVar(name = "ADM0", value = "Bolivia") |>
+    setIDVar(name = "ADM1", value = str_to_title(name[2])) %>%
+    setIDVar(name = "ADM3", columns = 1) |>
+    setIDVar(name = "year", value = name[1]) |>
+    setIDVar(name = "method", value = "survey") |>
+    setIDVar(name = "animal", value = animal) |>
+    setObsVar(name = "number_heads", columns = 2)
+
+  regTable(ADM0 = !!thisNation,
+           label = "ADM3",
+           subset = paste0(animal, str_to_title(name[2])),
+           dSeries = ds[2],
+           gSeries = gs[1],
+           schema = schema_livestock_ineBo,
+           begin = year,
+           end = year,
+           archive = thisFile,
+           archiveLink = "https://siip.produccion.gob.bo/repSIIP2/formulario_pecuario.php",
+           downloadDate = ymd("2024-05-22"),
+           updateFrequency = "annually",
+           metadataLink = "https://siip.produccion.gob.bo/repSIIP2/formulario_pecuario.php",
+           metadataPath = "unknown",
+           overwrite = TRUE)
+
 }
 
-if(build_livestock){
-  ## livestock ----
-
-  allFiles <- list.files(path = paste0(.get_path("cens", "_data"), "tables/stage1/siip"))
-  allFiles <- allFiles[!str_detect(allFiles, "avicola")]
-
-  for(i in seq_along(allFiles)){
-
-    thisFile <- allFiles[i]
-    name <- str_split(thisFile, "-|_")[[1]]
-    year <- as.integer(name[1])
-    animal <- str_split(name[3], "[.]")[[1]][1]
-
-    schema_livestock_ineBo <-
-      setFilter(rows = .find(fun = is.numeric, col = 2)) |>
-      setIDVar(name = "ADM0", value = "Bolivia") |>
-      setIDVar(name = "ADM1", value = str_to_title(name[2])) %>%
-      setIDVar(name = "ADM3", columns = 1) |>
-      setIDVar(name = "year", value = name[1]) |>
-      setIDVar(name = "method", value = "survey") |>
-      setIDVar(name = "animal", value = animal) |>
-      setObsVar(name = "number_heads", columns = 2)
-
-    regTable(ADM0 = !!thisNation,
-             label = "ADM3",
-             subset = paste0(animal, str_to_title(name[2])),
-             dSeries = ds[2],
-             gSeries = gs[1],
-             schema = schema_livestock_ineBo,
-             begin = year,
-             end = year,
-             archive = thisFile,
-             archiveLink = "https://siip.produccion.gob.bo/repSIIP2/formulario_pecuario.php",
-             downloadDate = ymd("2024-05-22"),
-             updateFrequency = "annually",
-             metadataLink = "https://siip.produccion.gob.bo/repSIIP2/formulario_pecuario.php",
-             metadataPath = "unknown",
-             overwrite = TRUE)
-
-  }
-
-  normTable(pattern = ds[2],
-            ontoMatch = "animal",
-            beep = 10)
-}
-
-if(build_landuse){
-  ## landuse ----
-
-  # work in progress
-}
-
-#### test schemas
-#
-myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
-myFile <- "Bolivia_ADM3_bovinoBeni_2013_2013_siip.csv"
-input <- read_csv(file = paste0(myRoot, myFile),
-                  col_names = FALSE,
-                  col_types = cols(.default = "c"))
-
-schema <- schema_livestock_ineBo
-
-schema_test <- schema |>
-  validateSchema(input = input)
-input_test <- input |>
-  validateInput(schema = schema_test)
-
-ids <- schema_test |>
-  getIDVars(input = input_test)
-
-obs <- schema_test |>
-  getObsVars(input = input_test)
-
-output <- reorganise(input = input, schema = schema)
-
-
-adb_visualise(territory = list(ADM0 = ""),
-              concept = list(animal = "cattle"),
-              variable = "number_heads",
-              level = "ADM2",
-              year = 2000:2020,
-              animate = TRUE)
+normTable(pattern = ds[2],
+          ontoMatch = "animal",
+          beep = 10)

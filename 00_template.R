@@ -3,10 +3,10 @@
 # description : this script integrates data of '_INSERT' (LINK)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-MM-DD
+# date        : YYYY-MM-DD
 # version     : 0.0.0
-# status      : find data, update, inventarize, validate, normalize, done
-# comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
+# status      : work in progress [%], finished
+# notes       : see 00_main.R
 # ----
 # geography   : _INSERT
 # spatial     : _INSERT
@@ -18,6 +18,7 @@
 # - tech      : number_machines, tons_applied (fertilizer)
 # - social    : _INSERT
 # sampling    : survey, census
+# comment     : _INSERT
 # ----
 
 thisNation <- _INSERT
@@ -159,34 +160,3 @@ if(build_landuse){
             ontoMatch = "landuse",
             beep = 10)
 }
-
-#### test schemas
-#
-myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
-myFile <- ""
-input <- read_csv(file = paste0(myRoot, myFile),
-                  col_names = FALSE,
-                  col_types = cols(.default = "c"))
-
-schema <- schema_ibge2
-
-schema_test <- schema |>
-  validateSchema(input = input)
-input_test <- input |>
-  validateInput(schema = schema_test)
-
-ids <- schema_test |>
-  getIDVars(input = input_test)
-
-obs <- schema_test |>
-  getObsVars(input = input_test)
-
-output <- reorganise(input = input, schema = schema)
-
-
-adb_visualise(territory = list(al1 = ""),
-              concept = list(animal = "cattle"),
-              variable = "number_heads",
-              level = "ADM2",
-              year = 2000:2020,
-              animate = TRUE)

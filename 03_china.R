@@ -3,21 +3,18 @@
 # description : this script integrates data of ' National Bureau of Statistics of China' (http://www.data.stats.gov.cn/english/), 'Data for Agriculture, Forest, Livestock and Fishery' (https://www.cnki.net/), 'National Geomatics Center of China' (http://gaohr.win/site/blogs/2017/2017-04-18-GIS-basic-data-of-China.html)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-07-17
-# version     : 0.6.0
-# status      : work in progress
-# comment     : file.edit(paste0(dir_docs, "/documentation/03_build_census_database.md"))
+# date        : 2025-01-31
+# version     : 0.3.0
+# status      : work in progress [30%]
+# notes       : see 00_main.R
 # ----
 # geography   : China
-# spatial     :
+# spatial     : ADM0, ADM1
 # period      : 1949 - 2020
 # variables   :
-# - land      : wip
-# - crops     : wip
 # - livestock : number_heads
-# - tech      : wip
-# - social    : -
 # sampling    : survey, census
+# comment     : -
 # ----
 
 thisNation <- "China"
@@ -55,62 +52,42 @@ regDataseries(name = gs[2],
 nbs_data <- list.files(path = paste0(.get_path("cens", "_data"), "/tables/stage1/nbs"))
 
 schema_nbs <- setCluster(id = "animal", left = 1, top = 4) %>%
-  setFormat(decimal = ".") |>
+  setFormat(decimal = ",") |>
   setIDVar(name = "ADM0", value = "China") |>
   setIDVar(name = "ADM1", rows = 4, columns = .find(fun = is.na, row = 3)) |>
   setIDVar(name = "year", columns = 1) |>
   setIDVar(name = "method", value = "survey")
 
-if(build_crops){
-  ## crops ----
+### nbs ----
+nbs_livestock <- nbs_data[str_which(string = nbs_data, pattern = c("headcount"))]
 
-  # work in progress
-}
+for(i in seq_along(nbs_livestock)){
 
-if(build_livestock){
-  ## livestock ----
+  temp <- str_split(nbs_livestock[i], "_")[[1]]
+  temp[2] <- str_split(temp[2], "[.]")[[1]][1]
 
-  ### nbs ----
-  nbs_livestock <- nbs_data[str_which(string = nbs_data, pattern = c("headcount"))]
+  schema_nbs_livestock <- schema_nbs |>
+    setIDVar(name = "animal", value = temp[2]) |>
+    setObsVar(name = "number_heads", factor = 10000, columns = .find(fun = is.na, row = 3))
 
-  for(i in seq_along(nbs_livestock)){
-
-    temp <- str_split(nbs_livestock[i], "_")[[1]]
-    temp[2] <- str_split(temp[2], "[.]")[[1]][1]
-
-    schema_nbs_livestock <- schema_nbs |>
-      setIDVar(name = "animal", value = temp[2]) |>
-      setObsVar(name = "number_heads", factor = 10000, columns = .find(fun = is.na, row = 3))
-
-    regTable(ADM0 = !!thisNation,
-             label = "ADM1",
-             subset = paste0(temp[2], .toCap(temp[1])),
-             dSeries = ds[1],
-             gSeries = gs[1],
-             schema = schema_nbs_livestock,
-             begin = 1978,
-             end = 2020,
-             archive = nbs_livestock[i],
-             archiveLink = "https://www.stats.gov.cn/english/",
-             downloadDate = ymd("2024-07-17"),
-             updateFrequency = "annually",
-             metadataLink = "unavailable",
-             metadataPath = "unavailable",
-             overwrite = TRUE)
-
-  }
-
-  normTable(pattern = ds[1],
-            ontoMatch = "animal",
-            beep = 10)
+  regTable(ADM0 = !!thisNation,
+           label = "ADM1",
+           subset = paste0(temp[2], .toCap(temp[1])),
+           dSeries = ds[1],
+           gSeries = gs[1],
+           schema = schema_nbs_livestock,
+           begin = 1978,
+           end = 2020,
+           archive = nbs_livestock[i],
+           archiveLink = "https://www.stats.gov.cn/english/",
+           downloadDate = ymd("2024-07-17"),
+           updateFrequency = "annually",
+           metadataLink = "unavailable",
+           metadataPath = "unavailable",
+           overwrite = TRUE)
 
 }
 
-if(build_landuse){
-  ## landuse ----
-
-  # work in progress
-}
-
-
-
+normTable(pattern = ds[1],
+          ontoMatch = "animal",
+          beep = 10)

@@ -3,25 +3,22 @@
 # description : this script integrates data of 'Statistical office of the European Union' (https://ec.europa.eu/eurostat/web/main/home), 'Nomenclature des unités territoriales statistiques' (https://ec.europa.eu/eurostat/web/nuts/background)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2024-06-05
+# date        : 2025-01-31
 # version     : 0.8.0
-# status      : work in progress
-# comment     : https://ec.europa.eu/eurostat/documents/3859598/15193590/KS-GQ-22-010-EN-N.pdf
+# status      : finished
+# notes       : see 00_main.R
 # ----
 # geography   : Europe
-# spatial     : Nation (NUTS0), NUTS1, NUTS2, NUTS3
+# spatial     : NUTS0, NUTS1, NUTS2, NUTS3
 # period      : 1975 - 2022
 # variables   :
-# - land      : wip
-# - crops     : wip
 # - livestock : number_heads
-# - tech      : -
-# - social    : -
 # sampling    : survey, census
+# comment     : https://ec.europa.eu/eurostat/documents/3859598/15193590/KS-GQ-22-010-EN-N.pdf
 # ----
 
 thisNation <- "Europe"
-# source(paste0(mdl0301, "src/preprocess_eurostat.R"))
+# source(paste0(.get_path("cens"), "preprocess_eurostat.R"))
 #
 # any data about horses? also in the US
 # how about zeros? Where are they, do my schemas capture them correctly?
@@ -114,73 +111,57 @@ schema_ADM2 <- schema_eurostat |>
   setIDVar(name = "ADM1", columns = .find(pattern = "^geo$", row = 1), split = "(.{3})") |>
   setIDVar(name = "ADM2", columns = .find(pattern = "^geo", row = 1))
 
-if(build_crops){
-  ## crops ----
+## Animal populations (agr_r_animal) ----
+schema_agrranimal <- schema_ADM2 |>
+  setIDVar(name = "method", value = "survey") |>
+  setIDVar(name = "animal", columns = 2) |>
+  setObsVar(name = "number_heads", factor = 1000, columns = .find(fun = is.numeric, row = 1))
 
-  # work in progress
-}
+regTable(un_region = thisNation,
+         label = "ADM2",
+         subset = "agrranimal",
+         dSeries = ds[1],
+         gSeries = gs[1],
+         schema = schema_agrranimal,
+         begin = 1977,
+         end = 2023,
+         archive = "agr_r_animal.tsv.gz",
+         archiveLink = "https://ec.europa.eu/eurostat/databrowser/view/agr_r_animal/",
+         updateFrequency = "annually",
+         downloadDate = ymd("2024-07-29"),
+         metadataLink = "https://ec.europa.eu/eurostat/cache/metadata/en/apro_anip_esms.htm",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-if(build_livestock){
-  ## livestock ----
+# as some nations don't have recent data at level 3 (looking at you, Germany!), also read in level 2 data
+schema_agrranimADM1 <- schema_ADM1 |>
+  setIDVar(name = "method", value = "survey") |>
+  setIDVar(name = "animal", columns = 2) |>
+  setObsVar(name = "number_heads", factor = 1000, columns = .find(fun = is.numeric, row = 1))
 
-  ### Animal populations (agr_r_animal) ----
-  schema_agrranimal <- schema_ADM2 |>
-    setIDVar(name = "method", value = "survey") |>
-    setIDVar(name = "animal", columns = 2) |>
-    setObsVar(name = "number_heads", factor = 1000, columns = .find(fun = is.numeric, row = 1))
+regTable(un_region = thisNation,
+         label = "ADM1",
+         subset = "agrranimal",
+         dSeries = ds[1],
+         gSeries = gs[1],
+         schema = schema_agrranimADM1,
+         begin = 1977,
+         end = 2023,
+         archive = "agr_r_animal.tsv.gz",
+         archiveLink = "https://ec.europa.eu/eurostat/databrowser/view/agr_r_animal/",
+         updateFrequency = "annually",
+         downloadDate = ymd("2024-07-29"),
+         metadataLink = "https://ec.europa.eu/eurostat/cache/metadata/en/apro_anip_esms.htm",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(un_region = thisNation,
-           label = "ADM2",
-           subset = "agrranimal",
-           dSeries = ds[1],
-           gSeries = gs[1],
-           schema = schema_agrranimal,
-           begin = 1977,
-           end = 2023,
-           archive = "agr_r_animal.tsv.gz",
-           archiveLink = "https://ec.europa.eu/eurostat/databrowser/view/agr_r_animal/",
-           updateFrequency = "annually",
-           downloadDate = ymd("2024-07-29"),
-           metadataLink = "https://ec.europa.eu/eurostat/cache/metadata/en/apro_anip_esms.htm",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+# ignore files for some southern and eastern neighbours because they are also covered by FAOstat
+# - ENP-South Livestock: https://ec.europa.eu/eurostat/databrowser/view/enps_apro_mt_ls/
+# - ENP-South Livestock - historical data: https://ec.europa.eu/eurostat/databrowser/view/med_ag33/
+# - ENP-South Poultry farming - historical data: https://ec.europa.eu/eurostat/databrowser/view/med_ag34/
+# - ENP-East Livestock: https://ec.europa.eu/eurostat/databrowser/view/enpe_apro_mt_ls/
 
-  # as some nations don't have recent data at level 3 (looking at you, Germany!), also read in level 2 data
-  schema_agrranimADM1 <- schema_ADM1 |>
-    setIDVar(name = "method", value = "survey") |>
-    setIDVar(name = "animal", columns = 2) |>
-    setObsVar(name = "number_heads", factor = 1000, columns = .find(fun = is.numeric, row = 1))
-
-  regTable(un_region = thisNation,
-           label = "ADM1",
-           subset = "agrranimal",
-           dSeries = ds[1],
-           gSeries = gs[1],
-           schema = schema_agrranimADM1,
-           begin = 1977,
-           end = 2023,
-           archive = "agr_r_animal.tsv.gz",
-           archiveLink = "https://ec.europa.eu/eurostat/databrowser/view/agr_r_animal/",
-           updateFrequency = "annually",
-           downloadDate = ymd("2024-07-29"),
-           metadataLink = "https://ec.europa.eu/eurostat/cache/metadata/en/apro_anip_esms.htm",
-           metadataPath = "unknown",
-           overwrite = TRUE)
-
-  # ignore files for some southern and eastern neighbours because they are also covered by FAOstat
-  # - ENP-South Livestock: https://ec.europa.eu/eurostat/databrowser/view/enps_apro_mt_ls/
-  # - ENP-South Livestock - historical data: https://ec.europa.eu/eurostat/databrowser/view/med_ag33/
-  # - ENP-South Poultry farming - historical data: https://ec.europa.eu/eurostat/databrowser/view/med_ag34/
-  # - ENP-East Livestock: https://ec.europa.eu/eurostat/databrowser/view/enpe_apro_mt_ls/
-
-  normTable(pattern = paste0("agrranimal.*", ds[1]),
-            ontoMatch = "animal",
-            query = "ADM0 == 'DK'",
-            beep = 10)
-}
-
-if(build_landuse){
-  ## landuse ----
-
-  # work in progress
-}
+normTable(pattern = paste0("agrranimal.*", ds[1]),
+          ontoMatch = "animal",
+          # query = "ADM0 == 'DK'",
+          beep = 10)

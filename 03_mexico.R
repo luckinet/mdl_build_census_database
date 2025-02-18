@@ -3,21 +3,18 @@
 # description : this script integrates data of 'Servicio de Información Agroalimentaria y Pesquera' (https://www.gob.mx/siap/), National Institute of Statistics and Geography (https://en.www.inegi.org.mx/)
 # license     : https://creativecommons.org/licenses/by-sa/4.0/
 # authors     : Steffen Ehrmann
-# date        : 2025-01-22
-# version     : 0.0.3
-# status      : normalize, done
-# comment     : file.edit(paste0(dir_docs, "/documentation/mdl_build_census_database.md"))
+# date        : 2025-01-31
+# version     : 0.3.0
+# status      : work in progress [30%]
+# notes       : see 00_main.R
 # ----
 # geography   : Mexico
 # spatial     : ADM0, ADM1
 # period      : 2012, 2014, 2017, 2019 (census); 2014 - 2023 (survey)
 # variables   :
-# - land      : -
-# - crops     : -
-# - livestock : number_heads (ave, bovino, caprino, guajolote, ovino, porcino), colonies (abeja)
-# - tech      : -
-# - social    : -
+# - livestock : number_heads
 # sampling    : survey, census
+# comment     : ave, bovino, caprino, guajolote, ovino, porcino, abeja
 # ----
 
 thisNation <- "Mexico"
@@ -59,245 +56,196 @@ regGeometry(ADM0 = !!thisNation,
             downloadDate = ymd("2025-01-27"),
             updateFrequency = "unknown")
 
-normGeometry(pattern = gs[1],
+normGeometry(pattern = paste0(thisNation, ".*", gs[1]),
              beep = 10)
 
 
 # 3. tables ----
 #
-if(build_crops){
-  ## crops ----
+schema_livestock_gobmx <-
+  setFormat(thousand = ",") |>
+  setIDVar(name = "ADM1", columns = 1) |>
+  setIDVar(name = "year", columns = c(2:11), rows = 9) |>
+  setIDVar(name = "method", value = "survey") |>
+  setIDVar(name = "animal", columns = 1, rows = 1) |>
+  setObsVar(name = "number_heads", columns = c(2:11), top = 9)
 
-  # work in progress
-}
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "abeja",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Abeja.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-if(build_livestock){
-  ## livestock ----
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "avesCarne",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Ave para carne.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  schema_livestock_gobmx <-
-    setFormat(thousand = ",") |>
-    setIDVar(name = "ADM1", columns = 1) |>
-    setIDVar(name = "year", columns = c(2:11), rows = 9) |>
-    setIDVar(name = "method", value = "survey") |>
-    setIDVar(name = "animal", columns = 1, rows = 1) |>
-    setObsVar(name = "number_heads", columns = c(2:11), top = 9)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "avesHuevo",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Ave para huevo.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "abeja",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Abeja.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "avesTotal",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Aves carne y huevo.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "avesCarne",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Ave para carne.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "bovinoCarne",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Bovino para carne.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "avesHuevo",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Ave para huevo.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "bovinoLeche",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Bovino para leche.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "avesTotal",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Aves carne y huevo.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "bovinoTotal",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Bovinos carne y leche.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "bovinoCarne",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Bovino para carne.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "caprino",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Caprino.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "bovinoLeche",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Bovino para leche.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "guajolote",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Guajolote.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "bovinoTotal",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Bovinos carne y leche.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "ovino",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Ovino.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "caprino",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Caprino.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
+regTable(ADM0 = !!thisNation,
+         label = "ADM1",
+         subset = "porcino",
+         dSeries = ds[2],
+         gSeries = gs[1],
+         schema = schema_livestock_gobmx,
+         begin = 2014,
+         end = 2023,
+         archive = "Inventario 2023 Porcino.xls",
+         archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         downloadDate = ymd("2025-01-14"),
+         updateFrequency = "annually",
+         metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
+         metadataPath = "unknown",
+         overwrite = TRUE)
 
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "guajolote",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Guajolote.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
-
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "ovino",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Ovino.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
-
-  regTable(ADM0 = !!thisNation,
-           label = "ADM1",
-           subset = "porcino",
-           dSeries = ds[2],
-           gSeries = gs[1],
-           schema = schema_livestock_gobmx,
-           begin = 2014,
-           end = 2023,
-           archive = "Inventario 2023 Porcino.xls",
-           archiveLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           downloadDate = ymd("2025-01-14"),
-           updateFrequency = "annually",
-           metadataLink = "https://nube.siap.gob.mx/poblacion_ganadera/",
-           metadataPath = "unknown",
-           overwrite = TRUE)
-
-  normTable(pattern = ds[2],
-            ontoMatch = "animal",
-            beep = 10)
-}
-
-if(build_landuse){
-  ## landuse ----
-
-  # work in progress
-}
-
-#### test schemas
-#
-myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
-myFile <- "Mexico_ADM1_abeja_2014_2023_siap.csv"
-input <- read_csv(file = paste0(myRoot, myFile),
-                  col_names = FALSE,
-                  col_types = cols(.default = "c"))
-
-
-
-schema <- schema_livestock_gobmx
-
-schema_test <- schema |>
-  validateSchema(input = input)
-input_test <- input |>
-  validateInput(schema = schema_test)
-
-ids <- schema_test |>
-  getIDVars(input = input_test)
-
-obs <- schema_test |>
-  getObsVars(input = input_test)
-
-output <- reorganise(input = input, schema = schema)
-
-
-adb_visualise(territory = list(ADM0 = "Russian Federation"),
-              concept = list(animal = "cattle"),
-              variable = "number_heads",
-              level = "al3",
-              year = 2000:2020,
-              animate = TRUE)
+normTable(pattern = ds[2],
+          ontoMatch = "animal",
+          beep = 10)
