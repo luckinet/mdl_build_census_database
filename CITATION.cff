@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+title: luckinet - build census database
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Steffen
+    family-names: Ehrmann
+    email: steffen.ehrmann@posteo.de
+    affiliation: >-
+      Deutsches Zentrum für integrative
+      Biodiversitätsforschung (iDiv) Halle-Jena-Leipzig
+    orcid: 'https://orcid.org/0000-0002-2958-0796'
+repository-code: 'https://github.com/luckinet/mdl_build_census_database'
+repository: 'https://github.com/luckinet/loca'
+abstract: >-
+  This is the main script for building a database of
+  (national and sub-national) census data for all crop and
+  land-use dimensions of LUCKINet and all livestock
+  dimensions of GPW. It is a module of the LOCA (LUCKINet
+  overall computation algorithm) pipeline and depends on
+  input from other files in the repository
+  https://github.com/luckinet/loca.
+keywords:
+  - census data
+  - subnational
+  - landuse
+  - livestock
+  - crop
+  - production
+  - harvested area
+  - planted area
+  - luckinet
+  - global pasture watch
+license: CC-BY-4.0
+version: 0.7.0
+date-released: '2025-03-14'

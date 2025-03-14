@@ -43,6 +43,11 @@ adb_backup()
 adb_archive(outPath = .get_path("cens", "_data"), compress = FALSE)
 
 
+# write cff file ----
+#
+.write_cff()
+
+
 #### test schemas ----
 
 myRoot <- paste0(.get_path("cens", "_data"), "tables/stage2/")
